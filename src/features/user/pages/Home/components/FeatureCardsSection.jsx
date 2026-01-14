@@ -1,0 +1,237 @@
+import {
+  Box,
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  useTheme,
+} from "@mui/material";
+
+const features = [
+  {
+    id: 1,
+    title: "Fresh Produce",
+    description:
+      "Hand-picked fruits and vegetables delivered at peak freshness directly from local farms.",
+    image:
+      "https://images.openai.com/thumbnails/url/JkbTjnicu5mVUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw72c3Hy9ffJyo0M8473SS329czNNI1wyQtwdMz29y-pjDT1q4rwTXN3cslJiQyviAjLUCsGAH6NJpk",
+  },
+  {
+    id: 2,
+    title: "Pantry Essentials",
+    description:
+      "All your daily essentials from trusted brands, carefully curated for quality and value.",
+    image:
+      "https://urbanfarmie.com/wp-content/uploads/Featured-Image-Top-2.jpg",
+  },
+  {
+    id: 3,
+    title: "Gourmet Treats",
+    description:
+      "Premium selections for special occasions, featuring artisanal and imported delicacies.",
+    image:
+      "https://i.pinimg.com/736x/96/12/f7/9612f7a7d7d00278a0808c1e77988ab4.jpg",
+  },
+];
+
+function FeatureCardsSection() {
+  const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        backgroundColor: "#fafafa",
+        py: { xs: 8, md: 12 },
+        px: { xs: 2, sm: 0 },
+      }}
+    >
+      <Container maxWidth="lg">
+        {/* Section Header */}
+        <Box sx={{ textAlign: "center", mb: { xs: 6, md: 8 } }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: { xs: "2rem", md: "2.5rem" },
+              fontWeight: 700,
+              color: "#1a1a1a",
+              mb: 2,
+              fontFamily: "'Helvetica Neue', Arial, sans-serif",
+            }}
+          >
+            Why Choose Zonix Fresh?
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: { xs: "1rem", md: "1.125rem" },
+              color: "#666",
+              maxWidth: "600px",
+              mx: "auto",
+              lineHeight: 1.6,
+            }}
+          >
+            Experience the difference with our carefully curated selections and
+            exceptional service
+          </Typography>
+        </Box>
+
+        {/* Cards Grid */}
+
+        <Grid
+          container
+          spacing={{ xs: 3, md: 4 }}
+          justifyContent={{
+            xs: "center", // mobile (stacked anyway)
+            sm: "center", // small tablets
+            md: "center", // ✅ iPad view
+            lg: "space-between", // desktop
+          }}
+        >
+          {features.map((feature) => (
+            <Grid item xs={12} sm={6} md={4} key={feature.id}>
+              <Card
+                sx={{
+                  height: "100%",
+                  maxWidth: "350px",
+                  display: "flex",
+                  flexDirection: "column",
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+                  transition: "all 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "translateY(-8px)",
+                    boxShadow: "0 12px 40px rgba(0, 0, 0, 0.15)",
+                  },
+                }}
+              >
+                {/* Image Container - Fixed Aspect Ratio */}
+                <Box sx={{ position: "relative", paddingTop: "75%" }}>
+                  {" "}
+                  {/* 4:3 aspect ratio */}
+                  <CardMedia
+                    component="img"
+                    image={feature.image}
+                    alt={feature.title}
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+
+                {/* Content - Fixed height */}
+                <CardContent
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    backgroundColor: "white",
+                  }}
+                >
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="h3"
+                    sx={{
+                      fontSize: { xs: "1.25rem", md: "1.5rem" },
+                      fontWeight: 600,
+                      color: "#1a1a1a",
+                      mb: 2,
+                      lineHeight: 1.3,
+                      fontFamily: "'Helvetica Neue', Arial, sans-serif",
+                    }}
+                  >
+                    {feature.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#666",
+                      fontSize: { xs: "0.95rem", md: "1rem" },
+                      lineHeight: 1.6,
+                      flexGrow: 1,
+                    }}
+                  >
+                    {feature.description}
+                  </Typography>
+
+                  {/* Learn More Link */}
+                  <Box sx={{ mt: 3, pt: 2, borderTop: "1px solid #f0f0f0" }}>
+                    <Typography
+                      component="a"
+                      href="#"
+                      sx={{
+                        color: "#2a9d8f",
+                        fontSize: "0.95rem",
+                        fontWeight: 600,
+                        textDecoration: "none",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        "&:hover": {
+                          color: "#21867a",
+                          textDecoration: "underline",
+                        },
+                      }}
+                    >
+                      Learn more →
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+        {/* Call to Action */}
+        {/* <Box sx={{ textAlign: "center", mt: { xs: 8, md: 10 } }}>
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: { xs: "1rem", md: "1.125rem" },
+              color: "#666",
+              mb: 3,
+              maxWidth: "600px",
+              mx: "auto",
+              lineHeight: 1.6,
+            }}
+          >
+            Join thousands of satisfied customers who trust Zonix Fresh for their
+            daily grocery needs
+          </Typography>
+          <Box
+            component="a"
+            href="#"
+            sx={{
+              display: "inline-block",
+              backgroundColor: "#2a9d8f",
+              color: "white",
+              px: 4,
+              py: 1.5,
+              borderRadius: "50px",
+              fontSize: "1rem",
+              fontWeight: 600,
+              textDecoration: "none",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                backgroundColor: "#21867a",
+                transform: "translateY(-2px)",
+                boxShadow: "0 4px 12px rgba(42, 157, 143, 0.3)",
+              },
+            }}
+          >
+            View All Categories
+          </Box>
+        </Box> */}
+      </Container>
+    </Box>
+  );
+}
+
+export default FeatureCardsSection;
