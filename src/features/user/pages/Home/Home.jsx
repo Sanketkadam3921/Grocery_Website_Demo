@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import Nav from "./components/Nav";
 import HeroSection from "./components/HeroSection";
 import QuickActionTabs from "./components/QuickActionTabs";
 import AboutSection from "./components/AboutSection";
@@ -10,7 +9,6 @@ import ExploreFeaturesSection from "./components/ExploreFeaturesSection";
 import FAQSection from "./components/FAQSection";
 import TrustedBrandsRow from "./components/TrustedBrandsRow";
 import FeaturedProductsBanner from "./components/FeaturedProductsBanner";
-import Footer from "./components/Footer";
 
 function Home() {
   return (
@@ -18,11 +16,9 @@ function Home() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh",
         backgroundColor: "#FFF8ED",
       }}
     >
-      <Nav />
       <HeroSection />
       {/* <QuickActionTabs /> */}
       {/* <AboutSection /> */}
@@ -33,7 +29,6 @@ function Home() {
       <FAQSection />
       <TrustedBrandsRow />
       <FeaturedProductsBanner />
-      <Footer />
     </Box>
   );
 }

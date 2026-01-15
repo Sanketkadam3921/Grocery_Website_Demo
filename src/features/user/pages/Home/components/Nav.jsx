@@ -114,6 +114,7 @@
 // export default Nav;
 
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -129,6 +130,7 @@ import logo from "../../../../../assets/Logo/shop-svgrepo-com 1.svg";
 function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   const toggleDrawer = (state) => () => {
     setOpen(state);
@@ -198,19 +200,54 @@ function Nav() {
                 gap: 3.75,
               }}
             >
-              {["Home", "About", "Shop", "Contact"].map((item) => (
-                <Typography
-                  key={item}
-                  sx={{
-                    color: "rgba(92, 92, 92, 1)",
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    "&:hover": { color: "primary.main" },
-                  }}
-                >
-                  {item}
-                </Typography>
-              ))}
+              <Typography
+                component={Link}
+                to="/"
+                sx={{
+                  color: location.pathname === "/" ? "#2e7d32" : "rgba(92, 92, 92, 1)",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  textDecoration: "none",
+                  fontWeight: location.pathname === "/" ? 600 : 400,
+                  "&:hover": { color: "#2e7d32" },
+                }}
+              >
+                Home
+              </Typography>
+              <Typography
+                sx={{
+                  color: "rgba(92, 92, 92, 1)",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  "&:hover": { color: "#2e7d32" },
+                }}
+              >
+                About
+              </Typography>
+              <Typography
+                component={Link}
+                to="/products"
+                sx={{
+                  color: location.pathname === "/products" ? "#2e7d32" : "rgba(92, 92, 92, 1)",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  textDecoration: "none",
+                  fontWeight: location.pathname === "/products" ? 600 : 400,
+                  "&:hover": { color: "#2e7d32" },
+                }}
+              >
+                Shop
+              </Typography>
+              <Typography
+                sx={{
+                  color: "rgba(92, 92, 92, 1)",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  "&:hover": { color: "#2e7d32" },
+                }}
+              >
+                Contact
+              </Typography>
 
               <Button
                 variant="contained"
@@ -250,19 +287,56 @@ function Nav() {
             gap: 2,
           }}
         >
-          {["Home", "About", "Shop", "Contact"].map((item) => (
-            <Typography
-              key={item}
-              sx={{
-                fontSize: "1.1rem",
-                cursor: "pointer",
-                color: "rgba(92, 92, 92, 1)",
-              }}
-              onClick={toggleDrawer(false)}
-            >
-              {item}
-            </Typography>
-          ))}
+          <Typography
+            component={Link}
+            to="/"
+            onClick={toggleDrawer(false)}
+            sx={{
+              fontSize: "1.1rem",
+              cursor: "pointer",
+              color: "rgba(92, 92, 92, 1)",
+              textDecoration: "none",
+              "&:hover": { color: "#2e7d32" },
+            }}
+          >
+            Home
+          </Typography>
+          <Typography
+            onClick={toggleDrawer(false)}
+            sx={{
+              fontSize: "1.1rem",
+              cursor: "pointer",
+              color: "rgba(92, 92, 92, 1)",
+              "&:hover": { color: "#2e7d32" },
+            }}
+          >
+            About
+          </Typography>
+          <Typography
+            component={Link}
+            to="/products"
+            onClick={toggleDrawer(false)}
+            sx={{
+              fontSize: "1.1rem",
+              cursor: "pointer",
+              color: "rgba(92, 92, 92, 1)",
+              textDecoration: "none",
+              "&:hover": { color: "#2e7d32" },
+            }}
+          >
+            Shop
+          </Typography>
+          <Typography
+            onClick={toggleDrawer(false)}
+            sx={{
+              fontSize: "1.1rem",
+              cursor: "pointer",
+              color: "rgba(92, 92, 92, 1)",
+              "&:hover": { color: "#2e7d32" },
+            }}
+          >
+            Contact
+          </Typography>
 
           <Button
             variant="contained"

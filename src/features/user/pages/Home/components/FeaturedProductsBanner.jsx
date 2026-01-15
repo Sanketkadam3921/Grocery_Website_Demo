@@ -77,3 +77,4 @@ function FeaturedProductsBanner() {
 }
 
 export default FeaturedProductsBanner;
+
