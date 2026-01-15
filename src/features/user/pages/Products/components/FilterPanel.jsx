@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import {
   Drawer,
   Box,
@@ -30,6 +31,41 @@ function FilterPanel({
   onCategoryToggle,
   onResetFilters,
 }) {
+  const [localPriceRange, setLocalPriceRange] = useState(priceRange);
+  const isDraggingRef = useRef(false);
+
+  // Sync local state only when panel opens (mobile) or on mount (desktop) or when reset is clicked
+  useEffect(() => {
+    if (!isDraggingRef.current) {
+      setLocalPriceRange(priceRange);
+    }
+  }, [priceRange, open]);
+
+  const handleSliderChange = (event, newValue) => {
+    isDraggingRef.current = true;
+    setLocalPriceRange(newValue);
+  };
+
+  const handleApplyFilters = () => {
+    isDraggingRef.current = false;
+
+    // Validate values
+    const minValue = Math.max(0, localPriceRange[0]);
+    const maxValue = Math.min(1000, Math.max(minValue, localPriceRange[1]));
+
+    // Update local state with validated values
+    setLocalPriceRange([minValue, maxValue]);
+
+    // Apply filters
+    onPriceChange([minValue, maxValue]);
+  };
+
+  const handleResetFilters = () => {
+    isDraggingRef.current = false;
+    onResetFilters();
+    // Local state will sync via useEffect when priceRange updates
+  };
+
   const FilterContent = () => (
     <Box sx={{ p: 3 }}>
       <Box
@@ -70,15 +106,21 @@ function FilterPanel({
           Price Range
         </Typography>
         <Slider
-          value={priceRange}
-          onChange={(e, newValue) => onPriceChange(newValue)}
+          value={localPriceRange}
+          onChange={handleSliderChange}
           valueLabelDisplay="auto"
           min={0}
           max={1000}
           sx={{
             color: "#2e7d32",
+            mb: 2,
             "& .MuiSlider-valueLabel": {
               backgroundColor: "#2e7d32",
+            },
+            "& .MuiSlider-thumb": {
+              "&:hover": {
+                boxShadow: "0 0 0 8px rgba(46, 125, 50, 0.16)",
+              },
             },
           }}
         />
@@ -86,16 +128,35 @@ function FilterPanel({
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            mt: 1,
+            mb: 2,
           }}
         >
           <Typography variant="body2" sx={{ color: "#666" }}>
-            ₹{priceRange[0]}
+            ₹{localPriceRange[0]}
           </Typography>
           <Typography variant="body2" sx={{ color: "#666" }}>
-            ₹{priceRange[1]}
+            ₹{localPriceRange[1]}
           </Typography>
         </Box>
+
+        {/* Apply Filters Button */}
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={handleApplyFilters}
+          sx={{
+            backgroundColor: "#2e7d32",
+            color: "white",
+            textTransform: "none",
+            fontWeight: 600,
+            py: 1.25,
+            "&:hover": {
+              backgroundColor: "#1b5e20",
+            },
+          }}
+        >
+          Apply Filters
+        </Button>
       </Box>
 
       <Divider sx={{ mb: 3 }} />
@@ -149,7 +210,7 @@ function FilterPanel({
       <Button
         variant="outlined"
         fullWidth
-        onClick={onResetFilters}
+        onClick={handleResetFilters}
         sx={{
           borderColor: "#2e7d32",
           color: "#2e7d32",
@@ -206,4 +267,3 @@ function FilterPanel({
 }
 
 export default FilterPanel;
-

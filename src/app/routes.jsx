@@ -9,6 +9,7 @@ import AddProduct from "../features/admin/pages/AddProduct/AddProduct";
 import UserLayout from "../features/user/components/UserLayout";
 import Home from "../features/user/pages/Home/Home";
 import Products from "../features/user/pages/Products/Products";
+import ProductDetail from "../features/user/pages/ProductDetail/ProductDetail";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "products", element: <Products /> },
+      { path: "products/:id", element: <ProductDetail /> },
     ],
   },
   {

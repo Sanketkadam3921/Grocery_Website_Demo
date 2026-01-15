@@ -1,11 +1,23 @@
+import { useNavigate } from "react-router-dom";
 import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 function ProductCard({ product, onAddToCart }) {
+  const navigate = useNavigate();
   const hasDiscount = product.mrp > product.price;
+
+  const handleCardClick = () => {
+    navigate(`/products/${product.id}`);
+  };
+
+  const handleAddToCartClick = (e) => {
+    e.stopPropagation(); // Prevent card click when button is clicked
+    onAddToCart(product);
+  };
 
   return (
     <Card
+      onClick={handleCardClick}
       sx={{
         height: "100%",
         display: "flex",
@@ -13,6 +25,7 @@ function ProductCard({ product, onAddToCart }) {
         borderRadius: 2,
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         transition: "all 0.3s ease",
+        cursor: "pointer",
         "&:hover": {
           transform: "translateY(-4px)",
           boxShadow: "0 8px 16px rgba(0,0,0,0.15)",
@@ -107,7 +120,7 @@ function ProductCard({ product, onAddToCart }) {
           variant="contained"
           fullWidth
           startIcon={<AddShoppingCartIcon />}
-          onClick={() => onAddToCart(product)}
+          onClick={handleAddToCartClick}
           sx={{
             backgroundColor: "#2e7d32",
             color: "white",
@@ -129,4 +142,5 @@ function ProductCard({ product, onAddToCart }) {
 }
 
 export default ProductCard;
+
 
