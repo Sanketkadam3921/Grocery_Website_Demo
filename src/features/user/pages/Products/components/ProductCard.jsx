@@ -1,10 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, Button, Box, Chip } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { getProductById } from "../../../../admin/services/productService";
 
 function ProductCard({ product, onAddToCart }) {
   const navigate = useNavigate();
   const hasDiscount = product.mrp > product.price;
+  
+  // Get current stock from products in localStorage
+  const currentProduct = getProductById(product.id);
+  const stock = currentProduct?.stock ?? product.stock ?? 0;
+  const isOutOfStock = stock === 0;
 
   const handleCardClick = () => {
     navigate(`/products/${product.id}`);
@@ -12,7 +18,9 @@ function ProductCard({ product, onAddToCart }) {
 
   const handleAddToCartClick = (e) => {
     e.stopPropagation(); // Prevent card click when button is clicked
-    onAddToCart(product);
+    if (!isOutOfStock) {
+      onAddToCart(product);
+    }
   };
 
   return (
@@ -64,16 +72,42 @@ function ProductCard({ product, onAddToCart }) {
           {product.name}
         </Typography>
 
-        <Typography
-          variant="body2"
-          sx={{
-            fontSize: "0.875rem",
-            color: "#666",
-            mb: 1.5,
-          }}
-        >
-          {product.unit}
-        </Typography>
+        <Box sx={{ mb: 1.5, display: "flex", flexDirection: "column", gap: 0.5 }}>
+          <Typography
+            variant="body2"
+            sx={{
+              fontSize: "0.875rem",
+              color: "#666",
+            }}
+          >
+            {product.unit}
+          </Typography>
+          {isOutOfStock ? (
+            <Chip
+              label="Sold Out"
+              size="small"
+              sx={{
+                backgroundColor: "#ffebee",
+                color: "#d32f2f",
+                fontWeight: 600,
+                fontSize: "0.75rem",
+                height: 20,
+                width: "fit-content",
+              }}
+            />
+          ) : (
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.75rem",
+                color: stock < 5 ? "#f57c00" : "#666",
+                fontWeight: stock < 5 ? 600 : 400,
+              }}
+            >
+              {stock} {stock === 1 ? "item" : "items"} remaining
+            </Typography>
+          )}
+        </Box>
 
         <Box sx={{ mb: 2, flexGrow: 1 }}>
           {hasDiscount && (
@@ -119,22 +153,27 @@ function ProductCard({ product, onAddToCart }) {
         <Button
           variant="contained"
           fullWidth
-          startIcon={<AddShoppingCartIcon />}
+          startIcon={!isOutOfStock && <AddShoppingCartIcon />}
           onClick={handleAddToCartClick}
+          disabled={isOutOfStock}
           sx={{
-            backgroundColor: "#2e7d32",
-            color: "white",
+            backgroundColor: isOutOfStock ? "#ccc" : "#2e7d32",
+            color: isOutOfStock ? "#666" : "white",
             borderRadius: "8px",
             py: 1,
             textTransform: "none",
             fontSize: "0.9375rem",
             fontWeight: 600,
             "&:hover": {
-              backgroundColor: "#1b5e20",
+              backgroundColor: isOutOfStock ? "#ccc" : "#1b5e20",
+            },
+            "&:disabled": {
+              backgroundColor: "#ccc",
+              color: "#666",
             },
           }}
         >
-          Add to Cart
+          {isOutOfStock ? "Sold Out" : "Add to Cart"}
         </Button>
       </CardContent>
     </Card>

@@ -12,15 +12,44 @@ import ProductCard from "./components/ProductCard";
 import FilterPanel from "./components/FilterPanel";
 import { mockProducts } from "./data/mockProducts";
 import { addToCart } from "../../services/cartService";
+import { getProducts, initializeProducts } from "../../../admin/services/productService";
+import { useAuth } from "../../../auth/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const PRODUCTS_PER_PAGE = 40;
 
 function Products() {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState([]);
   const isFirstRender = useRef(true);
+
+  // Initialize products from localStorage or use mock data
+  useEffect(() => {
+    // Initialize with mockProducts if localStorage is empty
+    initializeProducts(mockProducts);
+    // Load products from localStorage
+    const allProducts = getProducts();
+    setProducts(allProducts);
+
+    // Listen for storage changes to update products list
+    const handleStorageChange = () => {
+      const updatedProducts = getProducts();
+      setProducts(updatedProducts);
+    };
+    window.addEventListener("storage", handleStorageChange);
+    // Also listen for custom event for same-tab updates
+    window.addEventListener("productsUpdated", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("productsUpdated", handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -56,6 +85,10 @@ function Products() {
   };
 
   const handleAddToCart = (product) => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     addToCart(product, 1);
     // Dispatch custom event to update cart badge in Nav
     window.dispatchEvent(new Event("cartUpdated"));
@@ -63,7 +96,7 @@ function Products() {
 
   // Filter products based on selected filters
   const filteredProducts = useMemo(() => {
-    return mockProducts.filter((product) => {
+    return products.filter((product) => {
       const matchesCategory =
         selectedCategories.length === 0 ||
         selectedCategories.includes(product.category);
@@ -71,7 +104,7 @@ function Products() {
         product.price >= priceRange[0] && product.price <= priceRange[1];
       return matchesCategory && matchesPrice;
     });
-  }, [selectedCategories, priceRange]);
+  }, [products, selectedCategories, priceRange]);
 
   // Pagination logic
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);

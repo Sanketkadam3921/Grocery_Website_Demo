@@ -1,7 +1,9 @@
 import { Box, Container, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import heroImage from "../../../../../assets/homepage/Herosection/Foodstuff-PNG-HD-Image.png";
 
 function HeroSection() {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -105,6 +107,10 @@ function HeroSection() {
             >
               <Button
                 variant="contained"
+                onClick={() => {
+                  navigate("/products");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 sx={{
                   backgroundColor: "#FFD84D",
                   color: "#1a1a1a",
@@ -126,6 +132,10 @@ function HeroSection() {
 
               <Button
                 variant="outlined"
+                onClick={() => {
+                  navigate("/products");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 sx={{
                   borderColor: "#1a1a1a",
                   color: "#1a1a1a",

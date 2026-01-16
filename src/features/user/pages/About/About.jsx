@@ -9,32 +9,34 @@ import CallToAction from "./components/CallToAction";
 
 function About() {
   return (
-    <h1>About</h1>
-    // <Box sx={{ backgroundColor: "#fafafa", minHeight: "100vh" }}>
-    //   {/* Hero Section */}
-    //   <HeroSection />
+    <Box sx={{ backgroundColor: "#fafafa", minHeight: "100vh" }}>
+      {/* Hero Section */}
+      <HeroSection />
 
-    //   {/* Main Content */}
-    //   <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
-    //     {/* Who We Are Section */}
-    //     <WhoWeAre />
+      {/* Main Content */}
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: { xs: 4, sm: 5, md: 6 },
+          px: { xs: 2, sm: 3, md: 4 },
+        }}
+      >
+        {/* Who We Are Section */}
+        <WhoWeAre />
 
-    //     {/* What We Offer - Categories Section */}
-    //     <WhatWeOffer />
+        {/* What We Offer - Categories Section */}
+        <WhatWeOffer />
 
-    //     {/* Why Choose ZonixFresh Section */}
-    //     <WhyChooseUs />
+        {/* Why Choose ZonixFresh Section */}
+        <WhyChooseUs />
 
-    //     {/* Mission & Vision Section */}
-    //     <MissionVision />
+        {/* Mission & Vision Section */}
+        {/* <MissionVision /> */}
 
-    //     {/* How It Works Section */}
-    //     <HowItWorks />
-
-    //     {/* Call To Action Section */}
-    //     <CallToAction />
-    //   </Container>
-    // </Box>
+        {/* Call To Action Section */}
+        <CallToAction />
+      </Container>
+    </Box>
   );
 }
 

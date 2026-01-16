@@ -13,27 +13,175 @@ import {
   ShoppingBag as ShoppingBagIcon,
   Home as HomeIcon,
 } from "@mui/icons-material";
+import { getLastOrder } from "../../services/orderService";
+import { useAuth } from "../../../auth/hooks/useAuth";
+import { getCurrentUser } from "../../../auth/services/authService";
 
 function OrderSuccess() {
   const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuth();
   const [orderDetails, setOrderDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Get order details from localStorage
-    const storedOrder = localStorage.getItem("lastOrder");
-    if (storedOrder) {
-      setOrderDetails(JSON.parse(storedOrder));
-    } else {
-      // If no order details, redirect to home
-      navigate("/");
+    // Wait for auth to finish loading
+    if (loading) {
+      return;
     }
-  }, [navigate]);
 
-  if (!orderDetails) {
-    return null;
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+
+    // Try to get order by ID first (from lastOrderId stored during checkout)
+    const loadOrder = () => {
+      try {
+        const currentUser = getCurrentUser();
+        const userId = currentUser?.id || null;
+        
+        // First, try to get order by stored order ID
+        const lastOrderId = localStorage.getItem("lastOrderId");
+        
+        if (lastOrderId) {
+          // Try to get order from user's orders first
+          if (userId) {
+            try {
+              const userOrdersKey = `orders_${userId}`;
+              const userOrdersData = localStorage.getItem(userOrdersKey);
+              if (userOrdersData) {
+                const userOrders = JSON.parse(userOrdersData);
+                const order = userOrders.find((o) => o.orderId === lastOrderId);
+                
+                if (order) {
+                  setOrderDetails(order);
+                  setIsLoading(false);
+                  localStorage.removeItem("lastOrderId");
+                  return;
+                }
+              }
+            } catch (error) {
+              console.error("Error reading user orders:", error);
+            }
+          }
+          
+          // If not found in user orders, try global orders
+          try {
+            const allOrdersData = localStorage.getItem("orders");
+            if (allOrdersData) {
+              const allOrders = JSON.parse(allOrdersData);
+              const order = allOrders.find((o) => o.orderId === lastOrderId);
+              
+              if (order) {
+                setOrderDetails(order);
+                setIsLoading(false);
+                localStorage.removeItem("lastOrderId");
+                return;
+              }
+            }
+          } catch (error) {
+            console.error("Error reading global orders:", error);
+          }
+        }
+        
+        // Fallback: Get last order from user's orders
+        const lastOrder = getLastOrder();
+        if (lastOrder) {
+          setOrderDetails(lastOrder);
+          setIsLoading(false);
+          localStorage.removeItem("lastOrderId");
+          return;
+        }
+        
+        // Last resort: Try to get most recent order from global orders
+        if (userId) {
+          try {
+            const allOrdersData = localStorage.getItem("orders");
+            if (allOrdersData) {
+              const allOrders = JSON.parse(allOrdersData);
+              const userOrders = allOrders.filter(
+                (order) => order.userId === userId
+              );
+              if (userOrders.length > 0) {
+                const mostRecent = userOrders.sort(
+                  (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+                )[0];
+                setOrderDetails(mostRecent);
+                setIsLoading(false);
+                localStorage.removeItem("lastOrderId");
+                return;
+              }
+            }
+          } catch (error) {
+            console.error("Error reading orders:", error);
+          }
+        }
+        
+        // If we still don't have an order, wait a bit more and try again
+        console.warn("Order not found immediately, retrying...");
+        setTimeout(() => {
+          const retryOrderId = localStorage.getItem("lastOrderId");
+          if (retryOrderId) {
+            try {
+              const allOrdersData = localStorage.getItem("orders");
+              if (allOrdersData) {
+                const allOrders = JSON.parse(allOrdersData);
+                const order = allOrders.find((o) => o.orderId === retryOrderId);
+                if (order) {
+                  setOrderDetails(order);
+                  setIsLoading(false);
+                  localStorage.removeItem("lastOrderId");
+                  return;
+                }
+              }
+            } catch (error) {
+              console.error("Error in retry:", error);
+            }
+          }
+          
+          // Final fallback - get most recent order
+          const finalOrder = getLastOrder();
+          if (finalOrder) {
+            setOrderDetails(finalOrder);
+            setIsLoading(false);
+            localStorage.removeItem("lastOrderId");
+          } else {
+            console.error("No order found after retry, redirecting to home");
+            setIsLoading(false);
+            navigate("/");
+          }
+        }, 300);
+      } catch (error) {
+        console.error("Error loading order:", error);
+        setIsLoading(false);
+        navigate("/");
+      }
+    };
+
+    // Small delay to ensure order is saved
+    const timer = setTimeout(loadOrder, 200);
+    return () => clearTimeout(timer);
+  }, [navigate, isAuthenticated, loading]);
+
+  // Show loading state
+  if (loading || isLoading || !orderDetails) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: "#fafafa",
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography>Loading order details...</Typography>
+      </Box>
+    );
   }
 
   return (
@@ -193,7 +341,7 @@ function OrderSuccess() {
                 variant="h6"
                 sx={{ fontWeight: 700, color: "#2e7d32" }}
               >
-                ₹{orderDetails.total.toFixed(2)}
+                ₹{orderDetails.totalAmount.toFixed(2)}
               </Typography>
             </Box>
           </Paper>

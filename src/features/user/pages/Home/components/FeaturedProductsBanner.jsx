@@ -1,6 +1,8 @@
 import { Box, Container, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function FeaturedProductsBanner() {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -52,6 +54,10 @@ function FeaturedProductsBanner() {
 
           <Button
             variant="contained"
+            onClick={() => {
+              navigate("/products");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             sx={{
               backgroundColor: "#FFD84D",
               color: "#1a1a1a",

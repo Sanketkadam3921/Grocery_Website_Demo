@@ -1,7 +1,9 @@
 import { Box, Container, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 
 function DiscoverDifferenceSection() {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -108,6 +110,10 @@ function DiscoverDifferenceSection() {
               >
                 <Button
                   variant="contained"
+                  onClick={() => {
+                    navigate("/products");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                   sx={{
                     backgroundColor: "#FFD84D",
                     color: "#1a1a1a",

@@ -21,10 +21,13 @@ import {
 import { mockProducts } from "../Products/data/mockProducts";
 import ProductCard from "../Products/components/ProductCard";
 import { addToCart } from "../../services/cartService";
+import { getProductById, getProducts, initializeProducts } from "../../../admin/services/productService";
+import { useAuth } from "../../../auth/hooks/useAuth";
 
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -36,21 +39,47 @@ function ProductDetail() {
   }, [id]);
 
   useEffect(() => {
-    // Find product by ID
-    const foundProduct = mockProducts.find((p) => p.id === parseInt(id));
+    // Initialize products if empty
+    initializeProducts(mockProducts);
+    // Find product by ID from localStorage
+    const productId = parseInt(id);
+    const foundProduct = getProductById(productId);
     if (foundProduct) {
       setProduct(foundProduct);
+      // Set initial quantity based on stock
+      const stock = foundProduct.stock || 0;
+      if (stock > 0) {
+        setQuantity(1);
+      } else {
+        setQuantity(0);
+      }
     } else {
       setProduct(null);
     }
     setLoading(false);
   }, [id]);
 
+  // Get current stock
+  const stock = product?.stock || 0;
+  const isOutOfStock = stock === 0;
+  const maxQuantity = stock;
+
   const handleQuantityChange = (delta) => {
-    setQuantity((prev) => Math.max(1, prev + delta));
+    setQuantity((prev) => {
+      const newQuantity = prev + delta;
+      if (newQuantity < 1) return 1;
+      if (newQuantity > maxQuantity) return maxQuantity;
+      return newQuantity;
+    });
   };
 
   const handleAddToCart = (productToAdd) => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
     // Use the product passed as argument, or fall back to the current product
     const productToAddToCart = productToAdd || product;
     
@@ -80,7 +109,7 @@ function ProductDetail() {
       const result = addToCart(productToAddToCart, quantityToAdd);
       
       // Verify the product was added
-      if (result && Array.isArray(result)) {
+      if (result && Array.isArray(result) && result.length > 0) {
         const addedItem = result.find(item => item.id === productToAddToCart.id);
         if (addedItem) {
           // Dispatch custom event to update cart badge in Nav
@@ -151,7 +180,8 @@ function ProductDetail() {
     : 0;
 
   // Get similar products (same category, excluding current product)
-  const similarProducts = mockProducts
+  const allProducts = getProducts();
+  const similarProducts = allProducts
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
@@ -399,6 +429,34 @@ function ProductDetail() {
 
                 <Divider sx={{ my: { xs: 0.5, sm: 0.75 } }} />
 
+                {/* Stock Information */}
+                <Box>
+                  {isOutOfStock ? (
+                    <Chip
+                      label="Sold Out"
+                      sx={{
+                        backgroundColor: "#ffebee",
+                        color: "#d32f2f",
+                        fontWeight: 600,
+                        fontSize: "0.875rem",
+                      }}
+                    />
+                  ) : (
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: { xs: "0.875rem", sm: "0.9375rem" },
+                        color: stock < 5 ? "#f57c00" : "#666",
+                        fontWeight: stock < 5 ? 600 : 400,
+                      }}
+                    >
+                      {stock} {stock === 1 ? "item" : "items"} in stock
+                    </Typography>
+                  )}
+                </Box>
+
+                <Divider sx={{ my: { xs: 0.5, sm: 0.75 } }} />
+
                 {/* Quantity Selector */}
                 <Box>
                   <Typography
@@ -422,7 +480,7 @@ function ProductDetail() {
                   >
                     <IconButton
                       onClick={() => handleQuantityChange(-1)}
-                      disabled={quantity <= 1}
+                      disabled={quantity <= 1 || isOutOfStock}
                       sx={{
                         border: "1px solid #e0e0e0",
                         borderRadius: 1,
@@ -454,6 +512,7 @@ function ProductDetail() {
                     </Typography>
                     <IconButton
                       onClick={() => handleQuantityChange(1)}
+                      disabled={quantity >= maxQuantity || isOutOfStock}
                       sx={{
                         border: "1px solid #e0e0e0",
                         borderRadius: 1,
@@ -462,6 +521,10 @@ function ProductDetail() {
                         "&:hover": {
                           backgroundColor: "#f5f5f5",
                           borderColor: "#2e7d32",
+                        },
+                        "&.Mui-disabled": {
+                          borderColor: "#e0e0e0",
+                          opacity: 0.4,
                         },
                       }}
                     >
@@ -513,12 +576,12 @@ function ProductDetail() {
                 <Button
                   variant="contained"
                   fullWidth
-                  startIcon={<AddShoppingCartIcon />}
+                  startIcon={!isOutOfStock && <AddShoppingCartIcon />}
                   onClick={() => handleAddToCart()}
-                  disabled={!product}
+                  disabled={!product || isOutOfStock}
                   sx={{
-                    backgroundColor: "#2e7d32",
-                    color: "white",
+                    backgroundColor: isOutOfStock ? "#ccc" : "#2e7d32",
+                    color: isOutOfStock ? "#666" : "white",
                     borderRadius: { xs: 1, sm: 1.5 },
                     py: { xs: 1.125, sm: 1.25 },
                     textTransform: "none",
@@ -527,7 +590,7 @@ function ProductDetail() {
                     mt: { xs: 0.75, sm: 1 },
                     boxShadow: "none",
                     "&:hover": {
-                      backgroundColor: "#1b5e20",
+                      backgroundColor: isOutOfStock ? "#ccc" : "#1b5e20",
                       boxShadow: "none",
                     },
                     "&:disabled": {
@@ -536,7 +599,7 @@ function ProductDetail() {
                     },
                   }}
                 >
-                  Add to Cart
+                  {isOutOfStock ? "Sold Out" : "Add to Cart"}
                 </Button>
               </Box>
             </Box>

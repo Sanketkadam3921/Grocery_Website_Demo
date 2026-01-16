@@ -21,16 +21,31 @@ import {
   getCartTotal,
   clearCart,
 } from "../../services/cartService";
+import { useAuth } from "../../../auth/hooks/useAuth";
 
 function Cart() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo({ top: 0, behavior: "smooth" });
+
     loadCart();
+
+    // Listen for cart updates
+    const handleCartUpdate = () => {
+      loadCart();
+    };
+    window.addEventListener("cartUpdated", handleCartUpdate);
+    window.addEventListener("authStateChanged", handleCartUpdate);
+
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+      window.removeEventListener("authStateChanged", handleCartUpdate);
+    };
   }, []);
 
   const loadCart = () => {
@@ -58,6 +73,11 @@ function Cart() {
   };
 
   const handleCheckout = () => {
+    // Check if user is authenticated before proceeding to checkout
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     // Scroll to top before navigating
     window.scrollTo({ top: 0, behavior: "smooth" });
     // Navigate to checkout page
@@ -152,26 +172,51 @@ function Cart() {
                 mb: 3,
               }}
             >
-              Add some products to get started
+              {!isAuthenticated
+                ? "Please login to add items to your cart"
+                : "Add some products to get started"}
             </Typography>
-            <Button
-              variant="contained"
-              onClick={() => navigate("/products")}
-              sx={{
-                backgroundColor: "#2e7d32",
-                color: "white",
-                textTransform: "none",
-                px: 4,
-                py: 1.5,
-                borderRadius: 2,
-                fontWeight: 600,
-                "&:hover": {
-                  backgroundColor: "#1b5e20",
-                },
-              }}
-            >
-              Browse Products
-            </Button>
+            <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
+              {!isAuthenticated && (
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate("/login")}
+                  sx={{
+                    borderColor: "#2e7d32",
+                    color: "#2e7d32",
+                    textTransform: "none",
+                    px: 4,
+                    py: 1.5,
+                    borderRadius: 2,
+                    fontWeight: 600,
+                    "&:hover": {
+                      borderColor: "#1b5e20",
+                      backgroundColor: "rgba(46, 125, 50, 0.04)",
+                    },
+                  }}
+                >
+                  Login
+                </Button>
+              )}
+              <Button
+                variant="contained"
+                onClick={() => navigate("/products")}
+                sx={{
+                  backgroundColor: "#2e7d32",
+                  color: "white",
+                  textTransform: "none",
+                  px: 4,
+                  py: 1.5,
+                  borderRadius: 2,
+                  fontWeight: 600,
+                  "&:hover": {
+                    backgroundColor: "#1b5e20",
+                  },
+                }}
+              >
+                Browse Products
+              </Button>
+            </Box>
           </Paper>
         ) : (
           <Box

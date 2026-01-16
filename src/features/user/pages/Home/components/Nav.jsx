@@ -114,7 +114,7 @@
 // export default Nav;
 
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -124,20 +124,41 @@ import {
   IconButton,
   Drawer,
   Badge,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import logo from "../../../../../assets/Logo/shop-svgrepo-com 1.svg";
 import { getCartItemCount } from "../../../services/cartService";
+import { useAuth } from "../../../../auth/hooks/useAuth";
 
 function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const toggleDrawer = (state) => () => {
     setOpen(state);
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleMenuClose();
+    navigate("/");
   };
 
   // Detect scroll
@@ -311,20 +332,58 @@ function Nav() {
                 </Badge>
               </IconButton>
 
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#FFDE42",
-                  color: "#756A38",
-                  borderRadius: "52px",
-                  px: 2.5,
-                  py: 1.5,
-                  textTransform: "none",
-                  fontWeight: 600,
-                }}
-              >
-                Login
-              </Button>
+              {isAuthenticated ? (
+                <>
+                  <IconButton
+                    onClick={handleMenuOpen}
+                    sx={{
+                      color: "rgba(92, 92, 92, 1)",
+                      "&:hover": { color: "#2e7d32" },
+                    }}
+                  >
+                    <AccountCircleIcon />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                  >
+                    <MenuItem disabled>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {user?.name}
+                      </Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>
+                      <Typography variant="body2">Logout</Typography>
+                    </MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <Button
+                  component={Link}
+                  to="/login"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#FFDE42",
+                    color: "#756A38",
+                    borderRadius: "52px",
+                    px: 2.5,
+                    py: 1.5,
+                    textTransform: "none",
+                    fontWeight: 600,
+                  }}
+                >
+                  Login
+                </Button>
+              )}
             </Box>
 
             {/* Mobile/Tablet: Cart Icon and Hamburger Menu */}
@@ -452,19 +511,59 @@ function Nav() {
             <Typography>Cart</Typography>
           </Box>
 
-          <Button
-            variant="contained"
-            sx={{
-              mt: 2,
-              backgroundColor: "#FFDE42",
-              color: "#756A38",
-              borderRadius: "52px",
-              textTransform: "none",
-              fontWeight: 600,
-            }}
-          >
-            Login
-          </Button>
+          {isAuthenticated ? (
+            <Box sx={{ mt: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  mb: 1,
+                  color: "rgba(92, 92, 92, 1)",
+                  fontWeight: 600,
+                }}
+              >
+                {user?.name}
+              </Typography>
+              <Button
+                onClick={() => {
+                  toggleDrawer(false)();
+                  handleLogout();
+                }}
+                variant="outlined"
+                fullWidth
+                sx={{
+                  borderColor: "#2e7d32",
+                  color: "#2e7d32",
+                  borderRadius: "52px",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  "&:hover": {
+                    borderColor: "#1b5e20",
+                    backgroundColor: "rgba(46, 125, 50, 0.04)",
+                  },
+                }}
+              >
+                Logout
+              </Button>
+            </Box>
+          ) : (
+            <Button
+              component={Link}
+              to="/login"
+              onClick={toggleDrawer(false)}
+              variant="contained"
+              fullWidth
+              sx={{
+                mt: 2,
+                backgroundColor: "#FFDE42",
+                color: "#756A38",
+                borderRadius: "52px",
+                textTransform: "none",
+                fontWeight: 600,
+              }}
+            >
+              Login
+            </Button>
+          )}
         </Box>
       </Drawer>
     </>

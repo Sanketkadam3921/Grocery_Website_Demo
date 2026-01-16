@@ -14,6 +14,9 @@ import {
   getCartTotal,
   clearCart,
 } from "../../services/cartService";
+import { addOrder } from "../../services/orderService";
+import { updateProductStockOnOrder } from "../../../admin/services/productService";
+import { useAuth } from "../../../auth/hooks/useAuth";
 import { useCheckoutForm } from "./hooks/useCheckoutForm";
 import { useCheckoutSteps } from "./hooks/useCheckoutSteps";
 import ShippingForm from "./components/ShippingForm";
@@ -24,6 +27,7 @@ import CheckoutStepper from "./components/CheckoutStepper";
 
 function Checkout() {
   const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
 
@@ -38,8 +42,19 @@ function Checkout() {
   } = useCheckoutSteps();
 
   useEffect(() => {
+    // Wait for auth to finish loading
+    if (loading) {
+      return;
+    }
+
     // Scroll to top when component mounts
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
 
     const items = getCart();
     if (items.length === 0) {
@@ -48,28 +63,44 @@ function Checkout() {
     }
     setCartItems(items);
     setTotal(getCartTotal());
-  }, [navigate]);
+  }, [navigate, isAuthenticated, loading]);
 
   const handlePlaceOrder = () => {
     // Scroll to top before placing order
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Clear cart and navigate to success page
-    clearCart();
-    window.dispatchEvent(new Event("cartUpdated"));
+    // Update product stock before creating order
+    updateProductStockOnOrder(cartItems);
 
-    // Store order details in localStorage for OrderSuccess page
+    // Create order
     const orderDetails = {
       orderId: `ORD-${Date.now()}`,
       items: cartItems,
-      total: total,
+      totalAmount: total,
       shippingInfo: formData,
       paymentMethod: paymentMethod,
-      date: new Date().toISOString(),
+      status: "Pending",
     };
-    localStorage.setItem("lastOrder", JSON.stringify(orderDetails));
 
-    navigate("/order-success");
+    // Add order to user's order history
+    const order = addOrder(orderDetails);
+
+    if (order) {
+      // Store order ID temporarily for order success page
+      localStorage.setItem("lastOrderId", order.orderId);
+      
+      // Clear cart
+      clearCart();
+      window.dispatchEvent(new Event("cartUpdated"));
+
+      // Delay to ensure order is fully saved to localStorage before navigation
+      setTimeout(() => {
+        navigate("/order-success");
+      }, 200);
+    } else {
+      console.error("Failed to place order");
+      // You could show an error message here
+    }
   };
 
   const getStepContent = (step) => {
@@ -97,6 +128,22 @@ function Checkout() {
         return null;
     }
   };
+
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography>Loading...</Typography>
+      </Box>
+    );
+  }
 
   if (cartItems.length === 0) {
     return null;

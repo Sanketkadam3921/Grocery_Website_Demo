@@ -1,14 +1,29 @@
 // Cart service functions
 
-const CART_STORAGE_KEY = "grocery_cart";
+import { getCurrentUser } from "../../auth/services/authService";
+import { getProductById } from "../../admin/services/productService";
 
 /**
- * Get all items from cart
+ * Get cart storage key for current user
+ * @returns {string} Storage key
+ */
+const getCartStorageKey = () => {
+  const user = getCurrentUser();
+  if (!user) {
+    // Return a default key for non-authenticated users (they won't be able to use cart)
+    return "grocery_cart_guest";
+  }
+  return `grocery_cart_${user.id}`;
+};
+
+/**
+ * Get all items from cart for current user
  * @returns {Array} Array of cart items
  */
 export const getCart = () => {
   try {
-    const cartData = localStorage.getItem(CART_STORAGE_KEY);
+    const storageKey = getCartStorageKey();
+    const cartData = localStorage.getItem(storageKey);
     return cartData ? JSON.parse(cartData) : [];
   } catch (error) {
     console.error("Error getting cart:", error);
@@ -24,21 +39,53 @@ export const getCart = () => {
  */
 export const addToCart = (product, quantity = 1) => {
   try {
+    const user = getCurrentUser();
+    if (!user) {
+      console.warn("User must be logged in to add items to cart");
+      return [];
+    }
+
+    // Check stock availability
+    const currentProduct = getProductById(product.id);
+    const availableStock = currentProduct?.stock ?? product.stock ?? 0;
+
+    if (availableStock === 0) {
+      console.warn("Product is out of stock");
+      return getCart();
+    }
+
+    const storageKey = getCartStorageKey();
     const cart = getCart();
     const existingItemIndex = cart.findIndex((item) => item.id === product.id);
 
     if (existingItemIndex >= 0) {
-      // Item exists, update quantity
-      cart[existingItemIndex].quantity += quantity;
+      // Item exists, check if we can add more
+      const currentQuantity = cart[existingItemIndex].quantity;
+      const newTotalQuantity = currentQuantity + quantity;
+      
+      if (newTotalQuantity > availableStock) {
+        // Limit to available stock
+        cart[existingItemIndex].quantity = availableStock;
+        console.warn(`Limited quantity to available stock: ${availableStock}`);
+      } else {
+        cart[existingItemIndex].quantity = newTotalQuantity;
+      }
     } else {
-      // New item, add to cart
+      // New item, check if quantity doesn't exceed stock
+      const quantityToAdd = Math.min(quantity, availableStock);
       cart.push({
         ...product,
-        quantity: quantity,
+        quantity: quantityToAdd,
       });
+      
+      if (quantity > availableStock) {
+        console.warn(`Limited quantity to available stock: ${availableStock}`);
+      }
     }
 
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    localStorage.setItem(storageKey, JSON.stringify(cart));
+    // Dispatch event to update UI
+    window.dispatchEvent(new Event("cartUpdated"));
     return cart;
   } catch (error) {
     console.error("Error adding to cart:", error);
@@ -53,9 +100,12 @@ export const addToCart = (product, quantity = 1) => {
  */
 export const removeFromCart = (productId) => {
   try {
+    const storageKey = getCartStorageKey();
     const cart = getCart();
     const updatedCart = cart.filter((item) => item.id !== productId);
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updatedCart));
+    localStorage.setItem(storageKey, JSON.stringify(updatedCart));
+    // Dispatch event to update UI
+    window.dispatchEvent(new Event("cartUpdated"));
     return updatedCart;
   } catch (error) {
     console.error("Error removing from cart:", error);
@@ -75,11 +125,14 @@ export const updateCartItemQuantity = (productId, quantity) => {
       return removeFromCart(productId);
     }
 
+    const storageKey = getCartStorageKey();
     const cart = getCart();
     const updatedCart = cart.map((item) =>
       item.id === productId ? { ...item, quantity } : item
     );
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updatedCart));
+    localStorage.setItem(storageKey, JSON.stringify(updatedCart));
+    // Dispatch event to update UI
+    window.dispatchEvent(new Event("cartUpdated"));
     return updatedCart;
   } catch (error) {
     console.error("Error updating cart item quantity:", error);
@@ -94,11 +147,30 @@ export const updateCartItemQuantity = (productId, quantity) => {
  */
 export const increaseQuantity = (productId) => {
   try {
+    // Check stock availability
+    const product = getProductById(productId);
+    const availableStock = product?.stock ?? 0;
+
+    const storageKey = getCartStorageKey();
     const cart = getCart();
+    const item = cart.find((item) => item.id === productId);
+    
+    if (!item) {
+      return cart;
+    }
+
+    // Check if we can increase quantity
+    if (item.quantity >= availableStock) {
+      console.warn(`Cannot increase quantity. Only ${availableStock} items available.`);
+      return cart;
+    }
+
     const updatedCart = cart.map((item) =>
       item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
     );
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updatedCart));
+    localStorage.setItem(storageKey, JSON.stringify(updatedCart));
+    // Dispatch event to update UI
+    window.dispatchEvent(new Event("cartUpdated"));
     return updatedCart;
   } catch (error) {
     console.error("Error increasing quantity:", error);
@@ -113,6 +185,7 @@ export const increaseQuantity = (productId) => {
  */
 export const decreaseQuantity = (productId) => {
   try {
+    const storageKey = getCartStorageKey();
     const cart = getCart();
     const item = cart.find((item) => item.id === productId);
     
@@ -125,7 +198,9 @@ export const decreaseQuantity = (productId) => {
     const updatedCart = cart.map((item) =>
       item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
     );
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updatedCart));
+    localStorage.setItem(storageKey, JSON.stringify(updatedCart));
+    // Dispatch event to update UI
+    window.dispatchEvent(new Event("cartUpdated"));
     return updatedCart;
   } catch (error) {
     console.error("Error decreasing quantity:", error);
@@ -139,7 +214,10 @@ export const decreaseQuantity = (productId) => {
  */
 export const clearCart = () => {
   try {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify([]));
+    const storageKey = getCartStorageKey();
+    localStorage.setItem(storageKey, JSON.stringify([]));
+    // Dispatch event to update UI
+    window.dispatchEvent(new Event("cartUpdated"));
     return [];
   } catch (error) {
     console.error("Error clearing cart:", error);

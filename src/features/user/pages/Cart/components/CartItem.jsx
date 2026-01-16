@@ -4,12 +4,18 @@ import {
   Remove as RemoveIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
+import { getProductById } from "../../../../admin/services/productService";
 
 function CartItem({ item, onIncrease, onDecrease, onRemove }) {
   const hasDiscount = item.mrp > item.price;
   const discountPercentage = hasDiscount
     ? Math.round(((item.mrp - item.price) / item.mrp) * 100)
     : 0;
+  
+  // Get current stock
+  const currentProduct = getProductById(item.id);
+  const stock = currentProduct?.stock ?? item.stock ?? 0;
+  const canIncrease = item.quantity < stock;
 
   return (
     <Paper
@@ -154,6 +160,32 @@ function CartItem({ item, onIncrease, onDecrease, onRemove }) {
               Per {item.unit}
             </Typography>
           </Box>
+          
+          {/* Stock Information */}
+          {stock > 0 && (
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.75rem",
+                color: stock < 5 ? "#f57c00" : "#666",
+                fontWeight: stock < 5 ? 600 : 400,
+              }}
+            >
+              {stock} {stock === 1 ? "item" : "items"} remaining
+            </Typography>
+          )}
+          {stock === 0 && (
+            <Typography
+              variant="caption"
+              sx={{
+                fontSize: "0.75rem",
+                color: "#d32f2f",
+                fontWeight: 600,
+              }}
+            >
+              Out of stock
+            </Typography>
+          )}
 
           {/* Quantity Controls and Remove Button */}
           <Box
@@ -202,12 +234,16 @@ function CartItem({ item, onIncrease, onDecrease, onRemove }) {
               </Typography>
               <IconButton
                 onClick={onIncrease}
+                disabled={!canIncrease}
                 size="small"
                 sx={{
                   width: 32,
                   height: 32,
                   "&:hover": {
                     backgroundColor: "#f5f5f5",
+                  },
+                  "&.Mui-disabled": {
+                    opacity: 0.4,
                   },
                 }}
               >

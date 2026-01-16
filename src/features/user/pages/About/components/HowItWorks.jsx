@@ -17,14 +17,14 @@ function HowItWorks() {
   const { steps } = useAboutData();
 
   return (
-    <Box sx={{ mb: { xs: 4, md: 6 } }}>
+    <Box sx={{ mb: { xs: 4, sm: 5, md: 6 } }}>
       <Typography
         variant="h4"
         sx={{
           fontWeight: 700,
-          fontSize: { xs: "1.75rem", md: "2.25rem" },
+          fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2.25rem" },
           color: "#1a1a1a",
-          mb: 4,
+          mb: { xs: 3, sm: 3.5, md: 4 },
           textAlign: "center",
         }}
       >
@@ -32,10 +32,9 @@ function HowItWorks() {
       </Typography>
       <Grid
         container
-        spacing={3}
+        spacing={{ xs: 2, sm: 2.5, md: 3 }}
         sx={{
-          flexDirection: { xs: "column", md: "row" },
-          alignItems: { xs: "stretch", md: "flex-start" },
+          justifyContent: "center",
         }}
       >
         {steps.map((step, index) => {
@@ -45,7 +44,7 @@ function HowItWorks() {
               <Paper
                 elevation={0}
                 sx={{
-                  p: 3,
+                  p: { xs: 2.5, sm: 3, md: 3 },
                   textAlign: "center",
                   borderRadius: 2,
                   border: "1px solid #e0e0e0",
@@ -54,6 +53,7 @@ function HowItWorks() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  justifyContent: "flex-start",
                   boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                   position: "relative",
                 }}
@@ -62,11 +62,11 @@ function HowItWorks() {
                 <Box
                   sx={{
                     position: "absolute",
-                    top: -15,
+                    top: { xs: -12, sm: -15 },
                     left: "50%",
                     transform: "translateX(-50%)",
-                    width: 40,
-                    height: 40,
+                    width: { xs: 36, sm: 40 },
+                    height: { xs: 36, sm: 40 },
                     borderRadius: "50%",
                     backgroundColor: "#2e7d32",
                     color: "white",
@@ -74,15 +74,18 @@ function HowItWorks() {
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 700,
-                    fontSize: "1.25rem",
+                    fontSize: { xs: "1.125rem", sm: "1.25rem" },
                   }}
                 >
                   {step.number}
                 </Box>
-                <Box sx={{ mt: 2, mb: 2 }}>
+                <Box sx={{ mt: { xs: 1.5, sm: 2 }, mb: { xs: 1.5, sm: 2 } }}>
                   {IconComponent && (
                     <IconComponent
-                      sx={{ fontSize: step.iconSize, color: "#2e7d32" }}
+                      sx={{
+                        fontSize: { xs: 28, sm: step.iconSize },
+                        color: "#2e7d32",
+                      }}
                     />
                   )}
                 </Box>
@@ -92,7 +95,7 @@ function HowItWorks() {
                     fontWeight: 600,
                     color: "#1a1a1a",
                     mb: 1,
-                    fontSize: { xs: "1rem", md: "1.125rem" },
+                    fontSize: { xs: "1rem", sm: "1.0625rem", md: "1.125rem" },
                   }}
                 >
                   {step.title}
@@ -102,6 +105,7 @@ function HowItWorks() {
                   sx={{
                     color: "#666",
                     lineHeight: 1.6,
+                    fontSize: { xs: "0.875rem", sm: "0.9375rem" },
                   }}
                 >
                   {step.description}

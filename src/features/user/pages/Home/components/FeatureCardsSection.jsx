@@ -8,6 +8,7 @@ import {
   CardContent,
   useTheme,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   {
@@ -38,6 +39,7 @@ const features = [
 
 function FeatureCardsSection() {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -166,8 +168,11 @@ function FeatureCardsSection() {
                   {/* Learn More Link */}
                   <Box sx={{ mt: 3, pt: 2, borderTop: "1px solid #f0f0f0" }}>
                     <Typography
-                      component="a"
-                      href="#"
+                      component="button"
+                      onClick={() => {
+                        navigate("/products");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
                       sx={{
                         color: "#2a9d8f",
                         fontSize: "0.95rem",
@@ -175,6 +180,11 @@ function FeatureCardsSection() {
                         textDecoration: "none",
                         display: "inline-flex",
                         alignItems: "center",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: 0,
+                        fontFamily: "inherit",
                         "&:hover": {
                           color: "#21867a",
                           textDecoration: "underline",
