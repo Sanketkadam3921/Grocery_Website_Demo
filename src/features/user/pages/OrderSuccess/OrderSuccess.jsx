@@ -198,6 +198,97 @@ function OrderSuccess() {
             </Box>
           </Paper>
 
+          {/* Ordered Items Summary */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              mb: 4,
+              backgroundColor: "#f8f8f8",
+              borderRadius: 2,
+              textAlign: "left",
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                color: "#1a1a1a",
+                mb: 2,
+              }}
+            >
+              Ordered Items
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {orderDetails.items.map((item, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    p: 2,
+                    backgroundColor: "white",
+                    borderRadius: 1,
+                    border: "1px solid #e0e0e0",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 1,
+                      overflow: "hidden",
+                      backgroundColor: "#f5f5f5",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={item.image}
+                      alt={item.name}
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 600,
+                        color: "#1a1a1a",
+                        mb: 0.5,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                      }}
+                    >
+                      {item.name}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "#666", mb: 1 }}>
+                      Quantity: {item.quantity}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: 600,
+                        color: "#2e7d32",
+                      }}
+                    >
+                      ₹{item.price.toFixed(2)} × {item.quantity} = ₹
+                      {(item.price * item.quantity).toFixed(2)}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </Paper>
+
           {/* Shipping Address */}
           <Paper
             elevation={0}
