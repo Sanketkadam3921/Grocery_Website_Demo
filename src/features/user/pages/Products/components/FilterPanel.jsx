@@ -106,11 +106,13 @@ function FilterPanel({
           Price Range
         </Typography>
         <Slider
+          size="small"
           value={localPriceRange}
           onChange={handleSliderChange}
           valueLabelDisplay="auto"
           min={0}
           max={1000}
+          aria-label="Price Range"
           sx={{
             color: "#2e7d32",
             mb: 2,

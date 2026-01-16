@@ -10,6 +10,11 @@ import UserLayout from "../features/user/components/UserLayout";
 import Home from "../features/user/pages/Home/Home";
 import Products from "../features/user/pages/Products/Products";
 import ProductDetail from "../features/user/pages/ProductDetail/ProductDetail";
+import Cart from "../features/user/pages/Cart/Cart";
+import Checkout from "../features/user/pages/Checkout/Checkout";
+import OrderSuccess from "../features/user/pages/OrderSuccess/OrderSuccess";
+import About from "../features/user/pages/About/About";
+import Contact from "../features/user/pages/Contact/Contact";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +24,11 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "products", element: <Products /> },
       { path: "products/:id", element: <ProductDetail /> },
+      { path: "cart", element: <Cart /> },
+      { path: "checkout", element: <Checkout /> },
+      { path: "order-success", element: <OrderSuccess /> },
+      { path: "about", element: <About /> },
+      { path: "contact", element: <Contact /> },
     ],
   },
   {

@@ -123,13 +123,17 @@ import {
   Button,
   IconButton,
   Drawer,
+  Badge,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import logo from "../../../../../assets/Logo/shop-svgrepo-com 1.svg";
+import { getCartItemCount } from "../../../services/cartService";
 
 function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const location = useLocation();
 
   const toggleDrawer = (state) => () => {
@@ -145,6 +149,27 @@ function Nav() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Update cart item count
+  useEffect(() => {
+    const updateCartCount = () => {
+      setCartItemCount(getCartItemCount());
+    };
+
+    // Initial load
+    updateCartCount();
+
+    // Listen for storage changes (when cart is updated in other tabs/components)
+    window.addEventListener("storage", updateCartCount);
+    
+    // Custom event for same-tab updates
+    window.addEventListener("cartUpdated", updateCartCount);
+
+    return () => {
+      window.removeEventListener("storage", updateCartCount);
+      window.removeEventListener("cartUpdated", updateCartCount);
+    };
+  }, [location.pathname]); // Also update when location changes
 
   return (
     <>
@@ -174,7 +199,21 @@ function Nav() {
             }}
           >
             {/* Logo */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box
+              component={Link}
+              to="/"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                textDecoration: "none",
+                cursor: "pointer",
+                "&:hover": {
+                  opacity: 0.8,
+                },
+              }}
+            >
               <Box
                 component="img"
                 src={logo}
@@ -215,10 +254,14 @@ function Nav() {
                 Home
               </Typography>
               <Typography
+                component={Link}
+                to="/about"
                 sx={{
-                  color: "rgba(92, 92, 92, 1)",
+                  color: location.pathname === "/about" ? "#2e7d32" : "rgba(92, 92, 92, 1)",
                   fontSize: "1rem",
                   cursor: "pointer",
+                  textDecoration: "none",
+                  fontWeight: location.pathname === "/about" ? 600 : 400,
                   "&:hover": { color: "#2e7d32" },
                 }}
               >
@@ -239,15 +282,34 @@ function Nav() {
                 Shop
               </Typography>
               <Typography
+                component={Link}
+                to="/contact"
                 sx={{
-                  color: "rgba(92, 92, 92, 1)",
+                  color: location.pathname === "/contact" ? "#2e7d32" : "rgba(92, 92, 92, 1)",
                   fontSize: "1rem",
                   cursor: "pointer",
+                  textDecoration: "none",
+                  fontWeight: location.pathname === "/contact" ? 600 : 400,
                   "&:hover": { color: "#2e7d32" },
                 }}
               >
                 Contact
               </Typography>
+
+              {/* Cart Icon */}
+              <IconButton
+                component={Link}
+                to="/cart"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                sx={{
+                  color: "rgba(92, 92, 92, 1)",
+                  "&:hover": { color: "#2e7d32" },
+                }}
+              >
+                <Badge badgeContent={cartItemCount} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
 
               <Button
                 variant="contained"
@@ -265,13 +327,34 @@ function Nav() {
               </Button>
             </Box>
 
-            {/* Mobile Menu Icon */}
-            <IconButton
-              sx={{ display: { xs: "flex", md: "none" } }}
-              onClick={toggleDrawer(true)}
+            {/* Mobile/Tablet: Cart Icon and Hamburger Menu */}
+            <Box
+              sx={{
+                display: { xs: "flex", md: "none" },
+                alignItems: "center",
+                gap: 1,
+              }}
             >
-              <MenuIcon sx={{ color: "black" }} />
-            </IconButton>
+              {/* Cart Icon for Mobile/Tablet */}
+              <IconButton
+                component={Link}
+                to="/cart"
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                sx={{
+                  color: "rgba(92, 92, 92, 1)",
+                  "&:hover": { color: "#2e7d32" },
+                }}
+              >
+                <Badge badgeContent={cartItemCount} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+
+              {/* Hamburger Menu Icon */}
+              <IconButton onClick={toggleDrawer(true)}>
+                <MenuIcon sx={{ color: "black" }} />
+              </IconButton>
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
@@ -302,11 +385,14 @@ function Nav() {
             Home
           </Typography>
           <Typography
+            component={Link}
+            to="/about"
             onClick={toggleDrawer(false)}
             sx={{
               fontSize: "1.1rem",
               cursor: "pointer",
               color: "rgba(92, 92, 92, 1)",
+              textDecoration: "none",
               "&:hover": { color: "#2e7d32" },
             }}
           >
@@ -327,16 +413,44 @@ function Nav() {
             Shop
           </Typography>
           <Typography
+            component={Link}
+            to="/contact"
             onClick={toggleDrawer(false)}
             sx={{
               fontSize: "1.1rem",
               cursor: "pointer",
               color: "rgba(92, 92, 92, 1)",
+              textDecoration: "none",
               "&:hover": { color: "#2e7d32" },
             }}
           >
             Contact
           </Typography>
+
+          {/* Mobile Cart Link */}
+          <Box
+            component={Link}
+            to="/cart"
+            onClick={() => {
+              toggleDrawer(false)();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              fontSize: "1.1rem",
+              cursor: "pointer",
+              color: "rgba(92, 92, 92, 1)",
+              textDecoration: "none",
+              "&:hover": { color: "#2e7d32" },
+            }}
+          >
+            <Badge badgeContent={cartItemCount} color="error">
+              <ShoppingCartIcon />
+            </Badge>
+            <Typography>Cart</Typography>
+          </Box>
 
           <Button
             variant="contained"

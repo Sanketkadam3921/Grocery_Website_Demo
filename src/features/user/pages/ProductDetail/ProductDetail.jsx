@@ -9,6 +9,8 @@ import {
   Paper,
   Divider,
   Chip,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   AddShoppingCart as AddShoppingCartIcon,
@@ -18,6 +20,7 @@ import {
 } from "@mui/icons-material";
 import { mockProducts } from "../Products/data/mockProducts";
 import ProductCard from "../Products/components/ProductCard";
+import { addToCart } from "../../services/cartService";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -25,6 +28,7 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     // Scroll to top when component mounts or product ID changes
@@ -36,6 +40,8 @@ function ProductDetail() {
     const foundProduct = mockProducts.find((p) => p.id === parseInt(id));
     if (foundProduct) {
       setProduct(foundProduct);
+    } else {
+      setProduct(null);
     }
     setLoading(false);
   }, [id]);
@@ -45,14 +51,54 @@ function ProductDetail() {
   };
 
   const handleAddToCart = (productToAdd) => {
+    // Use the product passed as argument, or fall back to the current product
     const productToAddToCart = productToAdd || product;
+    
+    // If no product is available, return early
+    if (!productToAddToCart) {
+      console.error("Cannot add to cart: Product is missing");
+      return;
+    }
+    
+    // Validate product has required fields
+    if (!productToAddToCart.id) {
+      console.error("Cannot add to cart: Product ID is missing", productToAddToCart);
+      return;
+    }
+    
+    // Determine quantity: if productToAdd is passed (from similar products), use 1, otherwise use selected quantity
     const quantityToAdd = productToAdd ? 1 : quantity;
-    console.log("Added to cart:", {
-      ...productToAddToCart,
-      quantity: quantityToAdd,
-    });
-    // Add to cart logic will go here
-    // You can integrate with cartService when it's implemented
+    
+    // Ensure quantity is a valid number
+    if (!quantityToAdd || quantityToAdd < 1) {
+      console.error("Cannot add to cart: Invalid quantity", quantityToAdd);
+      return;
+    }
+    
+    try {
+      // Add product to cart
+      const result = addToCart(productToAddToCart, quantityToAdd);
+      
+      // Verify the product was added
+      if (result && Array.isArray(result)) {
+        const addedItem = result.find(item => item.id === productToAddToCart.id);
+        if (addedItem) {
+          // Dispatch custom event to update cart badge in Nav
+          window.dispatchEvent(new Event("cartUpdated"));
+          
+          // Show success message
+          setSnackbarOpen(true);
+        } else {
+          console.error("Product was not added to cart");
+        }
+      }
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   if (loading) {
@@ -468,7 +514,8 @@ function ProductDetail() {
                   variant="contained"
                   fullWidth
                   startIcon={<AddShoppingCartIcon />}
-                  onClick={handleAddToCart}
+                  onClick={() => handleAddToCart()}
+                  disabled={!product}
                   sx={{
                     backgroundColor: "#2e7d32",
                     color: "white",
@@ -482,6 +529,10 @@ function ProductDetail() {
                     "&:hover": {
                       backgroundColor: "#1b5e20",
                       boxShadow: "none",
+                    },
+                    "&:disabled": {
+                      backgroundColor: "#ccc",
+                      color: "#666",
                     },
                   }}
                 >
@@ -528,6 +579,22 @@ function ProductDetail() {
           </Box>
         )}
       </Container>
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Item added to cart successfully!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

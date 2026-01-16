@@ -11,6 +11,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import ProductCard from "./components/ProductCard";
 import FilterPanel from "./components/FilterPanel";
 import { mockProducts } from "./data/mockProducts";
+import { addToCart } from "../../services/cartService";
 
 const PRODUCTS_PER_PAGE = 40;
 
@@ -55,8 +56,9 @@ function Products() {
   };
 
   const handleAddToCart = (product) => {
-    console.log("Added to cart:", product);
-    // Add to cart logic will go here
+    addToCart(product, 1);
+    // Dispatch custom event to update cart badge in Nav
+    window.dispatchEvent(new Event("cartUpdated"));
   };
 
   // Filter products based on selected filters
