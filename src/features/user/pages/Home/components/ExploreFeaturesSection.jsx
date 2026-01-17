@@ -98,7 +98,7 @@ function ExploreFeaturesSection() {
                 flex: {
                   xs: "1 1 100%", // Mobile: 1 card per row
                   sm: "1 1 calc(50% - 16px)", // Tablet: 2 cards per row
-                  md: "1 1 calc(33.333% - 21px)", // Desktop: 3 cards per row
+                  md: "1 1 calc(25% - 21px)", // Desktop: 3 cards per row
                 },
                 maxWidth: { xs: "100%", sm: "400px" },
               }}
