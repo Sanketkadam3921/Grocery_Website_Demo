@@ -45,13 +45,10 @@ const getMessagesFromStorage = () => {
 const formatDate = (dateString) => {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 };
 
 const MESSAGES_PER_PAGE = 10;
@@ -71,7 +68,7 @@ function Messages() {
       setMessages(allMessages);
     };
     loadMessages();
-    
+
     // Listen for storage changes (when new messages are added)
     window.addEventListener("storage", loadMessages);
     return () => window.removeEventListener("storage", loadMessages);
@@ -93,7 +90,7 @@ function Messages() {
   const handleViewMessage = (message) => {
     setSelectedMessage(message);
     setOpenDialog(true);
-    
+
     // Mark as read
     if (message.status === "unread") {
       const updatedMessages = messages.map((msg) =>
@@ -108,7 +105,7 @@ function Messages() {
     const updatedMessages = messages.filter((msg) => msg.id !== messageId);
     setMessages(updatedMessages);
     localStorage.setItem("contactMessages", JSON.stringify(updatedMessages));
-    
+
     // Adjust page if current page becomes empty
     const newTotalPages = Math.ceil(updatedMessages.length / MESSAGES_PER_PAGE);
     if (currentPage > newTotalPages && newTotalPages > 0) {
@@ -116,7 +113,7 @@ function Messages() {
     } else if (newTotalPages === 0) {
       setCurrentPage(1);
     }
-    
+
     if (openDialog && selectedMessage?.id === messageId) {
       setOpenDialog(false);
       setSelectedMessage(null);
@@ -173,10 +170,16 @@ function Messages() {
             backgroundColor: "white",
           }}
         >
-          <EmailIcon sx={{ fontSize: { xs: 48, md: 64 }, color: "#bdbdbd", mb: 2 }} />
+          <EmailIcon
+            sx={{ fontSize: { xs: 48, md: 64 }, color: "#bdbdbd", mb: 2 }}
+          />
           <Typography
             variant="h6"
-            sx={{ color: "#757575", mb: 1, fontSize: { xs: "1rem", md: "1.25rem" } }}
+            sx={{
+              color: "#757575",
+              mb: 1,
+              fontSize: { xs: "1rem", md: "1.25rem" },
+            }}
           >
             No Messages Yet
           </Typography>
@@ -212,7 +215,9 @@ function Messages() {
                       mb: 2,
                     }}
                   >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+                    >
                       <Box
                         sx={{
                           width: 40,
@@ -372,13 +377,19 @@ function Messages() {
                       <TableCell>{formatDate(message.createdAt)}</TableCell>
                       <TableCell>
                         <Chip
-                          label={message.status === "unread" ? "Unread" : "Read"}
+                          label={
+                            message.status === "unread" ? "Unread" : "Read"
+                          }
                           size="small"
                           sx={{
                             backgroundColor:
-                              message.status === "unread" ? "#fff3e0" : "#e8f5e9",
+                              message.status === "unread"
+                                ? "#fff3e0"
+                                : "#e8f5e9",
                             color:
-                              message.status === "unread" ? "#f57c00" : "#2e7d32",
+                              message.status === "unread"
+                                ? "#f57c00"
+                                : "#2e7d32",
                             fontWeight: 500,
                           }}
                         />
@@ -441,10 +452,23 @@ function Messages() {
         maxWidth="md"
         fullWidth
         fullScreen={isMobile}
+        PaperProps={{
+          sx: {
+            borderRadius: isMobile ? 0 : 2,
+            maxHeight: isMobile ? "100%" : "90vh",
+          },
+        }}
       >
-        <DialogTitle sx={{ borderBottom: "1px solid #e0e0e0", pb: 2 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
+        {/* Header */}
+        <DialogTitle sx={{ borderBottom: "1px solid #e0e0e0", pb: 2, px: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 600, color: "#212121" }}>
               Message Details
             </Typography>
             {selectedMessage && (
@@ -453,74 +477,125 @@ function Messages() {
                 size="small"
                 sx={{
                   backgroundColor:
-                    selectedMessage.status === "unread"
-                      ? "#fff3e0"
-                      : "#e8f5e9",
+                    selectedMessage.status === "unread" ? "#fff3e0" : "#e8f5e9",
                   color:
                     selectedMessage.status === "unread" ? "#f57c00" : "#2e7d32",
+                  fontWeight: 600,
+                  px: 1,
                 }}
               />
             )}
           </Box>
         </DialogTitle>
-        <DialogContent sx={{ pt: 3 }}>
+
+        {/* Content */}
+        <DialogContent sx={{ p: 3 }}>
           {selectedMessage && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-              <Box>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "#757575", mb: 0.5, fontWeight: 600 }}
-                >
-                  Name
-                </Typography>
-                <Typography variant="body1">{selectedMessage.fullName}</Typography>
+              {/* Contact Information Grid */}
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                  gap: 3,
+                }}
+              >
+                <Box>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: "#757575",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      letterSpacing: 0.5,
+                    }}
+                  >
+                    Name
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 0.5, fontWeight: 500 }}>
+                    {selectedMessage.fullName}
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: "#757575",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      letterSpacing: 0.5,
+                    }}
+                  >
+                    Phone
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 0.5, fontWeight: 500 }}>
+                    {selectedMessage.phone}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: "#757575",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      letterSpacing: 0.5,
+                    }}
+                  >
+                    Email
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 0.5, fontWeight: 500 }}>
+                    {selectedMessage.email}
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: "#757575",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      letterSpacing: 0.5,
+                    }}
+                  >
+                    Date Received
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 0.5, fontWeight: 500 }}>
+                    {formatDate(selectedMessage.createdAt)}
+                  </Typography>
+                </Box>
               </Box>
+
+              <Divider />
+
+              {/* Message Content */}
               <Box>
                 <Typography
-                  variant="body2"
-                  sx={{ color: "#757575", mb: 0.5, fontWeight: 600 }}
-                >
-                  Email
-                </Typography>
-                <Typography variant="body1">{selectedMessage.email}</Typography>
-              </Box>
-              <Box>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "#757575", mb: 0.5, fontWeight: 600 }}
-                >
-                  Phone
-                </Typography>
-                <Typography variant="body1">{selectedMessage.phone}</Typography>
-              </Box>
-              <Box>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "#757575", mb: 0.5, fontWeight: 600 }}
-                >
-                  Date
-                </Typography>
-                <Typography variant="body1">
-                  {formatDate(selectedMessage.createdAt)}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "#757575", mb: 0.5, fontWeight: 600 }}
+                  variant="subtitle2"
+                  sx={{ mb: 1.5, fontWeight: 600, color: "#212121" }}
                 >
                   Message
                 </Typography>
                 <Paper
                   elevation={0}
                   sx={{
-                    p: 2,
+                    p: 2.5,
                     backgroundColor: "#fafafa",
                     borderRadius: 1,
                     border: "1px solid #e0e0e0",
                   }}
                 >
-                  <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      whiteSpace: "pre-wrap",
+                      color: "#212121",
+                      lineHeight: 1.6,
+                    }}
+                  >
                     {selectedMessage.message}
                   </Typography>
                 </Paper>
@@ -528,17 +603,45 @@ function Messages() {
             </Box>
           )}
         </DialogContent>
-        <DialogActions sx={{ px: 3, py: 2, borderTop: "1px solid #e0e0e0" }}>
-          {selectedMessage && (
-            <Button
-              onClick={() => handleDeleteMessage(selectedMessage.id)}
-              color="error"
-              startIcon={<DeleteIcon />}
-            >
-              Delete
-            </Button>
-          )}
-          <Button onClick={handleCloseDialog} variant="contained">
+
+        {/* Footer Actions */}
+        <DialogActions
+          sx={{ px: 3, py: 2.5, borderTop: "1px solid #e0e0e0", gap: 2 }}
+        >
+          <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
+            {selectedMessage && (
+              <Button
+                onClick={() => handleDeleteMessage(selectedMessage.id)}
+                color="error"
+                variant="outlined"
+                startIcon={<DeleteIcon />}
+                sx={{
+                  textTransform: "none",
+                  px: 3,
+                  height: 42,
+                  borderWidth: 2,
+                  "&:hover": {
+                    borderWidth: 2,
+                  },
+                }}
+              >
+                Delete
+              </Button>
+            )}
+          </Box>
+          <Button
+            onClick={handleCloseDialog}
+            variant="contained"
+            sx={{
+              textTransform: "none",
+              px: 4,
+              height: 42,
+              backgroundColor: "#2e7d32",
+              "&:hover": {
+                backgroundColor: "#1b5e20",
+              },
+            }}
+          >
             Close
           </Button>
         </DialogActions>
@@ -548,4 +651,3 @@ function Messages() {
 }
 
 export default Messages;
-

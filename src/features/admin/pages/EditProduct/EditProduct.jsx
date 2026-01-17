@@ -6,7 +6,6 @@ import {
   Typography,
   TextField,
   Button,
-  Grid,
   Alert,
   CircularProgress,
 } from "@mui/material";
@@ -53,7 +52,6 @@ function EditProduct() {
       ...prev,
       [name]: value,
     }));
-    // Clear error for this field
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -120,14 +118,24 @@ function EditProduct() {
 
   if (submitError && !product) {
     return (
-      <Box>
+      <Box sx={{ maxWidth: 900, mx: "auto", px: 2 }}>
         <Alert severity="error" sx={{ mb: 3 }}>
           {submitError}
         </Alert>
         <Button
           variant="outlined"
           onClick={() => navigate("/admin/products")}
-          sx={{ textTransform: "none" }}
+          sx={{
+            textTransform: "none",
+            px: 4,
+            height: 42,
+            borderColor: "#757575",
+            color: "#757575",
+            "&:hover": {
+              borderColor: "#616161",
+              backgroundColor: "#f5f5f5",
+            },
+          }}
         >
           Back to Products
         </Button>
@@ -136,12 +144,18 @@ function EditProduct() {
   }
 
   return (
-    <Box>
-      <Typography variant="h4" sx={{ mb: 4, fontWeight: 600, color: "#212121" }}>
+    <Box sx={{ maxWidth: 900, mx: "auto", px: 2 }}>
+      <Typography
+        variant="h4"
+        sx={{ mb: 4, fontWeight: 600, color: "#212121" }}
+      >
         Edit Product
       </Typography>
 
-      <Paper elevation={0} sx={{ p: 4, borderRadius: 2 }}>
+      <Paper
+        elevation={0}
+        sx={{ p: 4, borderRadius: 2, border: "1px solid #e0e0e0" }}
+      >
         {submitError && (
           <Alert severity="error" sx={{ mb: 3 }}>
             {submitError}
@@ -150,87 +164,146 @@ function EditProduct() {
 
         {/* Display Product Info (Read-only) */}
         <Box sx={{ mb: 4, p: 3, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+          <Typography
+            variant="h6"
+            sx={{ mb: 3, fontWeight: 600, color: "#212121" }}
+          >
             Product Information
           </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body2" sx={{ color: "#757575", mb: 0.5 }}>
+
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: 3,
+            }}
+          >
+            <Box>
+              <Typography
+                variant="body2"
+                sx={{ color: "#757575", mb: 0.5, fontSize: "0.875rem" }}
+              >
                 Product Name
               </Typography>
-              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 500, color: "#212121" }}
+              >
                 {product.name}
               </Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body2" sx={{ color: "#757575", mb: 0.5 }}>
+            </Box>
+
+            <Box>
+              <Typography
+                variant="body2"
+                sx={{ color: "#757575", mb: 0.5, fontSize: "0.875rem" }}
+              >
                 Category
               </Typography>
-              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 500, color: "#212121" }}
+              >
                 {product.category}
               </Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body2" sx={{ color: "#757575", mb: 0.5 }}>
+            </Box>
+
+            <Box>
+              <Typography
+                variant="body2"
+                sx={{ color: "#757575", mb: 0.5, fontSize: "0.875rem" }}
+              >
                 MRP
               </Typography>
-              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 500, color: "#212121" }}
+              >
                 ₹{product.mrp}
               </Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body2" sx={{ color: "#757575", mb: 0.5 }}>
+            </Box>
+
+            <Box>
+              <Typography
+                variant="body2"
+                sx={{ color: "#757575", mb: 0.5, fontSize: "0.875rem" }}
+              >
                 Unit
               </Typography>
-              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 500, color: "#212121" }}
+              >
                 {product.unit}
               </Typography>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Box>
 
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Selling Price (₹)"
-                name="price"
-                type="number"
-                value={formData.price}
-                onChange={handleChange}
-                error={!!errors.price}
-                helperText={errors.price || `Current MRP: ₹${product.mrp}`}
-                inputProps={{ min: 0, step: 0.01 }}
-                required
-              />
-            </Grid>
+        {/* Editable Section */}
+        <Box sx={{ mb: 3 }}>
+          <Typography
+            variant="h6"
+            sx={{ mb: 3, fontWeight: 600, color: "#212121" }}
+          >
+            Update Details
+          </Typography>
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Stock Quantity"
-                name="stock"
-                type="number"
-                value={formData.stock}
-                onChange={handleChange}
-                error={!!errors.stock}
-                helperText={errors.stock}
-                inputProps={{ min: 0 }}
-                required
-              />
-            </Grid>
+          <form onSubmit={handleSubmit}>
+            <Box sx={{ display: "grid", gap: 3 }}>
+              {/* Price and Stock in one row */}
+              <Box
+                sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3 }}
+              >
+                <TextField
+                  label="Selling Price (₹)"
+                  name="price"
+                  type="number"
+                  value={formData.price}
+                  onChange={handleChange}
+                  error={!!errors.price}
+                  helperText={errors.price || `Maximum: ₹${product.mrp}`}
+                  inputProps={{ min: 0, step: 0.01 }}
+                  required
+                  fullWidth
+                />
 
-            <Grid item xs={12}>
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
+                <TextField
+                  label="Stock Quantity"
+                  name="stock"
+                  type="number"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  error={!!errors.stock}
+                  helperText={errors.stock || "Available units in inventory"}
+                  inputProps={{ min: 0 }}
+                  required
+                  fullWidth
+                />
+              </Box>
+
+              {/* Action Buttons */}
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  justifyContent: "flex-end",
+                  mt: 2,
+                }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => navigate("/admin/products")}
                   sx={{
                     textTransform: "none",
                     px: 4,
+                    height: 42,
                     borderColor: "#757575",
                     color: "#757575",
+                    "&:hover": {
+                      borderColor: "#616161",
+                      backgroundColor: "#f5f5f5",
+                    },
                   }}
                 >
                   Cancel
@@ -241,6 +314,7 @@ function EditProduct() {
                   sx={{
                     textTransform: "none",
                     px: 4,
+                    height: 42,
                     backgroundColor: "#2e7d32",
                     "&:hover": {
                       backgroundColor: "#1b5e20",
@@ -250,9 +324,9 @@ function EditProduct() {
                   Update Product
                 </Button>
               </Box>
-            </Grid>
-          </Grid>
-        </form>
+            </Box>
+          </form>
+        </Box>
       </Paper>
     </Box>
   );

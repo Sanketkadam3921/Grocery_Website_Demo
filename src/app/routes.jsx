@@ -20,6 +20,7 @@ import About from "../features/user/pages/About/About";
 import Contact from "../features/user/pages/Contact/Contact";
 import Login from "../features/user/pages/Login/Login";
 import Signup from "../features/user/pages/Signup/Signup";
+import AdminLogin from "../features/admin/pages/Login/Login";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
     ],
+  },
+  {
+    path: "/admin/login",
+    element: <AdminLogin />,
   },
   {
     path: "/admin",

@@ -25,16 +25,16 @@ const menuItems = [
     icon: <DashboardIcon />,
     path: "/admin",
   },
-  {
-    text: "Products",
-    icon: <InventoryIcon />,
-    path: "/admin/products",
-  },
-  {
-    text: "Add Product",
-    icon: <AddBoxIcon />,
-    path: "/admin/products/add",
-  },
+  // {
+  //   text: "Products",
+  //   icon: <InventoryIcon />,
+  //   path: "/admin/products",
+  // },
+  // {
+  //   text: "Add Product",
+  //   icon: <AddBoxIcon />,
+  //   path: "/admin/products/add",
+  // },
   {
     text: "Orders",
     icon: <ShoppingCartIcon />,
@@ -173,4 +173,3 @@ function Sidebar({ mobileOpen, handleDrawerToggle }) {
 }
 
 export default Sidebar;
-

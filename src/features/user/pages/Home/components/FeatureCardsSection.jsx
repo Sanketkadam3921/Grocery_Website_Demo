@@ -2,7 +2,6 @@ import {
   Box,
   Container,
   Typography,
-  Grid,
   Card,
   CardMedia,
   CardContent,
@@ -79,24 +78,30 @@ function FeatureCardsSection() {
           </Typography>
         </Box>
 
-        {/* Cards Grid */}
-
-        <Grid
-          container
-          spacing={{ xs: 3, md: 4 }}
-          justifyContent={{
-            xs: "center", // mobile (stacked anyway)
-            sm: "center", // small tablets
-            md: "center", // ✅ iPad view
-            lg: "space-between", // desktop
+        {/* Cards - Using Flexbox */}
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: { xs: 3, md: 4 },
+            justifyContent: "center",
           }}
         >
           {features.map((feature) => (
-            <Grid item xs={12} sm={6} md={4} key={feature.id}>
+            <Box
+              key={feature.id}
+              sx={{
+                flex: {
+                  xs: "1 1 100%", // Mobile: 1 card per row
+                  sm: "1 1 calc(50% - 12px)", // Small tablet: 2 cards per row
+                  md: "1 1 calc(33.333% - 21px)", // Tablet & up: 3 cards per row
+                },
+                maxWidth: "350px",
+              }}
+            >
               <Card
                 sx={{
                   height: "100%",
-                  maxWidth: "350px",
                   display: "flex",
                   flexDirection: "column",
                   borderRadius: "16px",
@@ -111,8 +116,6 @@ function FeatureCardsSection() {
               >
                 {/* Image Container - Fixed Aspect Ratio */}
                 <Box sx={{ position: "relative", paddingTop: "75%" }}>
-                  {" "}
-                  {/* 4:3 aspect ratio */}
                   <CardMedia
                     component="img"
                     image={feature.image}
@@ -128,7 +131,7 @@ function FeatureCardsSection() {
                   />
                 </Box>
 
-                {/* Content - Fixed height */}
+                {/* Content */}
                 <CardContent
                   sx={{
                     p: { xs: 2.5, md: 3 },
@@ -196,49 +199,9 @@ function FeatureCardsSection() {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
-        {/* Call to Action */}
-        {/* <Box sx={{ textAlign: "center", mt: { xs: 8, md: 10 } }}>
-          <Typography
-            variant="body1"
-            sx={{
-              fontSize: { xs: "1rem", md: "1.125rem" },
-              color: "#666",
-              mb: 3,
-              maxWidth: "600px",
-              mx: "auto",
-              lineHeight: 1.6,
-            }}
-          >
-            Join thousands of satisfied customers who trust Zonix Fresh for their
-            daily grocery needs
-          </Typography>
-          <Box
-            component="a"
-            href="#"
-            sx={{
-              display: "inline-block",
-              backgroundColor: "#2a9d8f",
-              color: "white",
-              px: 4,
-              py: 1.5,
-              borderRadius: "50px",
-              fontSize: "1rem",
-              fontWeight: 600,
-              textDecoration: "none",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                backgroundColor: "#21867a",
-                transform: "translateY(-2px)",
-                boxShadow: "0 4px 12px rgba(42, 157, 143, 0.3)",
-              },
-            }}
-          >
-            View All Categories
-          </Box>
-        </Box> */}
+        </Box>
       </Container>
     </Box>
   );

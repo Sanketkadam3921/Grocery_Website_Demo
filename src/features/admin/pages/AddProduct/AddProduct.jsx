@@ -40,7 +40,6 @@ function AddProduct() {
       ...prev,
       [name]: value,
     }));
-    // Clear error for this field
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -127,12 +126,18 @@ function AddProduct() {
   };
 
   return (
-    <Box>
-      <Typography variant="h4" sx={{ mb: 4, fontWeight: 600, color: "#212121" }}>
+    <Box sx={{ maxWidth: 900, mx: "auto", px: 2 }}>
+      <Typography
+        variant="h4"
+        sx={{ mb: 4, fontWeight: 600, color: "#212121" }}
+      >
         Add New Product
       </Typography>
 
-      <Paper elevation={0} sx={{ p: 4, borderRadius: 2 }}>
+      <Paper
+        elevation={0}
+        sx={{ p: 4, borderRadius: 2, border: "1px solid #e0e0e0" }}
+      >
         {submitError && (
           <Alert severity="error" sx={{ mb: 3 }}>
             {submitError}
@@ -140,35 +145,23 @@ function AddProduct() {
         )}
 
         <form onSubmit={handleSubmit}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 3,
-            }}
-          >
-            {/* First Row: Product Name and Category */}
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 3,
-              }}
-            >
-              <TextField
-                label="Product Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                error={!!errors.name}
-                helperText={errors.name}
-                required
-                sx={{
-                  flex: "1 1 calc(50% - 12px)",
-                  minWidth: "250px",
-                }}
-              />
+          <Box sx={{ display: "grid", gap: 3 }}>
+            {/* Product Name */}
+            <TextField
+              label="Product Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              error={!!errors.name}
+              helperText={errors.name}
+              required
+              fullWidth
+            />
 
+            {/* Category and Unit */}
+            <Box
+              sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3 }}
+            >
               <TextField
                 select
                 label="Category"
@@ -178,10 +171,7 @@ function AddProduct() {
                 error={!!errors.category}
                 helperText={errors.category}
                 required
-                sx={{
-                  flex: "1 1 calc(50% - 12px)",
-                  minWidth: "250px",
-                }}
+                fullWidth
               >
                 {CATEGORIES.map((category) => (
                   <MenuItem key={category} value={category}>
@@ -189,11 +179,21 @@ function AddProduct() {
                   </MenuItem>
                 ))}
               </TextField>
+
+              <TextField
+                label="Unit"
+                name="unit"
+                value={formData.unit}
+                onChange={handleChange}
+                error={!!errors.unit}
+                helperText={errors.unit || "e.g., 1 kg, 500 g, 1 pack"}
+                required
+                fullWidth
+              />
             </Box>
 
-            {/* Image URL - Full Width */}
+            {/* Image URL */}
             <TextField
-              fullWidth
               label="Image URL"
               name="image"
               value={formData.image}
@@ -201,13 +201,14 @@ function AddProduct() {
               error={!!errors.image}
               helperText={errors.image || "Enter a valid image URL"}
               required
+              fullWidth
             />
 
-            {/* Second Row: MRP, Price, Unit */}
+            {/* MRP, Price, and Stock */}
             <Box
               sx={{
-                display: "flex",
-                flexWrap: "wrap",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
                 gap: 3,
               }}
             >
@@ -221,10 +222,7 @@ function AddProduct() {
                 helperText={errors.mrp}
                 inputProps={{ min: 0, step: 0.01 }}
                 required
-                sx={{
-                  flex: "1 1 calc(33.333% - 16px)",
-                  minWidth: "200px",
-                }}
+                fullWidth
               />
 
               <TextField
@@ -237,42 +235,22 @@ function AddProduct() {
                 helperText={errors.price}
                 inputProps={{ min: 0, step: 0.01 }}
                 required
-                sx={{
-                  flex: "1 1 calc(33.333% - 16px)",
-                  minWidth: "200px",
-                }}
+                fullWidth
               />
 
               <TextField
-                label="Unit"
-                name="unit"
-                value={formData.unit}
+                label="Stock Quantity"
+                name="stock"
+                type="number"
+                value={formData.stock}
                 onChange={handleChange}
-                error={!!errors.unit}
-                helperText={errors.unit || "e.g., 1 kg, 1 pack, 500 g"}
+                error={!!errors.stock}
+                helperText={errors.stock}
+                inputProps={{ min: 0 }}
                 required
-                sx={{
-                  flex: "1 1 calc(33.333% - 16px)",
-                  minWidth: "200px",
-                }}
+                fullWidth
               />
             </Box>
-
-            {/* Stock Quantity */}
-            <TextField
-              label="Stock Quantity"
-              name="stock"
-              type="number"
-              value={formData.stock}
-              onChange={handleChange}
-              error={!!errors.stock}
-              helperText={errors.stock || "Initial stock quantity"}
-              inputProps={{ min: 0 }}
-              required
-              sx={{
-                maxWidth: "400px",
-              }}
-            />
 
             {/* Action Buttons */}
             <Box
@@ -291,6 +269,10 @@ function AddProduct() {
                   px: 4,
                   borderColor: "#757575",
                   color: "#757575",
+                  "&:hover": {
+                    borderColor: "#616161",
+                    backgroundColor: "#f5f5f5",
+                  },
                 }}
               >
                 Cancel

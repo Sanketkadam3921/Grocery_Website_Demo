@@ -1,6 +1,5 @@
 import { Box, Container, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Grid from "@mui/material/Grid";
 
 function DiscoverDifferenceSection() {
   const navigate = useNavigate();
@@ -13,19 +12,26 @@ function DiscoverDifferenceSection() {
       }}
     >
       <Container maxWidth="lg">
-        <Grid
-          container
-          spacing={{ xs: 4, md: 6 }}
-          alignItems="center"
-          justifyContent="center"
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: { xs: 4, md: 6 },
+            alignItems: "center",
+          }}
         >
           {/* Left: Text Content */}
-          <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
+          <Box
+            sx={{
+              flex: 1,
+              order: { xs: 2, sm: 1 },
+            }}
+          >
             <Box
               sx={{
-                maxWidth: { xs: "100%", sm: "400px", md: "370px", lg: "520px" },
-                textAlign: { xs: "center", md: "left" },
-                mx: { xs: "auto", md: 0 },
+                maxWidth: { xs: "100%", sm: "100%", lg: "520px" },
+                textAlign: { xs: "center", sm: "left" },
+                mx: { xs: "auto", sm: 0 },
               }}
             >
               <Typography
@@ -38,7 +44,7 @@ function DiscoverDifferenceSection() {
                   letterSpacing: "-0.01em",
                 }}
               >
-                The Zonix Fresh Difference
+                Zonix Fresh Difference
               </Typography>
 
               <Typography
@@ -57,15 +63,17 @@ function DiscoverDifferenceSection() {
               </Typography>
 
               {/* Process Highlights */}
-              <Grid
-                container
-                spacing={{ xs: 1.5, sm: 2 }}
+              <Box
                 sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
+                  flexWrap: "wrap",
+                  gap: { xs: 1.5, sm: 2 },
                   mb: { xs: 3, md: 4 },
                   justifyContent: { xs: "center", sm: "flex-start" },
                 }}
               >
-                <Grid item xs={12} sm={4}>
+                <Box sx={{ flex: { xs: "1 1 100%", sm: "1 1 auto" } }}>
                   <Typography
                     sx={{
                       fontWeight: 600,
@@ -75,9 +83,9 @@ function DiscoverDifferenceSection() {
                   >
                     🏪 Direct-from-source procurement
                   </Typography>
-                </Grid>
+                </Box>
 
-                <Grid item xs={12} sm={4}>
+                <Box sx={{ flex: { xs: "1 1 100%", sm: "1 1 auto" } }}>
                   <Typography
                     sx={{
                       fontWeight: 600,
@@ -87,9 +95,9 @@ function DiscoverDifferenceSection() {
                   >
                     🧪 Multi-stage quality checks
                   </Typography>
-                </Grid>
+                </Box>
 
-                <Grid item xs={12} sm={4}>
+                <Box sx={{ flex: { xs: "1 1 100%", sm: "1 1 auto" } }}>
                   <Typography
                     sx={{
                       fontWeight: 600,
@@ -99,16 +107,16 @@ function DiscoverDifferenceSection() {
                   >
                     ⚡ Hyperlocal fulfillment hubs
                   </Typography>
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
 
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: { xs: "center", md: "flex-start" },
+                  justifyContent: { xs: "center", sm: "flex-start" },
                 }}
               >
-                <Button
+                {/* <Button
                   variant="contained"
                   onClick={() => {
                     navigate("/products");
@@ -132,41 +140,41 @@ function DiscoverDifferenceSection() {
                   }}
                 >
                   Start Shopping
-                </Button>
+                </Button> */}
               </Box>
             </Box>
-          </Grid>
+          </Box>
 
           {/* Right: Visual */}
-          <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
+          <Box
+            sx={{
+              flex: 1,
+              order: { xs: 1, sm: 2 },
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Box
+              component="img"
+              src="https://images.unsplash.com/photo-1542838132-92c53300491e"
+              alt="Fresh groceries sourced and delivered"
+              loading="lazy"
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                width: "100%",
+                maxWidth: {
+                  xs: "100%",
+                  sm: "400px",
+                  md: "420px",
+                  lg: "520px",
+                },
+                height: "auto",
+                borderRadius: 3,
+                boxShadow: 3,
               }}
-            >
-              <Box
-                component="img"
-                src="https://images.unsplash.com/photo-1542838132-92c53300491e"
-                alt="Fresh groceries sourced and delivered"
-                loading="lazy"
-                sx={{
-                  width: "100%",
-                  maxWidth: {
-                    xs: "100%",
-                    sm: "400px",
-                    md: "420px",
-                    lg: "520px",
-                  },
-                  height: "auto",
-                  borderRadius: 3,
-                  boxShadow: 3,
-                }}
-              />
-            </Box>
-          </Grid>
-        </Grid>
+            />
+          </Box>
+        </Box>
       </Container>
     </Box>
   );

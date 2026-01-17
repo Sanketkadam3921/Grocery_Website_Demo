@@ -33,7 +33,10 @@ const validationSchema = yup.object().shape({
   phone: yup
     .string()
     .required("Phone number is required")
-    .matches(/^[6-9]\d{9}$/, "Phone number must start with 6, 7, 8, or 9 and be exactly 10 digits")
+    .matches(
+      /^[6-9]\d{9}$/,
+      "Phone number must start with 6, 7, 8, or 9 and be exactly 10 digits"
+    )
     .length(10, "Phone number must be exactly 10 digits"),
   message: yup
     .string()
@@ -54,7 +57,7 @@ function Contact() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Prevent numbers in fullName field
     if (name === "fullName") {
       // Only allow letters and spaces
@@ -78,7 +81,7 @@ function Contact() {
         [name]: value,
       }));
     }
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
@@ -121,17 +124,20 @@ function Contact() {
         createdAt: new Date().toISOString(),
         status: "unread",
       };
-      
+
       try {
         const existingMessages = JSON.parse(
           localStorage.getItem("contactMessages") || "[]"
         );
         existingMessages.unshift(messageData); // Add new message at the beginning
-        localStorage.setItem("contactMessages", JSON.stringify(existingMessages));
+        localStorage.setItem(
+          "contactMessages",
+          JSON.stringify(existingMessages)
+        );
       } catch (error) {
         console.error("Error saving message:", error);
       }
-      
+
       console.log("Form submitted:", formData);
       setLoading(false);
       setSubmitted(true);
@@ -202,7 +208,6 @@ function Contact() {
             left: 0,
             right: 0,
             bottom: 0,
-
             zIndex: 1,
           },
         }}
@@ -259,12 +264,9 @@ function Contact() {
           sx={{
             width: "100%",
             maxWidth: "1200px",
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              md: "1.2fr 1fr",
-            },
-            gap: { xs: 3, md: 4 },
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            gap: { xs: 4, md: 4 },
             alignItems: "stretch",
           }}
         >
@@ -280,6 +282,7 @@ function Contact() {
               display: "flex",
               flexDirection: "column",
               height: "100%",
+              flex: { xs: "1 1 100%", md: "1.2 1 0" },
             }}
           >
             <Typography
@@ -455,12 +458,10 @@ function Contact() {
           {/* Contact Info Cards - Right Side */}
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "repeat(2, 1fr)",
-                md: "1fr",
-              },
-              gap: { xs: 2, md: 2.5 },
+              display: "flex",
+              flexWrap: "wrap",
+              gap: { xs: 2.5, md: 3 },
+              flex: { xs: "1 1 100%", md: "1 1 0" },
             }}
           >
             {contactInfo.map((info, index) => (
@@ -473,11 +474,13 @@ function Contact() {
                   borderRadius: 2,
                   border: "1px solid #e0e0e0",
                   backgroundColor: "white",
-                  height: "100%",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "flex-start",
+                  flex: { xs: "1 1 calc(50% - 10px)", md: "1 1 calc(50% - 12px)" },
+                  minWidth: { xs: "calc(50% - 10px)", md: "calc(50% - 12px)" },
+                  maxWidth: { xs: "calc(50% - 10px)", md: "calc(50% - 12px)" },
                 }}
               >
                 <Box

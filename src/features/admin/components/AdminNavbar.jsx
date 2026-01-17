@@ -53,7 +53,13 @@ function AdminNavbar({ handleDrawerToggle }) {
         </Box>
 
         {/* Right Side Actions */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.5, sm: 1 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: { xs: 0.5, sm: 1 },
+          }}
+        >
           <IconButton
             sx={{
               color: "#757575",
@@ -81,4 +87,3 @@ function AdminNavbar({ handleDrawerToggle }) {
 }
 
 export default AdminNavbar;
-

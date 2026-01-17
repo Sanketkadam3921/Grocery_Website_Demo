@@ -12,7 +12,10 @@ import ProductCard from "./components/ProductCard";
 import FilterPanel from "./components/FilterPanel";
 import { mockProducts } from "./data/mockProducts";
 import { addToCart } from "../../services/cartService";
-import { getProducts, initializeProducts } from "../../../admin/services/productService";
+import {
+  getProducts,
+  initializeProducts,
+} from "../../../admin/services/productService";
 import { useAuth } from "../../../auth/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -316,9 +319,9 @@ function Products() {
                   sx={{
                     display: "grid",
                     gridTemplateColumns: {
-                      xs: "repeat(2, 1fr)",
+                      xs: "repeat(1, 1fr)",
                       sm: "repeat(3, 1fr)",
-                      md: "repeat(4, 1fr)",
+                      md: "repeat(3, 1fr)",
                       xl: "repeat(4, 1fr)",
                     },
                     gap: 2,

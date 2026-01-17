@@ -1,11 +1,4 @@
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-} from "@mui/material";
+import { Box, Container, Typography, Card, CardContent } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PaymentIcon from "@mui/icons-material/Payment";
@@ -90,14 +83,26 @@ function ExploreFeaturesSection() {
         </Box>
 
         {/* Feature Cards */}
-        <Grid
-          container
-          spacing={4}
-          alignItems="stretch"
-          justifyContent="center"
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 4,
+            justifyContent: "center",
+          }}
         >
           {features.map((feature) => (
-            <Grid item xs={12} md={4} key={feature.id}>
+            <Box
+              key={feature.id}
+              sx={{
+                flex: {
+                  xs: "1 1 100%", // Mobile: 1 card per row
+                  sm: "1 1 calc(50% - 16px)", // Tablet: 2 cards per row
+                  md: "1 1 calc(33.333% - 21px)", // Desktop: 3 cards per row
+                },
+                maxWidth: { xs: "100%", sm: "400px" },
+              }}
+            >
               <Card
                 sx={{
                   height: "100%",
@@ -165,9 +170,9 @@ function ExploreFeaturesSection() {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Container>
     </Box>
   );

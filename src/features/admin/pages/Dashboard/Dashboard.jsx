@@ -46,11 +46,10 @@ const isToday = (dateString) => {
 const formatDate = (dateString) => {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 };
 
 function Dashboard() {
@@ -125,7 +124,10 @@ function Dashboard() {
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ mb: 4, fontWeight: 600, color: "#212121" }}>
+      <Typography
+        variant="h4"
+        sx={{ mb: 4, fontWeight: 600, color: "#212121" }}
+      >
         Dashboard Overview
       </Typography>
 
@@ -164,10 +166,7 @@ function Dashboard() {
                 {card.title}
               </Typography>
             </Box>
-            <Typography
-              variant="h4"
-              sx={{ fontWeight: 600, color: "#212121" }}
-            >
+            <Typography variant="h4" sx={{ fontWeight: 600, color: "#212121" }}>
               {card.value}
             </Typography>
           </Paper>
@@ -196,8 +195,8 @@ function Dashboard() {
               </TableHead>
               <TableBody>
                 {recentOrders.map((order) => (
-                  <TableRow key={order.id} hover>
-                    <TableCell>{order.id || "N/A"}</TableCell>
+                  <TableRow key={order.orderId || order.id} hover>
+                    <TableCell>{order.orderId || "N/A"}</TableCell>
                     <TableCell>{order.user || "N/A"}</TableCell>
                     <TableCell>₹{order.totalAmount || 0}</TableCell>
                     <TableCell>{formatDate(order.createdAt)}</TableCell>
@@ -288,7 +287,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-
-
-

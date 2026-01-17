@@ -1,4 +1,9 @@
-import { Box, Typography, Container, Grid, Link } from "@mui/material";
+import { Box, Typography, Container, Link, IconButton } from "@mui/material";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 import logo from "../../../../../assets/Logo/shop-svgrepo-com 1.svg";
 
 function Footer() {
@@ -12,32 +17,33 @@ function Footer() {
       }}
     >
       <Container maxWidth="lg">
-        <Grid
-          container
-          spacing={4}
-          justifyContent="center"
-          columnGap={{
-            xs: 1, // mobile
-            sm: 3, // tablets
-            md: 4, // laptops
-            lg: 6, // large screens
-            xl: 18, // extra large
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            gap: { xs: 4, md: 6 },
+            mb: 6,
           }}
         >
-          {/* Logo Column */}
-          <Grid item xs={12} md={4}>
+          {/* Logo & Description Column */}
+          <Box
+            sx={{
+              flex: { xs: "1 1 100%", md: "1 1 40%" },
+              maxWidth: { md: "400px" },
+            }}
+          >
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
               <Box
                 component="img"
                 src={logo}
                 alt="Zonix Fresh Logo"
-                sx={{ width: 96, height: 96 }}
+                sx={{ width: 80, height: 80 }}
               />
               <Typography
                 variant="h5"
                 sx={{
                   fontWeight: 700,
-                  fontSize: "1.75rem",
+                  fontSize: { xs: "1.5rem", md: "1.75rem" },
                   color: "#1a1a1a",
                 }}
               >
@@ -50,264 +56,348 @@ function Footer() {
                 color: "#666",
                 fontSize: "1rem",
                 lineHeight: 1.7,
-                maxWidth: "300px",
+                mb: 3,
               }}
             >
               Your trusted source for fresh, quality groceries delivered to your
               door. Experience the Zonix Fresh difference today.
             </Typography>
-          </Grid>
 
-          {/* Quick Links */}
-          <Grid
-            item
-            xs={6}
-            sm={4}
-            md={2.67}
+            {/* Social Icons */}
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <IconButton
+                href="#"
+                sx={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  width: 40,
+                  height: 40,
+                  "&:hover": {
+                    backgroundColor: "#FFD84D",
+                    color: "#1a1a1a",
+                  },
+                }}
+              >
+                <FacebookIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                href="#"
+                sx={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  width: 40,
+                  height: 40,
+                  "&:hover": {
+                    backgroundColor: "#FFD84D",
+                    color: "#1a1a1a",
+                  },
+                }}
+              >
+                <TwitterIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                href="#"
+                sx={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  width: 40,
+                  height: 40,
+                  "&:hover": {
+                    backgroundColor: "#FFD84D",
+                    color: "#1a1a1a",
+                  },
+                }}
+              >
+                <InstagramIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                href="#"
+                sx={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  width: 40,
+                  height: 40,
+                  "&:hover": {
+                    backgroundColor: "#FFD84D",
+                    color: "#1a1a1a",
+                  },
+                }}
+              >
+                <LinkedInIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                href="#"
+                sx={{
+                  backgroundColor: "#1a1a1a",
+                  color: "white",
+                  width: 40,
+                  height: 40,
+                  "&:hover": {
+                    backgroundColor: "#FFD84D",
+                    color: "#1a1a1a",
+                  },
+                }}
+              >
+                <YouTubeIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          </Box>
+
+          {/* Links Columns */}
+          <Box
             sx={{
-              mt: 4,
+              flex: { xs: "1 1 100%", md: "1 1 60%" },
+              display: "flex",
+              flexWrap: "wrap",
+              gap: { xs: 4, sm: 3, md: 4 },
             }}
           >
-            <Typography
-              variant="h6"
+            {/* Quick Links */}
+            <Box
               sx={{
-                fontSize: "1.125rem",
-                fontWeight: 700,
-                color: "#1a1a1a",
-                mb: 2,
+                flex: { xs: "1 1 calc(50% - 16px)", sm: "1 1 auto" },
+                minWidth: { xs: "140px", sm: "150px" },
               }}
             >
-              Quick Links
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-              <Link
-                href="#"
+              <Typography
+                variant="h6"
                 sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
+                  fontSize: "1.125rem",
+                  fontWeight: 700,
+                  color: "#1a1a1a",
+                  mb: 2,
                 }}
               >
-                Home
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                About
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Shop
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Contact
-              </Link>
+                Quick Links
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Home
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  About
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Shop
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Contact
+                </Link>
+              </Box>
             </Box>
-          </Grid>
 
-          {/* Services */}
-          <Grid
-            item
-            xs={6}
-            sm={4}
-            md={2.67}
-            sx={{
-              mt: 4,
-            }}
-          >
-            <Typography
-              variant="h6"
+            {/* Services */}
+            <Box
               sx={{
-                fontSize: "1.125rem",
-                fontWeight: 700,
-                color: "#1a1a1a",
-                mb: 2,
+                flex: { xs: "1 1 calc(50% - 16px)", sm: "1 1 auto" },
+                minWidth: { xs: "140px", sm: "150px" },
               }}
             >
-              Services
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-              <Link
-                href="#"
+              <Typography
+                variant="h6"
                 sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
+                  fontSize: "1.125rem",
+                  fontWeight: 700,
+                  color: "#1a1a1a",
+                  mb: 2,
                 }}
               >
-                Delivery
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Returns
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                FAQ
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Support
-              </Link>
+                Services
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Delivery
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Returns
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  FAQ
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Support
+                </Link>
+              </Box>
             </Box>
-          </Grid>
 
-          {/* Connect With Us */}
-          <Grid
-            item
-            xs={12}
-            sm={4}
-            md={2.67}
-            sx={{
-              mt: 4,
-            }}
-          >
-            <Typography
-              variant="h6"
+            {/* Connect With Us */}
+            <Box
               sx={{
-                fontSize: "1.125rem",
-                fontWeight: 700,
-                color: "#1a1a1a",
-                mb: 2,
+                flex: { xs: "1 1 calc(50% - 16px)", sm: "1 1 auto" },
+                minWidth: { xs: "140px", sm: "150px" },
               }}
             >
-              Connect With Us
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-              <Link
-                href="#"
+              <Typography
+                variant="h6"
                 sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
+                  fontSize: "1.125rem",
+                  fontWeight: 700,
+                  color: "#1a1a1a",
+                  mb: 2,
                 }}
               >
-                Newsletter
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Social Media
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Blog
-              </Link>
-              <Link
-                href="#"
-                sx={{
-                  color: "#666",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                  "&:hover": {
-                    color: "#FFD84D",
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                Careers
-              </Link>
+                Connect
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Newsletter
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Blog
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Careers
+                </Link>
+                <Link
+                  href="#"
+                  sx={{
+                    color: "#666",
+                    textDecoration: "none",
+                    fontSize: "1rem",
+                    "&:hover": {
+                      color: "#FFD84D",
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Press
+                </Link>
+              </Box>
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
+        {/* Bottom Bar */}
         <Box
           sx={{
             borderTop: "1px solid rgba(0, 0, 0, 0.1)",
-            mt: 6,
             pt: 4,
-            textAlign: "center",
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 2,
           }}
         >
           <Typography
@@ -315,10 +405,76 @@ function Footer() {
             sx={{
               color: "#666",
               fontSize: "0.875rem",
+              textAlign: { xs: "center", sm: "left" },
             }}
           >
-            © {new Date().getFullYear()} Zonix Fresh. All rights reserved.
+            © {new Date().getFullYear()}{" "}
+            <Link
+              href="https://www.zonixtec.com" // change this to your actual website
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="hover"
+              sx={{
+                color: "inherit",
+                fontWeight: 600,
+              }}
+            >
+              Zonixtec
+            </Link>
+            . All rights reserved.
           </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              gap: 3,
+              flexWrap: "wrap",
+              justifyContent: { xs: "center", sm: "flex-end" },
+            }}
+          >
+            <Link
+              href="#"
+              sx={{
+                color: "#666",
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                "&:hover": {
+                  color: "#FFD84D",
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="#"
+              sx={{
+                color: "#666",
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                "&:hover": {
+                  color: "#FFD84D",
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              Terms of Service
+            </Link>
+            <Link
+              href="#"
+              sx={{
+                color: "#666",
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                "&:hover": {
+                  color: "#FFD84D",
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              Cookie Policy
+            </Link>
+          </Box>
         </Box>
       </Container>
     </Box>
