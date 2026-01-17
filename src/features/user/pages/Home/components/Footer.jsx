@@ -461,7 +461,7 @@ function Footer() {
               Terms of Service
             </Link>
             <Link
-              href="#"
+              href="/admin"
               sx={{
                 color: "#666",
                 textDecoration: "none",

@@ -8,6 +8,8 @@ import {
   Button,
   MenuItem,
   Alert,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { addProduct } from "../../services/productService";
 
@@ -22,6 +24,10 @@ const CATEGORIES = [
 
 function AddProduct() {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -126,17 +132,33 @@ function AddProduct() {
   };
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", px: 2 }}>
+    <Box
+      sx={{
+        maxWidth: 900,
+        mx: "auto",
+        px: { xs: 2, sm: 3, md: 4 },
+        py: { xs: 2, sm: 3 },
+      }}
+    >
       <Typography
-        variant="h4"
-        sx={{ mb: 4, fontWeight: 600, color: "#212121" }}
+        variant={isMobile ? "h5" : "h4"}
+        sx={{
+          mb: { xs: 3, sm: 4 },
+          fontWeight: 600,
+          color: "#212121",
+        }}
       >
         Add New Product
       </Typography>
 
       <Paper
         elevation={0}
-        sx={{ p: 4, borderRadius: 2, border: "1px solid #e0e0e0" }}
+        sx={{
+          p: { xs: 2, sm: 3, md: 4 },
+          borderRadius: 2,
+          border: "1px solid #e0e0e0",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+        }}
       >
         {submitError && (
           <Alert severity="error" sx={{ mb: 3 }}>
@@ -145,7 +167,13 @@ function AddProduct() {
         )}
 
         <form onSubmit={handleSubmit}>
-          <Box sx={{ display: "grid", gap: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: { xs: 2.5, sm: 3 },
+            }}
+          >
             {/* Product Name */}
             <TextField
               label="Product Name"
@@ -156,11 +184,16 @@ function AddProduct() {
               helperText={errors.name}
               required
               fullWidth
+              size={isMobile ? "small" : "medium"}
             />
 
-            {/* Category and Unit */}
+            {/* Category and Unit - Stack on mobile */}
             <Box
-              sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3 }}
+              sx={{
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                gap: { xs: 2.5, sm: 3 },
+              }}
             >
               <TextField
                 select
@@ -172,6 +205,7 @@ function AddProduct() {
                 helperText={errors.category}
                 required
                 fullWidth
+                size={isMobile ? "small" : "medium"}
               >
                 {CATEGORIES.map((category) => (
                   <MenuItem key={category} value={category}>
@@ -189,6 +223,7 @@ function AddProduct() {
                 helperText={errors.unit || "e.g., 1 kg, 500 g, 1 pack"}
                 required
                 fullWidth
+                size={isMobile ? "small" : "medium"}
               />
             </Box>
 
@@ -202,14 +237,19 @@ function AddProduct() {
               helperText={errors.image || "Enter a valid image URL"}
               required
               fullWidth
+              size={isMobile ? "small" : "medium"}
             />
 
-            {/* MRP, Price, and Stock */}
+            {/* MRP, Price, and Stock - Stack on mobile, 2 cols on tablet */}
             <Box
               sx={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr",
-                gap: 3,
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  sm: "1fr 1fr",
+                  md: "1fr 1fr 1fr",
+                },
+                gap: { xs: 2.5, sm: 3 },
               }}
             >
               <TextField
@@ -223,6 +263,7 @@ function AddProduct() {
                 inputProps={{ min: 0, step: 0.01 }}
                 required
                 fullWidth
+                size={isMobile ? "small" : "medium"}
               />
 
               <TextField
@@ -236,6 +277,7 @@ function AddProduct() {
                 inputProps={{ min: 0, step: 0.01 }}
                 required
                 fullWidth
+                size={isMobile ? "small" : "medium"}
               />
 
               <TextField
@@ -249,26 +291,35 @@ function AddProduct() {
                 inputProps={{ min: 0 }}
                 required
                 fullWidth
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  gridColumn: { sm: "1 / -1", md: "auto" },
+                }}
               />
             </Box>
 
-            {/* Action Buttons */}
+            {/* Action Buttons - Stack on mobile */}
             <Box
               sx={{
                 display: "flex",
+                flexDirection: { xs: "column-reverse", sm: "row" },
                 gap: 2,
                 justifyContent: "flex-end",
-                mt: 2,
+                mt: { xs: 1, sm: 2 },
               }}
             >
               <Button
                 variant="outlined"
                 onClick={() => navigate("/admin/products")}
+                fullWidth={isMobile}
                 sx={{
                   textTransform: "none",
                   px: 4,
+                  py: { xs: 1.2, sm: 1 },
                   borderColor: "#757575",
                   color: "#757575",
+                  fontSize: { xs: "0.95rem", sm: "0.875rem" },
+                  fontWeight: 500,
                   "&:hover": {
                     borderColor: "#616161",
                     backgroundColor: "#f5f5f5",
@@ -280,12 +331,18 @@ function AddProduct() {
               <Button
                 type="submit"
                 variant="contained"
+                fullWidth={isMobile}
                 sx={{
                   textTransform: "none",
                   px: 4,
+                  py: { xs: 1.2, sm: 1 },
+                  fontSize: { xs: "0.95rem", sm: "0.875rem" },
+                  fontWeight: 500,
                   backgroundColor: "#2e7d32",
+                  boxShadow: "0 2px 4px rgba(46, 125, 50, 0.2)",
                   "&:hover": {
                     backgroundColor: "#1b5e20",
+                    boxShadow: "0 4px 8px rgba(46, 125, 50, 0.3)",
                   },
                 }}
               >

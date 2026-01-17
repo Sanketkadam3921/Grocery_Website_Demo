@@ -118,7 +118,7 @@ function EditProduct() {
 
   if (submitError && !product) {
     return (
-      <Box sx={{ maxWidth: 900, mx: "auto", px: 2 }}>
+      <Box sx={{ maxWidth: 900, mx: "auto", px: { xs: 2, sm: 3 } }}>
         <Alert severity="error" sx={{ mb: 3 }}>
           {submitError}
         </Alert>
@@ -131,6 +131,7 @@ function EditProduct() {
             height: 42,
             borderColor: "#757575",
             color: "#757575",
+            width: { xs: "100%", sm: "auto" },
             "&:hover": {
               borderColor: "#616161",
               backgroundColor: "#f5f5f5",
@@ -144,17 +145,26 @@ function EditProduct() {
   }
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto", px: 2 }}>
+    <Box sx={{ maxWidth: 900, mx: "auto", px: { xs: 2, sm: 3 } }}>
       <Typography
         variant="h4"
-        sx={{ mb: 4, fontWeight: 600, color: "#212121" }}
+        sx={{
+          mb: { xs: 3, md: 4 },
+          fontWeight: 600,
+          color: "#212121",
+          fontSize: { xs: "1.75rem", sm: "2rem", md: "2.125rem" },
+        }}
       >
         Edit Product
       </Typography>
 
       <Paper
         elevation={0}
-        sx={{ p: 4, borderRadius: 2, border: "1px solid #e0e0e0" }}
+        sx={{
+          p: { xs: 2.5, sm: 3, md: 4 },
+          borderRadius: 2,
+          border: "1px solid #e0e0e0",
+        }}
       >
         {submitError && (
           <Alert severity="error" sx={{ mb: 3 }}>
@@ -163,10 +173,22 @@ function EditProduct() {
         )}
 
         {/* Display Product Info (Read-only) */}
-        <Box sx={{ mb: 4, p: 3, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
+        <Box
+          sx={{
+            mb: 4,
+            p: { xs: 2, sm: 2.5, md: 3 },
+            backgroundColor: "#f5f5f5",
+            borderRadius: 2,
+          }}
+        >
           <Typography
             variant="h6"
-            sx={{ mb: 3, fontWeight: 600, color: "#212121" }}
+            sx={{
+              mb: { xs: 2, md: 3 },
+              fontWeight: 600,
+              color: "#212121",
+              fontSize: { xs: "1.125rem", sm: "1.25rem" },
+            }}
           >
             Product Information
           </Typography>
@@ -174,8 +196,8 @@ function EditProduct() {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: 3,
+              gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
+              gap: { xs: 2, sm: 2.5, md: 3 },
             }}
           >
             <Box>
@@ -244,16 +266,25 @@ function EditProduct() {
         <Box sx={{ mb: 3 }}>
           <Typography
             variant="h6"
-            sx={{ mb: 3, fontWeight: 600, color: "#212121" }}
+            sx={{
+              mb: { xs: 2, md: 3 },
+              fontWeight: 600,
+              color: "#212121",
+              fontSize: { xs: "1.125rem", sm: "1.25rem" },
+            }}
           >
             Update Details
           </Typography>
 
           <form onSubmit={handleSubmit}>
             <Box sx={{ display: "grid", gap: 3 }}>
-              {/* Price and Stock in one row */}
+              {/* Price and Stock in one row on desktop, stacked on mobile */}
               <Box
-                sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3 }}
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                  gap: 3,
+                }}
               >
                 <TextField
                   label="Selling Price (₹)"
@@ -286,8 +317,9 @@ function EditProduct() {
               <Box
                 sx={{
                   display: "flex",
+                  flexDirection: { xs: "column", sm: "row" },
                   gap: 2,
-                  justifyContent: "flex-end",
+                  justifyContent: { xs: "stretch", sm: "flex-end" },
                   mt: 2,
                 }}
               >
@@ -300,6 +332,8 @@ function EditProduct() {
                     height: 42,
                     borderColor: "#757575",
                     color: "#757575",
+                    width: { xs: "100%", sm: "auto" },
+                    order: { xs: 2, sm: 1 },
                     "&:hover": {
                       borderColor: "#616161",
                       backgroundColor: "#f5f5f5",
@@ -316,6 +350,8 @@ function EditProduct() {
                     px: 4,
                     height: 42,
                     backgroundColor: "#2e7d32",
+                    width: { xs: "100%", sm: "auto" },
+                    order: { xs: 1, sm: 2 },
                     "&:hover": {
                       backgroundColor: "#1b5e20",
                     },
