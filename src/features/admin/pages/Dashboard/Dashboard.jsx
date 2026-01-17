@@ -14,10 +14,10 @@ import {
 import {
   ShoppingCart as ShoppingCartIcon,
   Today as TodayIcon,
-  AttachMoney as AttachMoneyIcon,
   Warning as WarningIcon,
   PendingActions as PendingActionsIcon,
 } from "@mui/icons-material";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 // Utility function to safely parse JSON from localStorage
 const getFromStorage = (key, defaultValue = []) => {
@@ -111,7 +111,7 @@ function Dashboard() {
     {
       title: "Total Revenue",
       value: `₹${totalRevenue.toLocaleString()}`,
-      icon: <AttachMoneyIcon sx={{ fontSize: 40, color: "#757575" }} />,
+      icon: <CurrencyRupeeIcon sx={{ fontSize: 40, color: "#757575" }} />,
       color: "#f5f5f5",
     },
     {
