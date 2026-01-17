@@ -17,8 +17,6 @@ function AdminLayout() {
         display: "flex",
         minHeight: "100vh",
         backgroundColor: "#fafafa",
-        margin: 0,
-        padding: 0,
       }}
     >
       {/* Sidebar */}
@@ -32,7 +30,6 @@ function AdminLayout() {
           flexDirection: "column",
           overflow: "hidden",
           width: { xs: "100%", md: "calc(100% - 260px)" },
-          marginLeft: { xs: 0, md: "260px" },
         }}
       >
         {/* Navbar */}
@@ -44,7 +41,6 @@ function AdminLayout() {
             flex: 1,
             overflow: "auto",
             p: { xs: 2, sm: 3 },
-            mt: { xs: "64px", sm: "64px" },
           }}
         >
           <Outlet />
