@@ -6,8 +6,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 function AdminNavbar({ handleDrawerToggle }) {
   return (
     <AppBar
-      position="sticky"
+      position="fixed"
       sx={{
+        top: 0,
+        left: { xs: 0, md: "260px" },
+        right: 0,
         backgroundColor: "#fff",
         color: "#424242",
         boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
