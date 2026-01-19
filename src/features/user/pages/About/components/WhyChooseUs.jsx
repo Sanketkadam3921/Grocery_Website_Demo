@@ -1,6 +1,6 @@
 import { Box, Typography, Paper } from "@mui/material";
 import {
-  Restaurant as RestaurantIcon,
+  Spa as FreshIcon,
   LocalShipping as ShippingIcon,
   Security as SecurityIcon,
   SupportAgent as SupportIcon,
@@ -8,7 +8,7 @@ import {
 
 // Icon mapping
 const iconMap = {
-  Restaurant: RestaurantIcon,
+  Fresh: FreshIcon,
   LocalShipping: ShippingIcon,
   Security: SecurityIcon,
   SupportAgent: SupportIcon,
@@ -17,7 +17,7 @@ const iconMap = {
 // Mock data for demonstration
 const mockFeatures = [
   {
-    iconName: "Restaurant",
+    iconName: "Fresh",
     iconSize: 48,
     title: "Fresh Quality",
     description:
