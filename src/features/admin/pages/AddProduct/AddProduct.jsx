@@ -1,32 +1,74 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 import {
   Box,
   Paper,
   Typography,
-  TextField,
-  Button,
-  MenuItem,
-  Alert,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
 import { addProduct } from "../../services/productService";
+import ProductNameField from "./components/ProductNameField";
+import CategoryUnitFields from "./components/CategoryUnitFields";
+import ImageUrlField from "./components/ImageUrlField";
+import PriceFields from "./components/PriceFields";
+import FormActions from "./components/FormActions";
+import ErrorAlert from "./components/ErrorAlert";
 
-const CATEGORIES = [
-  "Fresh Fruits",
-  "Fresh Vegetables",
-  "Dairy & Bakery",
-  "Staples & Grains",
-  "Snacks & Beverages",
-  "Household Essentials",
-];
+// Validation schema using Yup
+const validationSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Product name is required")
+    .trim()
+    .min(2, "Product name must be at least 2 characters"),
+  category: yup.string().required("Category is required"),
+  image: yup
+    .string()
+    .required("Image URL is required")
+    .url("Please enter a valid URL"),
+  mrp: yup
+    .number()
+    .required("MRP is required")
+    .typeError("MRP must be a number")
+    .integer("MRP must be a whole number (no decimals)")
+    .min(2, "MRP must be greater than ₹1")
+    .positive("MRP must be a positive number"),
+  price: yup
+    .number()
+    .required("Selling price is required")
+    .typeError("Selling price must be a number")
+    .integer("Selling price must be a whole number (no decimals)")
+    .min(2, "Selling price must be greater than ₹1")
+    .positive("Selling price must be a positive number")
+    .test(
+      "less-than-mrp",
+      "Price cannot be greater than MRP",
+      function (value) {
+        const { mrp } = this.parent;
+        if (!mrp || !value) return true;
+        return value <= mrp;
+      }
+    ),
+  unit: yup
+    .string()
+    .required("Unit is required")
+    .trim()
+    .min(1, "Unit is required"),
+  stock: yup
+    .number()
+    .required("Stock quantity is required")
+    .typeError("Stock must be a number")
+    .integer("Stock must be a whole number")
+    .min(1, "Stock must be greater than 0")
+    .positive("Stock must be a positive number"),
+});
 
 function AddProduct() {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
   const [formData, setFormData] = useState({
     name: "",
@@ -42,10 +84,41 @@ function AddProduct() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    // For MRP and Price fields, only allow whole numbers (no decimals)
+    if (name === "mrp" || name === "price") {
+      // Remove any non-numeric characters
+      let filteredValue = value.replace(/[^0-9]/g, "");
+      
+      // Prevent leading zero - first digit can't be 0
+      if (filteredValue.startsWith("0")) {
+        filteredValue = filteredValue.replace(/^0+/, "");
+      }
+      
+      setFormData((prev) => ({
+        ...prev,
+        [name]: filteredValue,
+      }));
+    } else if (name === "stock") {
+      // For stock, only allow whole numbers
+      let filteredValue = value.replace(/[^0-9]/g, "");
+      
+      // Prevent leading zero
+      if (filteredValue.startsWith("0")) {
+        filteredValue = filteredValue.replace(/^0+/, "");
+      }
+      
+      setFormData((prev) => ({
+        ...prev,
+        [name]: filteredValue,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+    
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -54,61 +127,39 @@ function AddProduct() {
     }
   };
 
-  const validate = () => {
-    const newErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Product name is required";
-    }
-
-    if (!formData.category) {
-      newErrors.category = "Category is required";
-    }
-
-    if (!formData.image.trim()) {
-      newErrors.image = "Image URL is required";
-    } else if (!isValidUrl(formData.image)) {
-      newErrors.image = "Please enter a valid URL";
-    }
-
-    if (!formData.mrp || formData.mrp <= 0) {
-      newErrors.mrp = "MRP must be greater than 0";
-    }
-
-    if (!formData.price || formData.price <= 0) {
-      newErrors.price = "Price must be greater than 0";
-    }
-
-    if (parseFloat(formData.price) > parseFloat(formData.mrp)) {
-      newErrors.price = "Price cannot be greater than MRP";
-    }
-
-    if (!formData.unit.trim()) {
-      newErrors.unit = "Unit is required";
-    }
-
-    if (formData.stock === "" || formData.stock < 0) {
-      newErrors.stock = "Stock must be 0 or greater";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const isValidUrl = (string) => {
+  const validateForm = async () => {
     try {
-      new URL(string);
+      // Convert string values to numbers for validation
+      const dataToValidate = {
+        ...formData,
+        mrp: formData.mrp && formData.mrp !== "" ? parseInt(formData.mrp, 10) : undefined,
+        price: formData.price && formData.price !== "" ? parseInt(formData.price, 10) : undefined,
+        stock: formData.stock && formData.stock !== "" ? parseInt(formData.stock, 10) : undefined,
+      };
+
+      await validationSchema.validate(dataToValidate, { abortEarly: false });
+      setErrors({});
       return true;
-    } catch (_) {
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const newErrors = {};
+        err.inner.forEach((error) => {
+          if (error.path) {
+            newErrors[error.path] = error.message;
+          }
+        });
+        setErrors(newErrors);
+      }
       return false;
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError("");
 
-    if (!validate()) {
+    const isValid = await validateForm();
+    if (!isValid) {
       return;
     }
 
@@ -117,10 +168,10 @@ function AddProduct() {
         name: formData.name.trim(),
         category: formData.category,
         image: formData.image.trim(),
-        mrp: parseFloat(formData.mrp),
-        price: parseFloat(formData.price),
+        mrp: parseInt(formData.mrp),
+        price: parseInt(formData.price),
         unit: formData.unit.trim(),
-        stock: parseInt(formData.stock) || 0,
+        stock: parseInt(formData.stock),
       };
 
       addProduct(product);
@@ -160,11 +211,7 @@ function AddProduct() {
           boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
         }}
       >
-        {submitError && (
-          <Alert severity="error" sx={{ mb: 3 }}>
-            {submitError}
-          </Alert>
-        )}
+        <ErrorAlert message={submitError} />
 
         <form onSubmit={handleSubmit}>
           <Box
@@ -174,181 +221,44 @@ function AddProduct() {
               gap: { xs: 2.5, sm: 3 },
             }}
           >
-            {/* Product Name */}
-            <TextField
-              label="Product Name"
-              name="name"
+            <ProductNameField
               value={formData.name}
               onChange={handleChange}
-              error={!!errors.name}
-              helperText={errors.name}
-              required
-              fullWidth
-              size={isMobile ? "small" : "medium"}
+              error={errors.name}
+              isMobile={isMobile}
             />
 
-            {/* Category and Unit - Stack on mobile */}
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-                gap: { xs: 2.5, sm: 3 },
-              }}
-            >
-              <TextField
-                select
-                label="Category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                error={!!errors.category}
-                helperText={errors.category}
-                required
-                fullWidth
-                size={isMobile ? "small" : "medium"}
-              >
-                {CATEGORIES.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </TextField>
+            <CategoryUnitFields
+              category={formData.category}
+              unit={formData.unit}
+              onCategoryChange={handleChange}
+              onUnitChange={handleChange}
+              categoryError={errors.category}
+              unitError={errors.unit}
+              isMobile={isMobile}
+            />
 
-              <TextField
-                label="Unit"
-                name="unit"
-                value={formData.unit}
-                onChange={handleChange}
-                error={!!errors.unit}
-                helperText={errors.unit || "e.g., 1 kg, 500 g, 1 pack"}
-                required
-                fullWidth
-                size={isMobile ? "small" : "medium"}
-              />
-            </Box>
-
-            {/* Image URL */}
-            <TextField
-              label="Image URL"
-              name="image"
+            <ImageUrlField
               value={formData.image}
               onChange={handleChange}
-              error={!!errors.image}
-              helperText={errors.image || "Enter a valid image URL"}
-              required
-              fullWidth
-              size={isMobile ? "small" : "medium"}
+              error={errors.image}
+              isMobile={isMobile}
             />
 
-            {/* MRP, Price, and Stock - Stack on mobile, 2 cols on tablet */}
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: {
-                  xs: "1fr",
-                  sm: "1fr 1fr",
-                  md: "1fr 1fr 1fr",
-                },
-                gap: { xs: 2.5, sm: 3 },
-              }}
-            >
-              <TextField
-                label="MRP (₹)"
-                name="mrp"
-                type="number"
-                value={formData.mrp}
-                onChange={handleChange}
-                error={!!errors.mrp}
-                helperText={errors.mrp}
-                inputProps={{ min: 0, step: 0.01 }}
-                required
-                fullWidth
-                size={isMobile ? "small" : "medium"}
-              />
+            <PriceFields
+              mrp={formData.mrp}
+              price={formData.price}
+              stock={formData.stock}
+              onMrpChange={handleChange}
+              onPriceChange={handleChange}
+              onStockChange={handleChange}
+              mrpError={errors.mrp}
+              priceError={errors.price}
+              stockError={errors.stock}
+              isMobile={isMobile}
+            />
 
-              <TextField
-                label="Selling Price (₹)"
-                name="price"
-                type="number"
-                value={formData.price}
-                onChange={handleChange}
-                error={!!errors.price}
-                helperText={errors.price}
-                inputProps={{ min: 0, step: 0.01 }}
-                required
-                fullWidth
-                size={isMobile ? "small" : "medium"}
-              />
-
-              <TextField
-                label="Stock Quantity"
-                name="stock"
-                type="number"
-                value={formData.stock}
-                onChange={handleChange}
-                error={!!errors.stock}
-                helperText={errors.stock}
-                inputProps={{ min: 0 }}
-                required
-                fullWidth
-                size={isMobile ? "small" : "medium"}
-                sx={{
-                  gridColumn: { sm: "1 / -1", md: "auto" },
-                }}
-              />
-            </Box>
-
-            {/* Action Buttons - Stack on mobile */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column-reverse", sm: "row" },
-                gap: 2,
-                justifyContent: "flex-end",
-                mt: { xs: 1, sm: 2 },
-              }}
-            >
-              <Button
-                variant="outlined"
-                onClick={() => navigate("/admin/products")}
-                fullWidth={isMobile}
-                sx={{
-                  textTransform: "none",
-                  px: 4,
-                  py: { xs: 1.2, sm: 1 },
-                  borderColor: "#757575",
-                  color: "#757575",
-                  fontSize: { xs: "0.95rem", sm: "0.875rem" },
-                  fontWeight: 500,
-                  "&:hover": {
-                    borderColor: "#616161",
-                    backgroundColor: "#f5f5f5",
-                  },
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth={isMobile}
-                sx={{
-                  textTransform: "none",
-                  px: 4,
-                  py: { xs: 1.2, sm: 1 },
-                  fontSize: { xs: "0.95rem", sm: "0.875rem" },
-                  fontWeight: 500,
-                  backgroundColor: "#2e7d32",
-                  boxShadow: "0 2px 4px rgba(46, 125, 50, 0.2)",
-                  "&:hover": {
-                    backgroundColor: "#1b5e20",
-                    boxShadow: "0 4px 8px rgba(46, 125, 50, 0.3)",
-                  },
-                }}
-              >
-                Add Product
-              </Button>
-            </Box>
+            <FormActions isMobile={isMobile} />
           </Box>
         </form>
       </Paper>

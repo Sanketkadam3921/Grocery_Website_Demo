@@ -56,7 +56,7 @@ const updateOrderStatus = (orderId, newStatus) => {
   try {
     const orders = getOrdersFromStorage();
     const updatedOrders = orders.map((order) =>
-      order.orderId === orderId ? { ...order, status: newStatus } : order
+      order.orderId === orderId ? { ...order, status: newStatus } : order,
     );
     localStorage.setItem("orders", JSON.stringify(updatedOrders));
 
@@ -65,10 +65,10 @@ const updateOrderStatus = (orderId, newStatus) => {
     userIds.forEach((userId) => {
       const userOrdersKey = `orders_${userId}`;
       const userOrders = JSON.parse(
-        localStorage.getItem(userOrdersKey) || "[]"
+        localStorage.getItem(userOrdersKey) || "[]",
       );
       const updatedUserOrders = userOrders.map((order) =>
-        order.orderId === orderId ? { ...order, status: newStatus } : order
+        order.orderId === orderId ? { ...order, status: newStatus } : order,
       );
       localStorage.setItem(userOrdersKey, JSON.stringify(updatedUserOrders));
     });
@@ -98,7 +98,7 @@ function Orders() {
       const allOrders = getOrdersFromStorage();
       // Sort by date, most recent first
       const sortedOrders = [...allOrders].sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
       );
       setOrders(sortedOrders);
     };
@@ -129,7 +129,7 @@ function Orders() {
   const handleStatusChange = (orderId, newStatus) => {
     updateOrderStatus(orderId, newStatus);
     const updatedOrders = orders.map((order) =>
-      order.orderId === orderId ? { ...order, status: newStatus } : order
+      order.orderId === orderId ? { ...order, status: newStatus } : order,
     );
     setOrders(updatedOrders);
   };
@@ -145,7 +145,7 @@ function Orders() {
   };
 
   const pendingCount = orders.filter(
-    (order) => order.status === "Pending"
+    (order) => order.status === "Pending",
   ).length;
 
   return (
@@ -532,6 +532,7 @@ function Orders() {
               {/* Order Information Grid */}
               <Box
                 sx={{
+                  mt: 2,
                   display: "grid",
                   gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                   gap: 3,
@@ -695,6 +696,41 @@ function Orders() {
                   </Paper>
                 </Box>
               )}
+              <Box
+                sx={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ color: "#757575", fontWeight: 600 }}
+                >
+                  Update Status:
+                </Typography>
+                {selectedOrder && (
+                  <FormControl size="small" sx={{ minWidth: 150 }}>
+                    <Select
+                      value={selectedOrder.status || "Pending"}
+                      onChange={(e) => {
+                        handleStatusChange(
+                          selectedOrder.orderId,
+                          e.target.value,
+                        );
+                        setSelectedOrder({
+                          ...selectedOrder,
+                          status: e.target.value,
+                        });
+                      }}
+                      sx={{
+                        "& .MuiSelect-select": {
+                          py: 1,
+                        },
+                      }}
+                    >
+                      <MenuItem value="Pending">Pending</MenuItem>
+                      <MenuItem value="Delivered">Delivered</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              </Box>
 
               {/* Order Items */}
               <Box>
@@ -757,36 +793,6 @@ function Orders() {
         <DialogActions
           sx={{ px: 3, py: 2.5, borderTop: "1px solid #e0e0e0", gap: 2 }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
-            <Typography
-              variant="body2"
-              sx={{ color: "#757575", fontWeight: 600 }}
-            >
-              Update Status:
-            </Typography>
-            {selectedOrder && (
-              <FormControl size="small" sx={{ minWidth: 150 }}>
-                <Select
-                  value={selectedOrder.status || "Pending"}
-                  onChange={(e) => {
-                    handleStatusChange(selectedOrder.orderId, e.target.value);
-                    setSelectedOrder({
-                      ...selectedOrder,
-                      status: e.target.value,
-                    });
-                  }}
-                  sx={{
-                    "& .MuiSelect-select": {
-                      py: 1,
-                    },
-                  }}
-                >
-                  <MenuItem value="Pending">Pending</MenuItem>
-                  <MenuItem value="Delivered">Delivered</MenuItem>
-                </Select>
-              </FormControl>
-            )}
-          </Box>
           <Button
             onClick={handleCloseDialog}
             variant="contained"
@@ -809,4 +815,3 @@ function Orders() {
 }
 
 export default Orders;
-

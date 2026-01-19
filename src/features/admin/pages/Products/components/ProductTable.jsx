@@ -32,7 +32,7 @@ function ProductTable({ products, onProductDeleted }) {
     return products.filter(
       (product) =>
         product.name?.toLowerCase().includes(term) ||
-        product.category?.toLowerCase().includes(term)
+        product.category?.toLowerCase().includes(term),
     );
   }, [products, searchTerm]);
 
@@ -70,7 +70,7 @@ function ProductTable({ products, onProductDeleted }) {
     <Box>
       <TextField
         fullWidth
-        placeholder="Search products by name or category..."
+        placeholder="Search products "
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         sx={{ mb: 3 }}
@@ -153,8 +153,7 @@ function ProductTable({ products, onProductDeleted }) {
                       sx={{
                         backgroundColor:
                           (product.stock || 0) < 5 ? "#fff3e0" : "#e8f5e9",
-                        color:
-                          (product.stock || 0) < 5 ? "#f57c00" : "#2e7d32",
+                        color: (product.stock || 0) < 5 ? "#f57c00" : "#2e7d32",
                         fontWeight: 600,
                       }}
                     />

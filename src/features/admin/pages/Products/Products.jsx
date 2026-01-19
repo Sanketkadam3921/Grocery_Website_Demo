@@ -46,7 +46,14 @@ function Products() {
           mb: 4,
         }}
       >
-        <Typography variant="h4" sx={{ fontWeight: 600, color: "#212121" }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 600,
+            color: "#212121",
+            fontSize: { xs: 20, sm: 30, md: 40 },
+          }}
+        >
           Products Management
         </Typography>
         <Button
@@ -54,6 +61,7 @@ function Products() {
           startIcon={<AddIcon />}
           onClick={() => navigate("/admin/products/add")}
           sx={{
+            minWidth: "150px",
             textTransform: "none",
             backgroundColor: "#2e7d32",
             "&:hover": {
@@ -66,7 +74,10 @@ function Products() {
       </Box>
 
       <Paper elevation={0} sx={{ p: 3, borderRadius: 2 }}>
-        <ProductTable products={products} onProductDeleted={handleProductDeleted} />
+        <ProductTable
+          products={products}
+          onProductDeleted={handleProductDeleted}
+        />
       </Paper>
     </Box>
   );

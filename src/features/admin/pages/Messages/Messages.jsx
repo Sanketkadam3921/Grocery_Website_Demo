@@ -94,7 +94,7 @@ function Messages() {
     // Mark as read
     if (message.status === "unread") {
       const updatedMessages = messages.map((msg) =>
-        msg.id === message.id ? { ...msg, status: "read" } : msg
+        msg.id === message.id ? { ...msg, status: "read" } : msg,
       );
       setMessages(updatedMessages);
       localStorage.setItem("contactMessages", JSON.stringify(updatedMessages));
@@ -495,6 +495,7 @@ function Messages() {
               {/* Contact Information Grid */}
               <Box
                 sx={{
+                  mt: 3,
                   display: "grid",
                   gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                   gap: 3,
