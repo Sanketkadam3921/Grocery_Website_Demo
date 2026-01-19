@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import AdminNavbar from "./AdminNavbar";
+import ScrollToTop from "../../../shared/components/ScrollToTop";
 
 function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -19,6 +20,7 @@ function AdminLayout() {
         backgroundColor: "#fafafa",
       }}
     >
+      <ScrollToTop />
       {/* Sidebar */}
       <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
 

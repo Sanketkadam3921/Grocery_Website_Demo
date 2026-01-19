@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Nav from "../pages/Home/components/Nav";
 import Footer from "../pages/Home/components/Footer";
+import ScrollToTop from "../../../shared/components/ScrollToTop";
 
 function UserLayout() {
   return (
@@ -12,6 +13,7 @@ function UserLayout() {
         minHeight: "100vh",
       }}
     >
+      <ScrollToTop />
       <Nav />
       <Box
         sx={{
@@ -28,6 +30,7 @@ function UserLayout() {
 }
 
 export default UserLayout;
+
 
 
 

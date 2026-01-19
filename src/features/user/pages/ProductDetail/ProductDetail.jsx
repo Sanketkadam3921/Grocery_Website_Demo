@@ -266,21 +266,6 @@ function ProductDetail() {
                     objectFit: "contain",
                   }}
                 />
-                {hasDiscount && (
-                  <Chip
-                    label={`${discountPercentage}% OFF`}
-                    sx={{
-                      position: "absolute",
-                      top: { xs: 8, sm: 10 },
-                      left: { xs: 8, sm: 10 },
-                      backgroundColor: "#2e7d32",
-                      color: "white",
-                      fontWeight: 600,
-                      fontSize: { xs: "0.6875rem", sm: "0.75rem" },
-                      height: { xs: 20, sm: 24 },
-                    }}
-                  />
-                )}
               </Box>
             </Box>
 
@@ -385,6 +370,19 @@ function ProductDetail() {
                       >
                         ₹{product.mrp}
                       </Typography>
+                    )}
+                    {hasDiscount && (
+                      <Chip
+                        label={`${discountPercentage}% OFF`}
+                        sx={{
+                          backgroundColor: "#2e7d32",
+                          color: "white",
+                          fontWeight: 600,
+                          fontSize: { xs: "0.75rem", sm: "0.8125rem" },
+                          height: { xs: 24, sm: 28 },
+                          px: { xs: 0.5, sm: 0.75 },
+                        }}
+                      />
                     )}
                   </Box>
                   <Typography

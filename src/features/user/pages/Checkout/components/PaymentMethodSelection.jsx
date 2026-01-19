@@ -1,10 +1,18 @@
-import { Box, Paper, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Typography } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  Typography,
+} from "@mui/material";
 import {
   CreditCard as CreditCardIcon,
   AccountBalanceWallet as WalletIcon,
-  LocalAtm as CashIcon,
 } from "@mui/icons-material";
-
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 function PaymentMethodSelection({ paymentMethod, setPaymentMethod }) {
   return (
     <Box sx={{ mt: 3 }}>
@@ -105,7 +113,7 @@ function PaymentMethodSelection({ paymentMethod, setPaymentMethod }) {
               control={<Radio />}
               label={
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <CashIcon sx={{ color: "#2e7d32" }} />
+                  <CurrencyRupeeIcon sx={{ color: "#2e7d32" }} />
                   <Typography sx={{ fontWeight: 600 }}>
                     Cash on Delivery
                   </Typography>
@@ -120,4 +128,3 @@ function PaymentMethodSelection({ paymentMethod, setPaymentMethod }) {
 }
 
 export default PaymentMethodSelection;
-

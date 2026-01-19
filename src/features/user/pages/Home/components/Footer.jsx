@@ -12,7 +12,8 @@ function Footer() {
       component="footer"
       sx={{
         backgroundColor: "#FFF8ED",
-        py: { xs: 6, md: 10 },
+        py: { xs: 5, md: 4 },
+
         mt: "auto",
       }}
     >
@@ -177,8 +178,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -191,8 +193,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -205,8 +208,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -219,8 +223,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -255,8 +260,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -269,8 +275,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -283,8 +290,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -297,8 +305,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -333,8 +342,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -347,8 +357,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -361,8 +372,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -375,8 +387,9 @@ function Footer() {
                     color: "#666",
                     textDecoration: "none",
                     fontSize: "1rem",
+                    transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#FFD84D",
+                      color: "#1a1a1a",
                       textDecoration: "underline",
                     },
                   }}
@@ -438,8 +451,9 @@ function Footer() {
                 color: "#666",
                 textDecoration: "none",
                 fontSize: "0.875rem",
+                transition: "color 0.2s ease",
                 "&:hover": {
-                  color: "#FFD84D",
+                  color: "#1a1a1a",
                   textDecoration: "underline",
                 },
               }}
@@ -452,8 +466,9 @@ function Footer() {
                 color: "#666",
                 textDecoration: "none",
                 fontSize: "0.875rem",
+                transition: "color 0.2s ease",
                 "&:hover": {
-                  color: "#FFD84D",
+                  color: "#1a1a1a",
                   textDecoration: "underline",
                 },
               }}
@@ -466,8 +481,9 @@ function Footer() {
                 color: "#666",
                 textDecoration: "none",
                 fontSize: "0.875rem",
+                transition: "color 0.2s ease",
                 "&:hover": {
-                  color: "#FFD84D",
+                  color: "#1a1a1a",
                   textDecoration: "underline",
                 },
               }}

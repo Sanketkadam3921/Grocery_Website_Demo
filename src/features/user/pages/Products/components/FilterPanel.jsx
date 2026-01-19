@@ -3,12 +3,12 @@ import {
   Drawer,
   Box,
   Typography,
-  Slider,
   FormControlLabel,
   Checkbox,
   Button,
   Divider,
   IconButton,
+  Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -21,6 +21,14 @@ const categories = [
   "Household Essentials",
 ];
 
+const priceRanges = [
+  { label: "Under ₹100", min: 0, max: 100 },
+  { label: "₹100 - ₹300", min: 100, max: 300 },
+  { label: "₹300 - ₹500", min: 300, max: 500 },
+  { label: "₹500 - ₹1000", min: 500, max: 1000 },
+  { label: "Above ₹1000", min: 1000, max: 10000 },
+];
+
 function FilterPanel({
   open,
   onClose,
@@ -31,39 +39,31 @@ function FilterPanel({
   onCategoryToggle,
   onResetFilters,
 }) {
-  const [localPriceRange, setLocalPriceRange] = useState(priceRange);
+  const [selectedPriceRange, setSelectedPriceRange] = useState(null);
   const isDraggingRef = useRef(false);
 
-  // Sync local state only when panel opens (mobile) or on mount (desktop) or when reset is clicked
+  // Find matching price range on mount or when priceRange changes
   useEffect(() => {
-    if (!isDraggingRef.current) {
-      setLocalPriceRange(priceRange);
+    const matchingRange = priceRanges.find(
+      (range) => range.min === priceRange[0] && range.max === priceRange[1],
+    );
+    setSelectedPriceRange(matchingRange ? matchingRange.label : null);
+  }, [priceRange]);
+
+  const handlePriceRangeClick = (range) => {
+    setSelectedPriceRange(range.label);
+    onPriceChange([range.min, range.max]);
+
+    // Auto-close drawer on mobile after selection
+    if (isMobile) {
+      setTimeout(() => onClose(), 300);
     }
-  }, [priceRange, open]);
-
-  const handleSliderChange = (event, newValue) => {
-    isDraggingRef.current = true;
-    setLocalPriceRange(newValue);
-  };
-
-  const handleApplyFilters = () => {
-    isDraggingRef.current = false;
-
-    // Validate values
-    const minValue = Math.max(0, localPriceRange[0]);
-    const maxValue = Math.min(1000, Math.max(minValue, localPriceRange[1]));
-
-    // Update local state with validated values
-    setLocalPriceRange([minValue, maxValue]);
-
-    // Apply filters
-    onPriceChange([minValue, maxValue]);
   };
 
   const handleResetFilters = () => {
     isDraggingRef.current = false;
+    setSelectedPriceRange(null);
     onResetFilters();
-    // Local state will sync via useEffect when priceRange updates
   };
 
   const FilterContent = () => (
@@ -105,60 +105,48 @@ function FilterPanel({
         >
           Price Range
         </Typography>
-        <Slider
-          size="small"
-          value={localPriceRange}
-          onChange={handleSliderChange}
-          valueLabelDisplay="auto"
-          min={0}
-          max={1000}
-          aria-label="Price Range"
-          sx={{
-            color: "#2e7d32",
-            mb: 2,
-            "& .MuiSlider-valueLabel": {
-              backgroundColor: "#2e7d32",
-            },
-            "& .MuiSlider-thumb": {
-              "&:hover": {
-                boxShadow: "0 0 0 8px rgba(46, 125, 50, 0.16)",
-              },
-            },
-          }}
-        />
+
+        {/* Price Range Buttons */}
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            mb: 2,
+            flexDirection: "column",
+            gap: 1.5,
           }}
         >
-          <Typography variant="body2" sx={{ color: "#666" }}>
-            ₹{localPriceRange[0]}
-          </Typography>
-          <Typography variant="body2" sx={{ color: "#666" }}>
-            ₹{localPriceRange[1]}
-          </Typography>
+          {priceRanges.map((range) => (
+            <Button
+              key={range.label}
+              variant={
+                selectedPriceRange === range.label ? "contained" : "outlined"
+              }
+              onClick={() => handlePriceRangeClick(range)}
+              sx={{
+                justifyContent: "flex-start",
+                textTransform: "none",
+                fontWeight: 500,
+                py: 1.25,
+                px: 2,
+                borderColor:
+                  selectedPriceRange === range.label ? "#2e7d32" : "#e0e0e0",
+                backgroundColor:
+                  selectedPriceRange === range.label
+                    ? "#2e7d32"
+                    : "transparent",
+                color: selectedPriceRange === range.label ? "white" : "#1a1a1a",
+                "&:hover": {
+                  borderColor: "#2e7d32",
+                  backgroundColor:
+                    selectedPriceRange === range.label
+                      ? "#1b5e20"
+                      : "rgba(46, 125, 50, 0.04)",
+                },
+              }}
+            >
+              {range.label}
+            </Button>
+          ))}
         </Box>
-
-        {/* Apply Filters Button */}
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={handleApplyFilters}
-          sx={{
-            backgroundColor: "#2e7d32",
-            color: "white",
-            textTransform: "none",
-            fontWeight: 600,
-            py: 1.25,
-            "&:hover": {
-              backgroundColor: "#1b5e20",
-            },
-          }}
-        >
-          Apply Filters
-        </Button>
       </Box>
 
       <Divider sx={{ mb: 3 }} />

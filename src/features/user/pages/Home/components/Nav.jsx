@@ -182,7 +182,7 @@ function Nav() {
 
     // Listen for storage changes (when cart is updated in other tabs/components)
     window.addEventListener("storage", updateCartCount);
-    
+
     // Custom event for same-tab updates
     window.addEventListener("cartUpdated", updateCartCount);
 
@@ -264,7 +264,10 @@ function Nav() {
                 component={Link}
                 to="/"
                 sx={{
-                  color: location.pathname === "/" ? "#2e7d32" : "rgba(92, 92, 92, 1)",
+                  color:
+                    location.pathname === "/"
+                      ? "#2e7d32"
+                      : "rgba(92, 92, 92, 1)",
                   fontSize: "1rem",
                   cursor: "pointer",
                   textDecoration: "none",
@@ -278,7 +281,10 @@ function Nav() {
                 component={Link}
                 to="/about"
                 sx={{
-                  color: location.pathname === "/about" ? "#2e7d32" : "rgba(92, 92, 92, 1)",
+                  color:
+                    location.pathname === "/about"
+                      ? "#2e7d32"
+                      : "rgba(92, 92, 92, 1)",
                   fontSize: "1rem",
                   cursor: "pointer",
                   textDecoration: "none",
@@ -292,7 +298,10 @@ function Nav() {
                 component={Link}
                 to="/products"
                 sx={{
-                  color: location.pathname === "/products" ? "#2e7d32" : "rgba(92, 92, 92, 1)",
+                  color:
+                    location.pathname === "/products"
+                      ? "#2e7d32"
+                      : "rgba(92, 92, 92, 1)",
                   fontSize: "1rem",
                   cursor: "pointer",
                   textDecoration: "none",
@@ -306,7 +315,10 @@ function Nav() {
                 component={Link}
                 to="/contact"
                 sx={{
-                  color: location.pathname === "/contact" ? "#2e7d32" : "rgba(92, 92, 92, 1)",
+                  color:
+                    location.pathname === "/contact"
+                      ? "#2e7d32"
+                      : "rgba(92, 92, 92, 1)",
                   fontSize: "1rem",
                   cursor: "pointer",
                   textDecoration: "none",
@@ -487,7 +499,7 @@ function Nav() {
           </Typography>
 
           {/* Mobile Cart Link */}
-          <Box
+          {/* <Box
             component={Link}
             to="/cart"
             onClick={() => {
@@ -509,16 +521,17 @@ function Nav() {
               <ShoppingCartIcon />
             </Badge>
             <Typography>Cart</Typography>
-          </Box>
+          </Box> */}
 
           {isAuthenticated ? (
             <Box sx={{ mt: 2 }}>
               <Typography
-                variant="body2"
+                variant="subtitle1"
                 sx={{
-                  mb: 1,
-                  color: "rgba(92, 92, 92, 1)",
+                  mb: 0.5,
+                  color: "#1a1a1a",
                   fontWeight: 600,
+                  letterSpacing: "0.2px",
                 }}
               >
                 {user?.name}

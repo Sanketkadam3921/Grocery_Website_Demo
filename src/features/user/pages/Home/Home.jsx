@@ -26,8 +26,9 @@ function Home() {
       <DiscoverDifferenceSection />
       <ConnectWithUsSection />
       <ExploreFeaturesSection />
-      <FAQSection />
       <TrustedBrandsRow />
+      <FAQSection />
+
       <FeaturedProductsBanner />
     </Box>
   );

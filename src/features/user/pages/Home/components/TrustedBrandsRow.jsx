@@ -60,7 +60,11 @@ function TrustedBrandsRow() {
             justifyContent: "center",
             alignItems: "center",
             gap: { xs: 4, md: 7 },
-            flexWrap: "wrap",
+            flexWrap: {
+              xs: "wrap", // mobile
+              sm: "wrap", // tablet
+              md: "wrap", // desktop (optional)
+            },
             overflowX: "auto",
             pb: 1,
             "&::-webkit-scrollbar": {
@@ -99,7 +103,3 @@ function TrustedBrandsRow() {
 }
 
 export default TrustedBrandsRow;
-
-
-
-

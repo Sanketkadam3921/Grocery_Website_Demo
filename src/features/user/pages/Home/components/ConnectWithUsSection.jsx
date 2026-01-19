@@ -100,8 +100,8 @@ function ConnectWithUsSection() {
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: "#1a1a1a",
-                    color: "white",
+                    backgroundColor: "#FFD84D",
+                    color: "black",
                     borderRadius: "999px",
                     px: { xs: 3, md: 4 },
                     py: { xs: 1.25, md: 1.5 },
@@ -111,7 +111,7 @@ function ConnectWithUsSection() {
                     width: { xs: "100%", sm: "auto" },
                     boxShadow: "0px 10px 20px rgba(0,0,0,0.15)",
                     "&:hover": {
-                      backgroundColor: "#000",
+                      backgroundColor: "#FFD84D",
                     },
                   }}
                 >
@@ -149,4 +149,3 @@ function ConnectWithUsSection() {
 }
 
 export default ConnectWithUsSection;
-

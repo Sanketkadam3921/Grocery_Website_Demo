@@ -93,8 +93,8 @@ function FeatureCardsSection() {
               sx={{
                 flex: {
                   xs: "1 1 100%", // Mobile: 1 card per row
-                  sm: "1 1 calc(50% - 12px)", // Small tablet: 2 cards per row
-                  md: "1 1 calc(33.333% - 21px)", // Tablet & up: 3 cards per row
+                  sm: "1 1 calc(30% - 12px)", // Small tablet: 2 cards per row
+                  md: "1 1 calc(30% - 21px)", // Tablet & up: 3 cards per row
                 },
                 maxWidth: "350px",
               }}

@@ -9,11 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
-import {
-  getCart,
-  getCartTotal,
-  clearCart,
-} from "../../services/cartService";
+import { getCart, getCartTotal, clearCart } from "../../services/cartService";
 import { addOrder } from "../../services/orderService";
 import { updateProductStockOnOrder } from "../../../admin/services/productService";
 import { useAuth } from "../../../auth/hooks/useAuth";
@@ -32,7 +28,8 @@ function Checkout() {
   const [total, setTotal] = useState(0);
 
   // Custom hooks
-  const { formData, errors, handleInputChange, validateForm } = useCheckoutForm();
+  const { formData, errors, handleInputChange, validateForm } =
+    useCheckoutForm();
   const {
     activeStep,
     paymentMethod,
@@ -88,7 +85,7 @@ function Checkout() {
     if (order) {
       // Store order ID temporarily for order success page
       localStorage.setItem("lastOrderId", order.orderId);
-      
+
       // Clear cart
       clearCart();
       window.dispatchEvent(new Event("cartUpdated"));
@@ -121,9 +118,7 @@ function Checkout() {
           />
         );
       case 2:
-        return (
-          <ReviewStep formData={formData} paymentMethod={paymentMethod} />
-        );
+        return <ReviewStep formData={formData} paymentMethod={paymentMethod} />;
       default:
         return null;
     }
@@ -244,8 +239,10 @@ function Checkout() {
                   onClick={handleBack}
                   sx={{
                     textTransform: "none",
-                    color: "#666",
+                    color: "#ffffff",
                     width: { xs: "100%", sm: "auto" },
+                    visibility: activeStep === 0 ? "hidden" : "visible",
+                    backgroundColor: "grey",
                   }}
                 >
                   Back

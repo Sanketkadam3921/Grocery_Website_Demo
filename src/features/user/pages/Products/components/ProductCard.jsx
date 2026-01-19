@@ -1,12 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { Card, CardMedia, CardContent, Typography, Button, Box, Chip } from "@mui/material";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Chip,
+} from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { getProductById } from "../../../../admin/services/productService";
 
 function ProductCard({ product, onAddToCart }) {
   const navigate = useNavigate();
   const hasDiscount = product.mrp > product.price;
-  
+
   // Get current stock from products in localStorage
   const currentProduct = getProductById(product.id);
   const stock = currentProduct?.stock ?? product.stock ?? 0;
@@ -72,7 +80,9 @@ function ProductCard({ product, onAddToCart }) {
           {product.name}
         </Typography>
 
-        <Box sx={{ mb: 1.5, display: "flex", flexDirection: "column", gap: 0.5 }}>
+        <Box
+          sx={{ mb: 1.5, display: "flex", flexDirection: "column", gap: 0.5 }}
+        >
           <Typography
             variant="body2"
             sx={{
@@ -109,7 +119,26 @@ function ProductCard({ product, onAddToCart }) {
           )}
         </Box>
 
-        <Box sx={{ mb: 2, flexGrow: 1 }}>
+        <Box
+          sx={{
+            mb: 2,
+            flexGrow: 1,
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontSize: { xs: "1.125rem", md: "1.25rem" },
+              fontWeight: 700,
+              color: "#2e7d32",
+            }}
+          >
+            ₹{product.price}
+          </Typography>
+
           {hasDiscount && (
             <Typography
               variant="body2"
@@ -117,35 +146,23 @@ function ProductCard({ product, onAddToCart }) {
                 fontSize: "0.875rem",
                 color: "#999",
                 textDecoration: "line-through",
-                display: "inline-block",
-                mr: 1,
               }}
             >
               ₹{product.mrp}
             </Typography>
           )}
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: { xs: "1.125rem", md: "1.25rem" },
-              fontWeight: 700,
-              color: "#2e7d32",
-              display: "inline-block",
-            }}
-          >
-            ₹{product.price}
-          </Typography>
+
           {hasDiscount && (
             <Typography
               variant="caption"
               sx={{
                 fontSize: "0.75rem",
                 color: "#2e7d32",
-                ml: 1,
                 fontWeight: 600,
               }}
             >
-              {Math.round(((product.mrp - product.price) / product.mrp) * 100)}% OFF
+              {Math.round(((product.mrp - product.price) / product.mrp) * 100)}%
+              OFF
             </Typography>
           )}
         </Box>
@@ -181,5 +198,3 @@ function ProductCard({ product, onAddToCart }) {
 }
 
 export default ProductCard;
-
-

@@ -130,7 +130,7 @@ function HeroSection() {
                 Shop Now
               </Button>
 
-              <Button
+              {/* <Button
                 variant="outlined"
                 onClick={() => {
                   navigate("/products");
@@ -153,7 +153,7 @@ function HeroSection() {
                 }}
               >
                 Explore
-              </Button>
+              </Button> */}
             </Box>
           </Box>
         </Box>
