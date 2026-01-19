@@ -126,6 +126,8 @@ import {
   Badge,
   Menu,
   MenuItem,
+  Avatar,
+  Divider,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -438,126 +440,152 @@ function Nav() {
             p: 3,
             display: "flex",
             flexDirection: "column",
-            gap: 2,
+            height: "100%",
           }}
         >
-          <Typography
-            component={Link}
-            to="/"
-            onClick={toggleDrawer(false)}
-            sx={{
-              fontSize: "1.1rem",
-              cursor: "pointer",
-              color: "rgba(92, 92, 92, 1)",
-              textDecoration: "none",
-              "&:hover": { color: "#2e7d32" },
-            }}
-          >
-            Home
-          </Typography>
-          <Typography
-            component={Link}
-            to="/about"
-            onClick={toggleDrawer(false)}
-            sx={{
-              fontSize: "1.1rem",
-              cursor: "pointer",
-              color: "rgba(92, 92, 92, 1)",
-              textDecoration: "none",
-              "&:hover": { color: "#2e7d32" },
-            }}
-          >
-            About
-          </Typography>
-          <Typography
-            component={Link}
-            to="/products"
-            onClick={toggleDrawer(false)}
-            sx={{
-              fontSize: "1.1rem",
-              cursor: "pointer",
-              color: "rgba(92, 92, 92, 1)",
-              textDecoration: "none",
-              "&:hover": { color: "#2e7d32" },
-            }}
-          >
-            Shop
-          </Typography>
-          <Typography
-            component={Link}
-            to="/contact"
-            onClick={toggleDrawer(false)}
-            sx={{
-              fontSize: "1.1rem",
-              cursor: "pointer",
-              color: "rgba(92, 92, 92, 1)",
-              textDecoration: "none",
-              "&:hover": { color: "#2e7d32" },
-            }}
-          >
-            Contact
-          </Typography>
+          {/* User Info Section - Only show if authenticated */}
+          {isAuthenticated && (
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  mb: 2,
+                }}
+              >
+                <Avatar
+                  sx={{
+                    width: 48,
+                    height: 48,
+                    backgroundColor: "#2e7d32",
+                    color: "white",
+                    fontWeight: 600,
+                    fontSize: "1.125rem",
+                  }}
+                >
+                  {user?.name
+                    ?.split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()
+                    .slice(0, 2) || "U"}
+                </Avatar>
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      color: "#1a1a1a",
+                      fontWeight: 600,
+                      fontSize: "1rem",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {user?.name || "User"}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#666",
+                      fontSize: "0.8125rem",
+                      mt: 0.25,
+                    }}
+                  >
+                    Logged in
+                  </Typography>
+                </Box>
+              </Box>
+              <Divider sx={{ mb: 2 }} />
+            </>
+          )}
 
-          {/* Mobile Cart Link */}
-          {/* <Box
-            component={Link}
-            to="/cart"
-            onClick={() => {
-              toggleDrawer(false)();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              fontSize: "1.1rem",
-              cursor: "pointer",
-              color: "rgba(92, 92, 92, 1)",
-              textDecoration: "none",
-              "&:hover": { color: "#2e7d32" },
-            }}
-          >
-            <Badge badgeContent={cartItemCount} color="error">
-              <ShoppingCartIcon />
-            </Badge>
-            <Typography>Cart</Typography>
-          </Box> */}
+          {/* Navigation Links */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Typography
+              component={Link}
+              to="/"
+              onClick={toggleDrawer(false)}
+              sx={{
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                color: "rgba(92, 92, 92, 1)",
+                textDecoration: "none",
+                "&:hover": { color: "#2e7d32" },
+              }}
+            >
+              Home
+            </Typography>
+            <Typography
+              component={Link}
+              to="/about"
+              onClick={toggleDrawer(false)}
+              sx={{
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                color: "rgba(92, 92, 92, 1)",
+                textDecoration: "none",
+                "&:hover": { color: "#2e7d32" },
+              }}
+            >
+              About
+            </Typography>
+            <Typography
+              component={Link}
+              to="/products"
+              onClick={toggleDrawer(false)}
+              sx={{
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                color: "rgba(92, 92, 92, 1)",
+                textDecoration: "none",
+                "&:hover": { color: "#2e7d32" },
+              }}
+            >
+              Shop
+            </Typography>
+            <Typography
+              component={Link}
+              to="/contact"
+              onClick={toggleDrawer(false)}
+              sx={{
+                fontSize: "1.1rem",
+                cursor: "pointer",
+                color: "rgba(92, 92, 92, 1)",
+                textDecoration: "none",
+                "&:hover": { color: "#2e7d32" },
+              }}
+            >
+              Contact
+            </Typography>
+          </Box>
 
+          {/* Divider before Logout/Login */}
+          <Divider sx={{ my: 2 }} />
+
+          {/* Logout/Login Button */}
           {isAuthenticated ? (
-            <Box sx={{ mt: 2 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  mb: 0.5,
-                  color: "#1a1a1a",
-                  fontWeight: 600,
-                  letterSpacing: "0.2px",
-                }}
-              >
-                {user?.name}
-              </Typography>
-              <Button
-                onClick={() => {
-                  toggleDrawer(false)();
-                  handleLogout();
-                }}
-                variant="outlined"
-                fullWidth
-                sx={{
-                  borderColor: "#2e7d32",
-                  color: "#2e7d32",
-                  borderRadius: "52px",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  "&:hover": {
-                    borderColor: "#1b5e20",
-                    backgroundColor: "rgba(46, 125, 50, 0.04)",
-                  },
-                }}
-              >
-                Logout
-              </Button>
-            </Box>
+            <Button
+              onClick={() => {
+                toggleDrawer(false)();
+                handleLogout();
+              }}
+              variant="outlined"
+              fullWidth
+              sx={{
+                borderColor: "#2e7d32",
+                color: "#2e7d32",
+                borderRadius: "52px",
+                textTransform: "none",
+                fontWeight: 600,
+                py: 1.25,
+                "&:hover": {
+                  borderColor: "#1b5e20",
+                  backgroundColor: "rgba(46, 125, 50, 0.04)",
+                },
+              }}
+            >
+              Logout
+            </Button>
           ) : (
             <Button
               component={Link}
@@ -566,12 +594,12 @@ function Nav() {
               variant="contained"
               fullWidth
               sx={{
-                mt: 2,
                 backgroundColor: "#FFDE42",
                 color: "#756A38",
                 borderRadius: "52px",
                 textTransform: "none",
                 fontWeight: 600,
+                py: 1.25,
               }}
             >
               Login

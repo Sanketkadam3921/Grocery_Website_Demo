@@ -180,7 +180,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -195,7 +195,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -210,7 +210,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -225,7 +225,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -262,7 +262,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -277,7 +277,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -292,7 +292,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -307,7 +307,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -344,7 +344,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -359,7 +359,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -374,7 +374,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -389,7 +389,7 @@ function Footer() {
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
                     "&:hover": {
-                      color: "#1a1a1a",
+                      color: "#2e7d32",
                       textDecoration: "underline",
                     },
                   }}
@@ -453,7 +453,7 @@ function Footer() {
                 fontSize: "0.875rem",
                 transition: "color 0.2s ease",
                 "&:hover": {
-                  color: "#1a1a1a",
+                  color: "#2e7d32",
                   textDecoration: "underline",
                 },
               }}
@@ -468,7 +468,7 @@ function Footer() {
                 fontSize: "0.875rem",
                 transition: "color 0.2s ease",
                 "&:hover": {
-                  color: "#1a1a1a",
+                  color: "#2e7d32",
                   textDecoration: "underline",
                 },
               }}
@@ -483,7 +483,7 @@ function Footer() {
                 fontSize: "0.875rem",
                 transition: "color 0.2s ease",
                 "&:hover": {
-                  color: "#1a1a1a",
+                  color: "#2e7d32",
                   textDecoration: "underline",
                 },
               }}
