@@ -78,7 +78,7 @@ function Products() {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category]
+        : [...prev, category],
     );
   };
 
@@ -243,15 +243,17 @@ function Products() {
             alignItems: "flex-start",
           }}
         >
-          {/* Left Sidebar: Filter Panel (Desktop only) */}
+          {/* Left Sidebar: Filter Panel (Desktop only) - Made Sticky */}
           <Box
             sx={{
               width: "280px",
               display: { xs: "none", md: "block" },
               flexShrink: 0,
               position: "sticky",
-              top: 96, // adjust based on navbar height
-              height: "fit-content",
+              top: 24,
+              alignSelf: "flex-start",
+              maxHeight: "calc(100vh - 48px)",
+              overflowY: "auto",
             }}
           >
             <FilterPanel
@@ -309,7 +311,7 @@ function Products() {
                   {showPagination
                     ? `${startIndex + 1}-${Math.min(
                         endIndex,
-                        filteredProducts.length
+                        filteredProducts.length,
                       )}`
                     : filteredProducts.length}{" "}
                   of {filteredProducts.length} product(s)

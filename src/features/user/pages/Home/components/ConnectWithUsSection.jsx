@@ -1,6 +1,14 @@
 import { Box, Container, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function ConnectWithUsSection() {
+  const navigate = useNavigate();
+
+  const handleGetInTouch = () => {
+    navigate("/contact");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <Box
       sx={{
@@ -99,6 +107,7 @@ function ConnectWithUsSection() {
               >
                 <Button
                   variant="contained"
+                  onClick={handleGetInTouch}
                   sx={{
                     backgroundColor: "#FFD84D",
                     color: "black",
@@ -117,7 +126,7 @@ function ConnectWithUsSection() {
                 >
                   Get in Touch
                 </Button>
-
+                {/* 
                 <Button
                   variant="outlined"
                   sx={{
@@ -138,7 +147,7 @@ function ConnectWithUsSection() {
                   }}
                 >
                   Chat with Us
-                </Button>
+                </Button> */}
               </Box>
             </Box>
           </Box>

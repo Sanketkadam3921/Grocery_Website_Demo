@@ -1,4 +1,5 @@
-import { Box, Typography, Container, Link, IconButton } from "@mui/material";
+import { Box, Typography, Container, Link as MuiLink, IconButton } from "@mui/material";
+import { Link } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -172,8 +173,10 @@ function Footer() {
                 Quick Links
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                <Link
-                  href="#"
+                <MuiLink
+                  component={Link}
+                  to="/"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                   sx={{
                     color: "#666",
                     textDecoration: "none",
@@ -186,9 +189,11 @@ function Footer() {
                   }}
                 >
                   Home
-                </Link>
-                <Link
-                  href="#"
+                </MuiLink>
+                <MuiLink
+                  component={Link}
+                  to="/about"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                   sx={{
                     color: "#666",
                     textDecoration: "none",
@@ -201,9 +206,11 @@ function Footer() {
                   }}
                 >
                   About
-                </Link>
-                <Link
-                  href="#"
+                </MuiLink>
+                <MuiLink
+                  component={Link}
+                  to="/products"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                   sx={{
                     color: "#666",
                     textDecoration: "none",
@@ -216,9 +223,11 @@ function Footer() {
                   }}
                 >
                   Shop
-                </Link>
-                <Link
-                  href="#"
+                </MuiLink>
+                <MuiLink
+                  component={Link}
+                  to="/contact"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                   sx={{
                     color: "#666",
                     textDecoration: "none",
@@ -231,7 +240,7 @@ function Footer() {
                   }}
                 >
                   Contact
-                </Link>
+                </MuiLink>
               </Box>
             </Box>
 
@@ -254,10 +263,10 @@ function Footer() {
                 Services
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                <Link
+                <MuiLink
                   href="#"
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -268,11 +277,11 @@ function Footer() {
                   }}
                 >
                   Delivery
-                </Link>
-                <Link
+                </MuiLink>
+                <MuiLink
                   href="#"
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -283,11 +292,11 @@ function Footer() {
                   }}
                 >
                   Returns
-                </Link>
-                <Link
+                </MuiLink>
+                <MuiLink
                   href="#"
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -298,11 +307,11 @@ function Footer() {
                   }}
                 >
                   FAQ
-                </Link>
-                <Link
+                </MuiLink>
+                <MuiLink
                   href="#"
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -313,7 +322,7 @@ function Footer() {
                   }}
                 >
                   Support
-                </Link>
+                </MuiLink>
               </Box>
             </Box>
 
@@ -336,10 +345,10 @@ function Footer() {
                 Connect
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                <Link
+                <MuiLink
                   href="#"
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -350,11 +359,11 @@ function Footer() {
                   }}
                 >
                   Newsletter
-                </Link>
-                <Link
+                </MuiLink>
+                <MuiLink
                   href="#"
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -365,11 +374,11 @@ function Footer() {
                   }}
                 >
                   Blog
-                </Link>
-                <Link
+                </MuiLink>
+                <MuiLink
                   href="#"
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -380,11 +389,11 @@ function Footer() {
                   }}
                 >
                   Careers
-                </Link>
-                <Link
+                </MuiLink>
+                <MuiLink
                   href="#"
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -395,7 +404,7 @@ function Footer() {
                   }}
                 >
                   Press
-                </Link>
+                </MuiLink>
               </Box>
             </Box>
           </Box>
@@ -422,7 +431,7 @@ function Footer() {
             }}
           >
             © {new Date().getFullYear()}{" "}
-            <Link
+            <MuiLink
               href="https://www.zonixtec.com" // change this to your actual website
               target="_blank"
               rel="noopener noreferrer"
@@ -433,7 +442,7 @@ function Footer() {
               }}
             >
               Zonixtec
-            </Link>
+            </MuiLink>
             . All rights reserved.
           </Typography>
 
@@ -445,10 +454,10 @@ function Footer() {
               justifyContent: { xs: "center", sm: "flex-end" },
             }}
           >
-            <Link
+            <MuiLink
               href="#"
               sx={{
-                color: "#666",
+                color: "#1a1a1a",
                 textDecoration: "none",
                 fontSize: "0.875rem",
                 transition: "color 0.2s ease",
@@ -459,11 +468,11 @@ function Footer() {
               }}
             >
               Privacy Policy
-            </Link>
-            <Link
+            </MuiLink>
+            <MuiLink
               href="#"
               sx={{
-                color: "#666",
+                color: "#1a1a1a",
                 textDecoration: "none",
                 fontSize: "0.875rem",
                 transition: "color 0.2s ease",
@@ -474,11 +483,11 @@ function Footer() {
               }}
             >
               Terms of Service
-            </Link>
-            <Link
+            </MuiLink>
+            <MuiLink
               href="/admin"
               sx={{
-                color: "#666",
+                color: "#1a1a1a",
                 textDecoration: "none",
                 fontSize: "0.875rem",
                 transition: "color 0.2s ease",
@@ -489,7 +498,7 @@ function Footer() {
               }}
             >
               Cookie Policy
-            </Link>
+            </MuiLink>
           </Box>
         </Box>
       </Container>
