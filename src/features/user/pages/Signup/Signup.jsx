@@ -270,7 +270,13 @@ function Signup() {
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
-                        sx={{ color: "#666" }}
+                        sx={{
+                          color: "#666",
+                          backgroundColor: "#fff",
+                          "&:hover": {
+                            backgroundColor: "#f5f5f5",
+                          },
+                        }}
                       >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
@@ -314,7 +320,13 @@ function Signup() {
                         onClick={handleClickShowConfirmPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
-                        sx={{ color: "#666" }}
+                        sx={{
+                          color: "#666",
+                          backgroundColor: "#fff",
+                          "&:hover": {
+                            backgroundColor: "#f5f5f5",
+                          },
+                        }}
                       >
                         {showConfirmPassword ? (
                           <VisibilityOff />
