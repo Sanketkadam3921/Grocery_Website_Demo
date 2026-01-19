@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import * as yup from "yup";
 import {
   Box,
   Container,
@@ -9,9 +10,31 @@ import {
   Button,
   Alert,
   Link as MuiLink,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import {
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import { login } from "../../../auth/services/authService";
 import { useAuth } from "../../../auth/hooks/useAuth";
+
+// Validation schema using Yup
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Invalid email format")
+    .matches(
+      /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/,
+      "Email must have a valid domain (e.g., .com, .in, .org)"
+    ),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
 
 function Login() {
   const navigate = useNavigate();
@@ -22,6 +45,7 @@ function Login() {
   });
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,28 +63,39 @@ function Login() {
     setSubmitError("");
   };
 
-  const validate = () => {
-    const newErrors = {};
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleClickShowPassword = () => {
+    setShowPassword((show) => !show);
   };
 
-  const handleSubmit = (e) => {
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const validateForm = async () => {
+    try {
+      await validationSchema.validate(formData, { abortEarly: false });
+      setErrors({});
+      return true;
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const newErrors = {};
+        err.inner.forEach((error) => {
+          if (error.path) {
+            newErrors[error.path] = error.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+      return false;
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError("");
 
-    if (!validate()) {
+    const isValid = await validateForm();
+    if (!isValid) {
       return;
     }
 
@@ -144,19 +179,66 @@ function Login() {
                 helperText={errors.email}
                 required
                 autoComplete="email"
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    "&:hover fieldset": {
+                      borderColor: "#2e7d32",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#2e7d32",
+                      borderWidth: 2,
+                    },
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#2e7d32",
+                  },
+                }}
               />
 
               <TextField
                 fullWidth
                 label="Password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleChange}
                 error={!!errors.password}
                 helperText={errors.password}
                 required
                 autoComplete="current-password"
+                variant="outlined"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                        sx={{ color: "#666" }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    "&:hover fieldset": {
+                      borderColor: "#2e7d32",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#2e7d32",
+                      borderWidth: 2,
+                    },
+                  },
+                  "& .MuiInputLabel-root.Mui-focused": {
+                    color: "#2e7d32",
+                  },
+                }}
               />
 
               <Button
