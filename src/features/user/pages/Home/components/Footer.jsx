@@ -243,7 +243,7 @@ function Footer() {
                     window.scrollTo({ top: 0, behavior: "smooth" })
                   }
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
