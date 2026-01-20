@@ -67,7 +67,15 @@ const startOfDay = (date) =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
 
 const endOfDay = (date) =>
-  new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
+  new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    23,
+    59,
+    59,
+    999,
+  );
 
 const getWeekStart = (date) => {
   // Week starts on Monday
@@ -116,7 +124,9 @@ const getDateRange = (filterValue) => {
 function Dashboard() {
   const [dateFilter, setDateFilter] = useState("this_week");
   const [orders, setOrders] = useState(() => getFromStorage("orders", []));
-  const [products, setProducts] = useState(() => getFromStorage("products", []));
+  const [products, setProducts] = useState(() =>
+    getFromStorage("products", []),
+  );
 
   // Keep dashboard in sync when orders/products change
   useEffect(() => {
@@ -156,7 +166,10 @@ function Dashboard() {
 
   // Calculate total revenue (sum of all order amounts)
   const totalRevenue = useMemo(() => {
-    return filteredOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+    return filteredOrders.reduce(
+      (sum, order) => sum + (order.totalAmount || 0),
+      0,
+    );
   }, [filteredOrders]);
 
   // Find low stock products (stock < 5)
@@ -231,9 +244,6 @@ function Dashboard() {
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 600, color: "#212121" }}>
             Dashboard Overview
-          </Typography>
-          <Typography variant="body2" sx={{ color: "#757575", mt: 0.5 }}>
-            Showing orders from {formatDate(rangeStart)} to {formatDate(rangeEnd)}
           </Typography>
         </Box>
 

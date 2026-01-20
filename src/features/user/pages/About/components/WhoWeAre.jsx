@@ -33,8 +33,8 @@ function WhoWeAre() {
           maxWidth: "800px",
         }}
       >
-        ZonixFresh is a modern online grocery platform dedicated to bringing you
-        the freshest produce and daily essentials. We focus on freshness,
+        Zonix Fresh is a modern online grocery platform dedicated to bringing
+        you the freshest produce and daily essentials. We focus on freshness,
         quality, and convenience, ensuring that every product reaches your home
         at its peak quality.
       </Typography>

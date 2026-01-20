@@ -42,7 +42,7 @@ function HeroSection() {
             mx: "auto",
           }}
         >
-          ZonixFresh brings farm-fresh produce and daily essentials straight to
+          Zonix Fresh brings farm-fresh produce and daily essentials straight to
           your doorstep — fast, affordable, and reliable.
         </Typography>
       </Container>
@@ -51,4 +51,3 @@ function HeroSection() {
 }
 
 export default HeroSection;
-

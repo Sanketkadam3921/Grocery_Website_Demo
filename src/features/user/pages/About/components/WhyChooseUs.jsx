@@ -70,7 +70,7 @@ function WhyChooseUs() {
           px: { xs: 2, sm: 0 },
         }}
       >
-        Why Choose ZonixFresh
+        Why Choose Zonix Fresh
       </Typography>
 
       {/* Grid Container for Cards */}

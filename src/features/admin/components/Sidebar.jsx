@@ -71,6 +71,8 @@ function Sidebar({ mobileOpen, handleDrawerToggle }) {
       {/* Logo/Brand Section */}
       <Box
         sx={{
+          display: "flex",
+          justifyContent: "center",
           p: 2,
           borderBottom: "1px solid #e0e0e0",
           backgroundColor: "#fff",

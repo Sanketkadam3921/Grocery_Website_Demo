@@ -147,6 +147,7 @@ function Checkout() {
   return (
     <Box
       sx={{
+        mt: 9,
         backgroundColor: "#fafafa",
         minHeight: "100vh",
         py: { xs: 2, md: 4 },
@@ -179,7 +180,7 @@ function Checkout() {
               },
             }}
           >
-            Back to Cart
+            Back
           </Button>
           <Typography
             variant="h4"
