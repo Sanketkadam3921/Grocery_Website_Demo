@@ -7,6 +7,11 @@ import {
   Button,
   Paper,
   Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import {
   ShoppingCart as ShoppingCartIcon,
@@ -28,6 +33,8 @@ function Cart() {
   const { isAuthenticated } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
+  const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+  const [pendingRemoveItem, setPendingRemoveItem] = useState(null);
 
   useEffect(() => {
     // Scroll to top when component mounts
@@ -66,10 +73,22 @@ function Cart() {
     window.dispatchEvent(new Event("cartUpdated"));
   };
 
-  const handleRemove = (productId) => {
-    removeFromCart(productId);
+  const handleRemoveClick = (item) => {
+    setPendingRemoveItem(item);
+    setRemoveDialogOpen(true);
+  };
+
+  const handleRemoveCancel = () => {
+    setRemoveDialogOpen(false);
+    setPendingRemoveItem(null);
+  };
+
+  const handleRemoveConfirm = () => {
+    if (!pendingRemoveItem) return;
+    removeFromCart(pendingRemoveItem.id);
     loadCart();
     window.dispatchEvent(new Event("cartUpdated"));
+    handleRemoveCancel();
   };
 
   const handleCheckout = () => {
@@ -101,6 +120,38 @@ function Cart() {
       }}
     >
       <Container maxWidth="lg">
+        {/* Confirm Remove Dialog */}
+        <Dialog
+          open={removeDialogOpen}
+          onClose={handleRemoveCancel}
+          aria-labelledby="remove-item-dialog-title"
+          aria-describedby="remove-item-dialog-description"
+        >
+          <DialogTitle id="remove-item-dialog-title">
+            Remove product?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="remove-item-dialog-description">
+              Are you sure you want to delete{" "}
+              <strong>{pendingRemoveItem?.name || "this product"}</strong> from
+              the cart?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleRemoveCancel} sx={{ textTransform: "none" }}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleRemoveConfirm}
+              color="error"
+              variant="contained"
+              sx={{ textTransform: "none" }}
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         {/* Header */}
         <Box
           sx={{
@@ -176,7 +227,14 @@ function Cart() {
                 ? "Please login to add items to your cart"
                 : "Add some products to get started"}
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
               {!isAuthenticated && (
                 <Button
                   variant="outlined"
@@ -249,7 +307,7 @@ function Cart() {
                     color: "#1a1a1a",
                   }}
                 >
-                  {cartItems.length} {cartItems.length === 1 ? "Item" : "Items"}
+                  {cartItems.length === 1 ? "" : ""}
                 </Typography>
                 <Button
                   onClick={handleClearCart}
@@ -273,7 +331,7 @@ function Cart() {
                   item={item}
                   onIncrease={() => handleIncrease(item.id)}
                   onDecrease={() => handleDecrease(item.id)}
-                  onRemove={() => handleRemove(item.id)}
+                  onRemove={() => handleRemoveClick(item)}
                 />
               ))}
             </Box>
@@ -323,7 +381,9 @@ function Cart() {
                       color: "#666",
                     }}
                   >
-                    Subtotal ({cartItems.reduce((sum, item) => sum + item.quantity, 0)} items)
+                    Subtotal (
+                    {cartItems.reduce((sum, item) => sum + item.quantity, 0)}{" "}
+                    items)
                   </Typography>
                   <Typography
                     variant="body2"

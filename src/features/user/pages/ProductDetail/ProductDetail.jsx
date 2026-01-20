@@ -143,7 +143,8 @@ function ProductDetail() {
       sx={{
         backgroundColor: "#ffffff",
         minHeight: "100vh",
-        py: { xs: 1.5, sm: 2, md: 3 },
+        pt: { xs: 10, sm: 11, md: 12 },
+        pb: { xs: 1.5, sm: 2, md: 3 },
       }}
     >
       <Container maxWidth="lg">

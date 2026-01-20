@@ -136,63 +136,78 @@ function Products() {
         pb: 4,
       }}
     >
-      <Container maxWidth="lg" sx={{ pt: { xs: 10, md: 12 } }}>
-        {/* Header */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 3,
-            flexWrap: "wrap",
-            gap: 2,
-          }}
-        >
-          <Typography
-            variant="h4"
+      {/* Sticky Header with Full Width Background */}
+      <Box
+        sx={{
+          position: "sticky",
+          top: { xs: 70, md: 70 },
+          backgroundColor: "#fafafa",
+          zIndex: 100,
+          width: "100%",
+          pt: { xs: 2, md: 2 },
+          pb: 1,
+          borderBottom: "1px solid rgba(0,0,0,0.05)",
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box
             sx={{
-              fontWeight: 700,
-              fontSize: { xs: "1.5rem", md: "2rem" },
-              color: "#1a1a1a",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: 2,
             }}
           >
-            All Products
-          </Typography>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                fontSize: { xs: "1.5rem", md: "2rem" },
+                color: "#1a1a1a",
+              }}
+            >
+              All Products
+            </Typography>
 
-          {/* Mobile Filter Button */}
-          <Button
-            variant="outlined"
-            startIcon={<FilterListIcon />}
-            onClick={() => setFilterDrawerOpen(true)}
-            sx={{
-              display: { xs: "flex", md: "none" },
-              borderColor: "#2e7d32",
-              color: "#2e7d32",
-              textTransform: "none",
-              fontWeight: 600,
-              borderRadius: "8px",
-              "&:hover": {
-                borderColor: "#1b5e20",
-                backgroundColor: "rgba(46, 125, 50, 0.04)",
-              },
-            }}
-          >
-            Filters
-            {activeFiltersCount > 0 && (
-              <Chip
-                label={activeFiltersCount}
-                size="small"
-                sx={{
-                  ml: 1,
-                  height: 20,
-                  backgroundColor: "#2e7d32",
-                  color: "white",
-                  fontSize: "0.75rem",
-                }}
-              />
-            )}
-          </Button>
-        </Box>
+            {/* Mobile Filter Button */}
+            <Button
+              variant="outlined"
+              startIcon={<FilterListIcon />}
+              onClick={() => setFilterDrawerOpen(true)}
+              sx={{
+                display: { xs: "flex", md: "none" },
+                borderColor: "#2e7d32",
+                color: "#2e7d32",
+                textTransform: "none",
+                fontWeight: 600,
+                borderRadius: "8px",
+                "&:hover": {
+                  borderColor: "#1b5e20",
+                  backgroundColor: "rgba(46, 125, 50, 0.04)",
+                },
+              }}
+            >
+              Filters
+              {activeFiltersCount > 0 && (
+                <Chip
+                  label={activeFiltersCount}
+                  size="small"
+                  sx={{
+                    ml: 1,
+                    height: 20,
+                    backgroundColor: "#2e7d32",
+                    color: "white",
+                    fontSize: "0.75rem",
+                  }}
+                />
+              )}
+            </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      <Container maxWidth="lg" sx={{ pt: { xs: 3, md: 3 } }}>
 
         {/* Active Filters Display */}
         <Box
@@ -201,6 +216,7 @@ function Products() {
             display: "flex",
             gap: 1,
             mb: 3,
+            mt: 2,
             flexWrap: "wrap",
             alignItems: "center",
           }}
@@ -250,10 +266,11 @@ function Products() {
               display: { xs: "none", md: "block" },
               flexShrink: 0,
               position: "sticky",
-              top: 24,
+              top: 140,
               alignSelf: "flex-start",
-              maxHeight: "calc(100vh - 48px)",
+              maxHeight: "calc(100vh - 160px)",
               overflowY: "auto",
+              zIndex: 10,
             }}
           >
             <FilterPanel

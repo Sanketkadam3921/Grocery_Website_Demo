@@ -43,10 +43,10 @@ function OrderSuccess() {
       try {
         const currentUser = getCurrentUser();
         const userId = currentUser?.id || null;
-        
+
         // First, try to get order by stored order ID
         const lastOrderId = localStorage.getItem("lastOrderId");
-        
+
         if (lastOrderId) {
           // Try to get order from user's orders first
           if (userId) {
@@ -56,7 +56,7 @@ function OrderSuccess() {
               if (userOrdersData) {
                 const userOrders = JSON.parse(userOrdersData);
                 const order = userOrders.find((o) => o.orderId === lastOrderId);
-                
+
                 if (order) {
                   setOrderDetails(order);
                   setIsLoading(false);
@@ -68,14 +68,14 @@ function OrderSuccess() {
               console.error("Error reading user orders:", error);
             }
           }
-          
+
           // If not found in user orders, try global orders
           try {
             const allOrdersData = localStorage.getItem("orders");
             if (allOrdersData) {
               const allOrders = JSON.parse(allOrdersData);
               const order = allOrders.find((o) => o.orderId === lastOrderId);
-              
+
               if (order) {
                 setOrderDetails(order);
                 setIsLoading(false);
@@ -87,7 +87,7 @@ function OrderSuccess() {
             console.error("Error reading global orders:", error);
           }
         }
-        
+
         // Fallback: Get last order from user's orders
         const lastOrder = getLastOrder();
         if (lastOrder) {
@@ -96,7 +96,7 @@ function OrderSuccess() {
           localStorage.removeItem("lastOrderId");
           return;
         }
-        
+
         // Last resort: Try to get most recent order from global orders
         if (userId) {
           try {
@@ -104,11 +104,12 @@ function OrderSuccess() {
             if (allOrdersData) {
               const allOrders = JSON.parse(allOrdersData);
               const userOrders = allOrders.filter(
-                (order) => order.userId === userId
+                (order) => order.userId === userId,
               );
               if (userOrders.length > 0) {
                 const mostRecent = userOrders.sort(
-                  (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+                  (a, b) =>
+                    new Date(b.createdAt || 0) - new Date(a.createdAt || 0),
                 )[0];
                 setOrderDetails(mostRecent);
                 setIsLoading(false);
@@ -120,7 +121,7 @@ function OrderSuccess() {
             console.error("Error reading orders:", error);
           }
         }
-        
+
         // If we still don't have an order, wait a bit more and try again
         console.warn("Order not found immediately, retrying...");
         setTimeout(() => {
@@ -142,7 +143,7 @@ function OrderSuccess() {
               console.error("Error in retry:", error);
             }
           }
-          
+
           // Final fallback - get most recent order
           const finalOrder = getLastOrder();
           if (finalOrder) {
@@ -187,6 +188,7 @@ function OrderSuccess() {
   return (
     <Box
       sx={{
+        mt: 6,
         backgroundColor: "#fafafa",
         minHeight: "100vh",
         py: { xs: 4, md: 6 },
@@ -304,7 +306,7 @@ function OrderSuccess() {
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 {orderDetails.items.reduce(
                   (sum, item) => sum + item.quantity,
-                  0
+                  0,
                 )}
               </Typography>
             </Box>

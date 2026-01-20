@@ -8,11 +8,6 @@ import {
   Button,
   Divider,
   IconButton,
-  Chip,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -234,7 +229,9 @@ function FilterPanel({
           },
         }}
       >
-        <FilterContent />
+        <Box sx={{ mt: 2 }}>
+          <FilterContent />
+        </Box>
       </Drawer>
     );
   }
@@ -242,17 +239,9 @@ function FilterPanel({
   return (
     <Box
       sx={{
-        position: "sticky",
-        top: { md: 90 },
-        alignSelf: "flex-start",
-        height: "fit-content",
-        maxHeight: "calc(100vh - 100px)",
-        overflowY: "auto",
-        overflowX: "hidden",
         backgroundColor: "white",
         borderRadius: 2,
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        zIndex: 10,
         width: "100%",
       }}
     >

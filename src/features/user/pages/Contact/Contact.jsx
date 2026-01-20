@@ -27,7 +27,7 @@ function Contact() {
         }}
       >
         <Container
-          maxWidth="xl"
+          maxWidth="lg"
           sx={{
             px: { xs: 2, sm: 3, md: 4 },
           }}

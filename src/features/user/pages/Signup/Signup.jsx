@@ -28,18 +28,72 @@ const validationSchema = yup.object().shape({
     .string()
     .required("Email is required")
     .email("Invalid email format")
-    .matches(
-      /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/,
-      "Email must have a valid domain (e.g., .com, .in, .org)",
+    .test(
+      "valid-tld",
+      "Email must have a valid domain extension (e.g., .com, .in, .org, .gov, .net, .edu)",
+      (value) => {
+        if (!value) return false;
+        // List of valid TLDs
+        const validTLDs = [
+          "com",
+          "in",
+          "org",
+          "gov",
+          "net",
+          "edu",
+          "co",
+          "io",
+          "ai",
+          "uk",
+          "us",
+          "ca",
+          "au",
+          "de",
+          "fr",
+          "jp",
+          "cn",
+          "ru",
+          "br",
+          "mx",
+          "info",
+          "biz",
+          "tech",
+          "online",
+          "site",
+          "xyz",
+          "me",
+          "tv",
+          "cc",
+          "ws",
+          "name",
+          "mobi",
+          "asia",
+          "tel",
+          "pro",
+          "travel",
+          "jobs",
+          "mil",
+          "int",
+        ];
+        // Extract TLD from email (part after the last dot)
+        const emailParts = value.split("@");
+        if (emailParts.length !== 2) return false;
+        const domainParts = emailParts[1].split(".");
+        if (domainParts.length < 2) return false;
+        const tld = domainParts[domainParts.length - 1].toLowerCase();
+        return validTLDs.includes(tld);
+      }
     ),
   password: yup
     .string()
     .required("Password is required")
-    .min(6, "Password must be at least 6 characters"),
+    .min(6, "Password must be at least 6 characters")
+    .matches(/^\S*$/, "Password cannot contain spaces"),
   confirmPassword: yup
     .string()
     .required("Please confirm your password")
-    .oneOf([yup.ref("password")], "Passwords do not match"),
+    .oneOf([yup.ref("password")], "Passwords do not match")
+    .matches(/^\S*$/, "Password cannot contain spaces"),
 });
 
 function Signup() {
@@ -59,19 +113,21 @@ function Signup() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    let filteredValue = value;
+
     // Prevent numbers in name field
     if (name === "name") {
-      const filteredValue = value.replace(/[^a-zA-Z\s]/g, "");
-      setFormData((prev) => ({
-        ...prev,
-        [name]: filteredValue,
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      filteredValue = value.replace(/[^a-zA-Z\s]/g, "");
     }
+    // Prevent spaces in password fields
+    else if (name === "password" || name === "confirmPassword") {
+      filteredValue = value.replace(/\s/g, "");
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: filteredValue,
+    }));
 
     // Clear error for this field
     if (errors[name]) {
@@ -258,7 +314,7 @@ function Signup() {
                 value={formData.password}
                 onChange={handleChange}
                 error={!!errors.password}
-                helperText={errors.password || "Must be at least 6 characters"}
+                helperText={errors.password || "Must be at least 6 characters, no spaces allowed"}
                 required
                 autoComplete="new-password"
                 variant="outlined"
@@ -308,7 +364,7 @@ function Signup() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 error={!!errors.confirmPassword}
-                helperText={errors.confirmPassword}
+                helperText={errors.confirmPassword || "Must match password, no spaces allowed"}
                 required
                 autoComplete="new-password"
                 variant="outlined"
