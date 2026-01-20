@@ -39,8 +39,12 @@ export const getProductById = (productId) => {
 export const addProduct = (product) => {
   try {
     const products = getProducts();
-    // Generate new ID if not provided
-    const newId = product.id || Math.max(...products.map((p) => p.id || 0), 0) + 1;
+    // Generate sequential ID (next number after the highest existing ID, or 1 if empty)
+    const maxId = products.length > 0 
+      ? Math.max(...products.map((p) => p.id || 0), 0)
+      : 0;
+    const newId = maxId + 1;
+    
     const newProduct = {
       ...product,
       id: newId,
@@ -90,18 +94,25 @@ export const updateProduct = (productId, updates) => {
 };
 
 /**
- * Delete a product
+ * Delete a product and renumber remaining products sequentially
  * @param {number} productId - ID of the product to delete
- * @returns {Array} Updated products array
+ * @returns {Array} Updated products array with renumbered IDs
  */
 export const deleteProduct = (productId) => {
   try {
     const products = getProducts();
     const filteredProducts = products.filter((p) => p.id !== productId);
-    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(filteredProducts));
+    
+    // Renumber products sequentially starting from 1
+    const renumberedProducts = filteredProducts.map((product, index) => ({
+      ...product,
+      id: index + 1,
+    }));
+    
+    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(renumberedProducts));
     // Dispatch event to update UI in other tabs/components
     window.dispatchEvent(new Event("productsUpdated"));
-    return filteredProducts;
+    return renumberedProducts;
   } catch (error) {
     console.error("Error deleting product:", error);
     return getProducts();
@@ -156,9 +167,10 @@ export const initializeProducts = (mockProducts = []) => {
   try {
     const existingProducts = getProducts();
     if (existingProducts.length === 0 && mockProducts.length > 0) {
-      // Add stock field to products if missing (default to 10)
-      const productsWithStock = mockProducts.map((product) => ({
+      // Add stock field to products if missing (default to 10) and ensure sequential IDs
+      const productsWithStock = mockProducts.map((product, index) => ({
         ...product,
+        id: index + 1, // Ensure sequential IDs starting from 1
         stock: product.stock !== undefined ? product.stock : 10,
         status: product.status || "active",
       }));
