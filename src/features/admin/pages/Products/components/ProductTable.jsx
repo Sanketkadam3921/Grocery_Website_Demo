@@ -14,13 +14,16 @@ import {
   TextField,
   InputAdornment,
   Typography,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Search as SearchIcon,
 } from "@mui/icons-material";
-import { deleteProduct } from "../../../services/productService";
+import { deleteProduct, updateProduct } from "../../../services/productService";
 
 function ProductTable({ products, onProductDeleted }) {
   const navigate = useNavigate();
@@ -47,6 +50,12 @@ function ProductTable({ products, onProductDeleted }) {
 
   const handleEdit = (productId) => {
     navigate(`/admin/products/edit/${productId}`);
+  };
+
+  const handleStatusChange = (productId, newStatus) => {
+    updateProduct(productId, { status: newStatus });
+    // parent listens for productsUpdated; this keeps UI consistent across tabs
+    window.dispatchEvent(new Event("productsUpdated"));
   };
 
   if (products.length === 0) {
@@ -94,13 +103,14 @@ function ProductTable({ products, onProductDeleted }) {
               <TableCell sx={{ fontWeight: 600 }}>Price</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Unit</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Stock</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} align="center" sx={{ py: 4 }}>
+                <TableCell colSpan={9} align="center" sx={{ py: 4 }}>
                   <Typography variant="body2" sx={{ color: "#757575" }}>
                     No products match your search
                   </Typography>
@@ -157,6 +167,24 @@ function ProductTable({ products, onProductDeleted }) {
                         fontWeight: 600,
                       }}
                     />
+                  </TableCell>
+                  <TableCell>
+                    <FormControl size="small" sx={{ minWidth: 120 }}>
+                      <Select
+                        value={product.status || "active"}
+                        onChange={(e) =>
+                          handleStatusChange(product.id, e.target.value)
+                        }
+                        sx={{
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#e0e0e0",
+                          },
+                        }}
+                      >
+                        <MenuItem value="active">Active</MenuItem>
+                        <MenuItem value="inactive">Inactive</MenuItem>
+                      </Select>
+                    </FormControl>
                   </TableCell>
                   <TableCell>
                     <Box sx={{ display: "flex", gap: 1 }}>

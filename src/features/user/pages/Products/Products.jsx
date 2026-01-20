@@ -100,6 +100,9 @@ function Products() {
   // Filter products based on selected filters
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
+      const isActive = (product.status || "active") === "active";
+      if (!isActive) return false;
+
       const matchesCategory =
         selectedCategories.length === 0 ||
         selectedCategories.includes(product.category);

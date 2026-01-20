@@ -3,6 +3,8 @@ import {
   Box,
   Typography,
   Paper,
+  TextField,
+  InputAdornment,
   Table,
   TableBody,
   TableCell,
@@ -28,6 +30,8 @@ import {
 import {
   ShoppingCart as ShoppingCartIcon,
   Visibility as VisibilityIcon,
+  Delete as DeleteIcon,
+  Search as SearchIcon,
 } from "@mui/icons-material";
 
 // Utility function to safely parse JSON from localStorage
@@ -38,6 +42,46 @@ const getOrdersFromStorage = () => {
   } catch (error) {
     console.error("Error reading orders from localStorage:", error);
     return [];
+  }
+};
+
+// Function to delete an order
+const deleteOrderFromStorage = (orderId) => {
+  try {
+    const orders = getOrdersFromStorage();
+    const orderToDelete = orders.find((o) => o.orderId === orderId);
+
+    const updatedOrders = orders.filter((order) => order.orderId !== orderId);
+    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+
+    // Also update in user-specific storage if exists
+    const userId = orderToDelete?.userId;
+    if (userId) {
+      const userOrdersKey = `orders_${userId}`;
+      const userOrders = JSON.parse(localStorage.getItem(userOrdersKey) || "[]");
+      const updatedUserOrders = userOrders.filter((o) => o.orderId !== orderId);
+      localStorage.setItem(userOrdersKey, JSON.stringify(updatedUserOrders));
+    } else {
+      // Best-effort: if we don't know userId, still try to remove from any user order lists
+      const allUserIds = [
+        ...new Set(orders.map((o) => o.userId).filter(Boolean)),
+      ];
+      allUserIds.forEach((uid) => {
+        const userOrdersKey = `orders_${uid}`;
+        const userOrders = JSON.parse(
+          localStorage.getItem(userOrdersKey) || "[]",
+        );
+        const updatedUserOrders = userOrders.filter((o) => o.orderId !== orderId);
+        localStorage.setItem(userOrdersKey, JSON.stringify(updatedUserOrders));
+      });
+    }
+
+    // Dispatch event to update UI
+    window.dispatchEvent(new Event("ordersUpdated"));
+    return updatedOrders;
+  } catch (error) {
+    console.error("Error deleting order:", error);
+    return getOrdersFromStorage();
   }
 };
 
@@ -89,8 +133,11 @@ function Orders() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState(null);
 
   // Load orders from localStorage
   useEffect(() => {
@@ -113,13 +160,29 @@ function Orders() {
     };
   }, []);
 
+  // Reset pagination when searching
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  const filteredOrders = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return orders;
+
+    return orders.filter((order) => {
+      const orderId = String(order.orderId || "").toLowerCase();
+      const customer = String(order.user || "").toLowerCase();
+      return orderId.includes(term) || customer.includes(term);
+    });
+  }, [orders, searchTerm]);
+
   // Calculate pagination
-  const totalPages = Math.ceil(orders.length / ORDERS_PER_PAGE);
+  const totalPages = Math.ceil(filteredOrders.length / ORDERS_PER_PAGE);
   const paginatedOrders = useMemo(() => {
     const startIndex = (currentPage - 1) * ORDERS_PER_PAGE;
     const endIndex = startIndex + ORDERS_PER_PAGE;
-    return orders.slice(startIndex, endIndex);
-  }, [orders, currentPage]);
+    return filteredOrders.slice(startIndex, endIndex);
+  }, [filteredOrders, currentPage]);
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
@@ -139,12 +202,37 @@ function Orders() {
     setOpenDialog(true);
   };
 
+  const handleDeleteClick = (order) => {
+    setOrderToDelete(order);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+    setOrderToDelete(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!orderToDelete?.orderId) return;
+
+    deleteOrderFromStorage(orderToDelete.orderId);
+    setOrders((prev) => prev.filter((o) => o.orderId !== orderToDelete.orderId));
+
+    // If the detail dialog is open for the same order, close it
+    if (selectedOrder?.orderId === orderToDelete.orderId) {
+      setOpenDialog(false);
+      setSelectedOrder(null);
+    }
+
+    handleCloseDeleteDialog();
+  };
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedOrder(null);
   };
 
-  const pendingCount = orders.filter(
+  const pendingCount = filteredOrders.filter(
     (order) => order.status === "Pending",
   ).length;
 
@@ -157,7 +245,7 @@ function Orders() {
           alignItems: "center",
           mb: { xs: 3, md: 4 },
           flexDirection: { xs: "column", sm: "row" },
-          gap: { xs: 2, sm: 0 },
+          gap: { xs: 2, sm: 2 },
         }}
       >
         <Typography
@@ -170,17 +258,46 @@ function Orders() {
         >
           Orders Management
         </Typography>
-        {pendingCount > 0 && (
-          <Chip
-            label={`${pendingCount} Pending`}
-            color="warning"
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            width: { xs: "100%", sm: "auto" },
+          }}
+        >
+          <TextField
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search by Order ID or Customer"
             size="small"
-            sx={{ fontWeight: 600 }}
+            sx={{
+              width: { xs: "100%", sm: 320 },
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "white",
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" />
+                </InputAdornment>
+              ),
+            }}
           />
-        )}
+
+          {pendingCount > 0 && (
+            <Chip
+              label={`${pendingCount} Pending`}
+              color="warning"
+              size="small"
+              sx={{ fontWeight: 600, flexShrink: 0 }}
+            />
+          )}
+        </Box>
       </Box>
 
-      {orders.length === 0 ? (
+      {filteredOrders.length === 0 ? (
         <Paper
           elevation={0}
           sx={{
@@ -378,6 +495,25 @@ function Orders() {
                     >
                       View Details
                     </Button>
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      onClick={() => handleDeleteClick(order)}
+                      sx={{
+                        textTransform: "none",
+                        height: 42,
+                        borderColor: "#d32f2f",
+                        color: "#d32f2f",
+                        fontWeight: 600,
+                        "&:hover": {
+                          borderColor: "#b71c1c",
+                          backgroundColor: "#ffebee",
+                        },
+                      }}
+                    >
+                      Delete
+                    </Button>
                   </Box>
                 </Paper>
               ))}
@@ -441,18 +577,32 @@ function Orders() {
                         </FormControl>
                       </TableCell>
                       <TableCell>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleViewOrder(order)}
-                          sx={{
-                            color: "#2e7d32",
-                            "&:hover": {
-                              backgroundColor: "#e8f5e9",
-                            },
-                          }}
-                        >
-                          <VisibilityIcon />
-                        </IconButton>
+                        <Stack direction="row" spacing={1}>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewOrder(order)}
+                            sx={{
+                              color: "#2e7d32",
+                              "&:hover": {
+                                backgroundColor: "#e8f5e9",
+                              },
+                            }}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDeleteClick(order)}
+                            sx={{
+                              color: "#d32f2f",
+                              "&:hover": {
+                                backgroundColor: "#ffebee",
+                              },
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -477,6 +627,39 @@ function Orders() {
           )}
         </>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Delete Order</DialogTitle>
+        <DialogContent>
+          <Typography sx={{ color: "#616161" }}>
+            Are you sure you want to delete{" "}
+            <strong>{orderToDelete?.orderId || "this order"}</strong>? This
+            action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={handleCloseDeleteDialog}
+            sx={{ textTransform: "none" }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirmDelete}
+            color="error"
+            variant="contained"
+            sx={{ textTransform: "none" }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Order Detail Dialog */}
       <Dialog

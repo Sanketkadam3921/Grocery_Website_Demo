@@ -54,6 +54,7 @@ const ContactInfoGrid = () => {
   return (
     <Box
       sx={{
+        minHeight: 550,
         display: "grid",
         gridTemplateColumns: {
           xs: "1fr 1fr",
@@ -78,5 +79,3 @@ const ContactInfoGrid = () => {
 };
 
 export default ContactInfoGrid;
-
-

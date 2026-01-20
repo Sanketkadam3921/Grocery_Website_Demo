@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -10,6 +10,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   ShoppingCart as ShoppingCartIcon,
@@ -52,20 +55,109 @@ const formatDate = (dateString) => {
   return `${day}/${month}/${year}`;
 };
 
+const DATE_FILTERS = [
+  { value: "today", label: "Today" },
+  { value: "this_week", label: "This week" },
+  { value: "last_week", label: "Last week" },
+  { value: "last_month", label: "Last month" },
+  { value: "this_year", label: "This year" },
+];
+
+const startOfDay = (date) =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+
+const endOfDay = (date) =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
+
+const getWeekStart = (date) => {
+  // Week starts on Monday
+  const d = new Date(date);
+  const day = d.getDay(); // 0=Sun ... 6=Sat
+  const diffToMonday = (day + 6) % 7; // Mon->0, Tue->1 ... Sun->6
+  d.setDate(d.getDate() - diffToMonday);
+  return startOfDay(d);
+};
+
+const getDateRange = (filterValue) => {
+  const now = new Date();
+
+  if (filterValue === "today") {
+    return { start: startOfDay(now), end: endOfDay(now) };
+  }
+
+  if (filterValue === "this_week") {
+    const start = getWeekStart(now);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 6);
+    return { start, end: endOfDay(end) };
+  }
+
+  if (filterValue === "last_week") {
+    const thisWeekStart = getWeekStart(now);
+    const start = new Date(thisWeekStart);
+    start.setDate(start.getDate() - 7);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 6);
+    return { start: startOfDay(start), end: endOfDay(end) };
+  }
+
+  if (filterValue === "last_month") {
+    const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const end = new Date(now.getFullYear(), now.getMonth(), 0); // last day of prev month
+    return { start: startOfDay(start), end: endOfDay(end) };
+  }
+
+  // this_year
+  const start = new Date(now.getFullYear(), 0, 1);
+  const end = new Date(now.getFullYear(), 11, 31);
+  return { start: startOfDay(start), end: endOfDay(end) };
+};
+
 function Dashboard() {
-  // Read data from localStorage
-  const orders = useMemo(() => getFromStorage("orders", []), []);
-  const products = useMemo(() => getFromStorage("products", []), []);
+  const [dateFilter, setDateFilter] = useState("this_week");
+  const [orders, setOrders] = useState(() => getFromStorage("orders", []));
+  const [products, setProducts] = useState(() => getFromStorage("products", []));
+
+  // Keep dashboard in sync when orders/products change
+  useEffect(() => {
+    const loadAll = () => {
+      setOrders(getFromStorage("orders", []));
+      setProducts(getFromStorage("products", []));
+    };
+
+    loadAll();
+    window.addEventListener("storage", loadAll);
+    window.addEventListener("ordersUpdated", loadAll);
+    window.addEventListener("productsUpdated", loadAll);
+    return () => {
+      window.removeEventListener("storage", loadAll);
+      window.removeEventListener("ordersUpdated", loadAll);
+      window.removeEventListener("productsUpdated", loadAll);
+    };
+  }, []);
+
+  const { start: rangeStart, end: rangeEnd } = useMemo(
+    () => getDateRange(dateFilter),
+    [dateFilter],
+  );
+
+  const filteredOrders = useMemo(() => {
+    return orders.filter((order) => {
+      const createdAt = order?.createdAt ? new Date(order.createdAt) : null;
+      if (!createdAt || Number.isNaN(createdAt.getTime())) return false;
+      return createdAt >= rangeStart && createdAt <= rangeEnd;
+    });
+  }, [orders, rangeStart, rangeEnd]);
 
   // Calculate today's orders
   const todayOrders = useMemo(() => {
-    return orders.filter((order) => isToday(order.createdAt));
-  }, [orders]);
+    return filteredOrders.filter((order) => isToday(order.createdAt));
+  }, [filteredOrders]);
 
   // Calculate total revenue (sum of all order amounts)
   const totalRevenue = useMemo(() => {
-    return orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
-  }, [orders]);
+    return filteredOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+  }, [filteredOrders]);
 
   // Find low stock products (stock < 5)
   const lowStockProducts = useMemo(() => {
@@ -74,30 +166,32 @@ function Dashboard() {
 
   // Calculate pending orders
   const pendingOrders = useMemo(() => {
-    return orders.filter((order) => (order.status || "Pending") === "Pending");
-  }, [orders]);
+    return filteredOrders.filter(
+      (order) => (order.status || "Pending") === "Pending",
+    );
+  }, [filteredOrders]);
 
   // Get recent 5 orders (sorted by date, most recent first)
   const recentOrders = useMemo(() => {
-    return [...orders]
+    return [...filteredOrders]
       .sort((a, b) => {
         const dateA = new Date(a.createdAt || 0);
         const dateB = new Date(b.createdAt || 0);
         return dateB - dateA;
       })
       .slice(0, 5);
-  }, [orders]);
+  }, [filteredOrders]);
 
   // Summary Cards Data
   const summaryCards = [
     {
       title: "Total Orders",
-      value: orders.length,
+      value: filteredOrders.length,
       icon: <ShoppingCartIcon sx={{ fontSize: 40, color: "#757575" }} />,
       color: "#f5f5f5",
     },
     {
-      title: "Today's Orders",
+      title: "Orders (Today)",
       value: todayOrders.length,
       icon: <TodayIcon sx={{ fontSize: 40, color: "#757575" }} />,
       color: "#f5f5f5",
@@ -109,7 +203,7 @@ function Dashboard() {
       color: "#fff3e0",
     },
     {
-      title: "Total Revenue",
+      title: "Revenue (Range)",
       value: `₹${totalRevenue.toLocaleString()}`,
       icon: <CurrencyRupeeIcon sx={{ fontSize: 40, color: "#757575" }} />,
       color: "#f5f5f5",
@@ -124,12 +218,44 @@ function Dashboard() {
 
   return (
     <Box>
-      <Typography
-        variant="h4"
-        sx={{ mb: 4, fontWeight: 600, color: "#212121" }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: { xs: "flex-start", sm: "center" },
+          flexDirection: { xs: "column", sm: "row" },
+          gap: 2,
+          mb: 4,
+        }}
       >
-        Dashboard Overview
-      </Typography>
+        <Box>
+          <Typography variant="h4" sx={{ fontWeight: 600, color: "#212121" }}>
+            Dashboard Overview
+          </Typography>
+          <Typography variant="body2" sx={{ color: "#757575", mt: 0.5 }}>
+            Showing orders from {formatDate(rangeStart)} to {formatDate(rangeEnd)}
+          </Typography>
+        </Box>
+
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <Select
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            sx={{
+              backgroundColor: "white",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e0e0e0",
+              },
+            }}
+          >
+            {DATE_FILTERS.map((opt) => (
+              <MenuItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
 
       {/* Summary Cards */}
       <Box

@@ -137,16 +137,6 @@ function AdminNavbar({ handleDrawerToggle }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 600,
-              color: "#212121",
-              fontSize: { xs: "1rem", sm: "1.25rem" },
-            }}
-          >
-            Admin Dashboard
-          </Typography>
         </Box>
 
         {/* Right Side Actions */}
@@ -234,7 +224,9 @@ function AdminNavbar({ handleDrawerToggle }) {
                   sx={{
                     py: 1.5,
                     px: 2,
-                    backgroundColor: notification.read ? "transparent" : "#f5f5f5",
+                    backgroundColor: notification.read
+                      ? "transparent"
+                      : "#f5f5f5",
                     "&:hover": {
                       backgroundColor: notification.read
                         ? "#fafafa"
@@ -352,7 +344,9 @@ function AdminNavbar({ handleDrawerToggle }) {
           >
             {/* User Info Section */}
             <Box sx={{ p: 2, pb: 1.5 }}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
+              <Box
+                sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}
+              >
                 <Box
                   sx={{
                     width: 40,

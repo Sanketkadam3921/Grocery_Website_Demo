@@ -45,6 +45,7 @@ export const addProduct = (product) => {
       ...product,
       id: newId,
       stock: product.stock || 0, // Default stock to 0 if not provided
+      status: product.status || "active", // Default status to active
     };
     products.push(newProduct);
     localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
@@ -159,6 +160,7 @@ export const initializeProducts = (mockProducts = []) => {
       const productsWithStock = mockProducts.map((product) => ({
         ...product,
         stock: product.stock !== undefined ? product.stock : 10,
+        status: product.status || "active",
       }));
       localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(productsWithStock));
       return productsWithStock;

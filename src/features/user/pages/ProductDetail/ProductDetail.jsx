@@ -33,7 +33,7 @@ function ProductDetail() {
     // Find product by ID from localStorage
     const productId = parseInt(id);
     const foundProduct = getProductById(productId);
-    if (foundProduct) {
+    if (foundProduct && (foundProduct.status || "active") === "active") {
       setProduct(foundProduct);
       // Set initial quantity based on stock
       const stock = foundProduct.stock || 0;
@@ -135,7 +135,12 @@ function ProductDetail() {
   // Get similar products (same category, excluding current product)
   const allProducts = getProducts();
   const similarProducts = allProducts
-    .filter((p) => p.category === product.category && p.id !== product.id)
+    .filter(
+      (p) =>
+        (p.status || "active") === "active" &&
+        p.category === product.category &&
+        p.id !== product.id,
+    )
     .slice(0, 4);
 
   return (
