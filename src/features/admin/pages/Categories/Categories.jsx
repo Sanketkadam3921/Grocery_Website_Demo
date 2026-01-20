@@ -94,21 +94,43 @@ function Categories() {
     setCategoryToDelete(null);
   };
 
+  const handleCategoryNameChange = (e) => {
+    const value = e.target.value;
+    // Only allow alphabetic characters and spaces
+    const filteredValue = value.replace(/[^a-zA-Z\s]/g, "");
+    setCategoryName(filteredValue);
+    setError("");
+  };
+
   const handleSave = () => {
     setError("");
 
-    if (!categoryName.trim()) {
+    const trimmedName = categoryName.trim();
+
+    if (!trimmedName) {
       setError("Category name is required");
+      return;
+    }
+
+    // Validate that category name contains only alphabetic characters and spaces
+    if (!/^[a-zA-Z\s]+$/.test(trimmedName)) {
+      setError("Category name can only contain alphabetic characters and spaces");
+      return;
+    }
+
+    // Validate minimum length
+    if (trimmedName.length < 2) {
+      setError("Category name must be at least 2 characters");
       return;
     }
 
     try {
       if (editingCategory) {
         // Update existing category
-        updateCategory(editingCategory, categoryName);
+        updateCategory(editingCategory, trimmedName);
       } else {
         // Add new category
-        addCategory(categoryName);
+        addCategory(trimmedName);
       }
       loadCategories();
       handleCloseDialog();
@@ -272,12 +294,9 @@ function Categories() {
             fullWidth
             variant="outlined"
             value={categoryName}
-            onChange={(e) => {
-              setCategoryName(e.target.value);
-              setError("");
-            }}
+            onChange={handleCategoryNameChange}
             error={!!error}
-            helperText={error || "Enter a unique category name"}
+            helperText={error || "Only alphabetic characters and spaces are allowed"}
             sx={{ mt: 1 }}
           />
         </DialogContent>
