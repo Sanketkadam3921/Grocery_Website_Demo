@@ -45,3 +45,4 @@ const SimilarProducts = ({ similarProducts, onAddToCart }) => {
 export default SimilarProducts;
 
 
+

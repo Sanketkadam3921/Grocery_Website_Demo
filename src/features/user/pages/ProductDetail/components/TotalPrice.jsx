@@ -45,3 +45,4 @@ const TotalPrice = ({ price, quantity }) => {
 export default TotalPrice;
 
 
+

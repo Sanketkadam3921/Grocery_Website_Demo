@@ -91,24 +91,20 @@ function DiscoverDifferenceSection() {
                   </Typography>
                 </Box>
 
-                {/* Item 2 */}
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: { xs: "0.9375rem", md: "1rem" },
+                    color: "#666",
+                  }}
+                >
+                  Multi-stage quality
                   <Box
-                    component="img"
-                    src="https://cdn-icons-png.flaticon.com/128/8071/8071280.png"
-                    alt="Quality check"
-                    sx={{ width: 40, height: 40 }}
+                    component="br"
+                    sx={{ display: { xs: "block", md: "none" } }}
                   />
-                  <Typography
-                    sx={{
-                      fontWeight: 600,
-                      fontSize: { xs: "0.9375rem", md: "1rem" },
-                      color: "#666",
-                    }}
-                  >
-                    Multi-stage quality<br></br> checks
-                  </Typography>
-                </Box>
+                  checks
+                </Typography>
 
                 {/* Item 3 */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -118,6 +114,7 @@ function DiscoverDifferenceSection() {
                     alt="Fast delivery"
                     sx={{ width: 40, height: 40 }}
                   />
+
                   <Typography
                     sx={{
                       fontWeight: 600,
@@ -125,7 +122,12 @@ function DiscoverDifferenceSection() {
                       color: "#666",
                     }}
                   >
-                    Hyperlocal fulfillment <br></br> hubs
+                    Hyperlocal fulfillment
+                    <Box
+                      component="br"
+                      sx={{ display: { xs: "block", md: "none" } }}
+                    />
+                    hubs
                   </Typography>
                 </Box>
 

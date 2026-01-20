@@ -39,3 +39,4 @@ const ProductImage = ({ image, name }) => {
 };
 
 export default ProductImage;
+
