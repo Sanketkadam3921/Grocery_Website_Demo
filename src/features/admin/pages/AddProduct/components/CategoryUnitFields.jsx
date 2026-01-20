@@ -1,13 +1,6 @@
+import { useState, useEffect } from "react";
 import { Box, TextField, MenuItem } from "@mui/material";
-
-const CATEGORIES = [
-  "Fresh Fruits",
-  "Fresh Vegetables",
-  "Dairy & Bakery",
-  "Staples & Grains",
-  "Snacks & Beverages",
-  "Household Essentials",
-];
+import { getCategories } from "../../../services/categoryService";
 
 const CategoryUnitFields = ({
   category,
@@ -18,6 +11,26 @@ const CategoryUnitFields = ({
   unitError,
   isMobile,
 }) => {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const loadCategories = () => {
+      const cats = getCategories();
+      setCategories(cats);
+    };
+    loadCategories();
+
+    // Listen for category updates
+    const handleCategoryUpdate = () => {
+      loadCategories();
+    };
+    window.addEventListener("categoriesUpdated", handleCategoryUpdate);
+
+    return () => {
+      window.removeEventListener("categoriesUpdated", handleCategoryUpdate);
+    };
+  }, []);
+
   return (
     <Box
       sx={{
@@ -38,7 +51,7 @@ const CategoryUnitFields = ({
         fullWidth
         size={isMobile ? "small" : "medium"}
       >
-        {CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <MenuItem key={cat} value={cat}>
             {cat}
           </MenuItem>

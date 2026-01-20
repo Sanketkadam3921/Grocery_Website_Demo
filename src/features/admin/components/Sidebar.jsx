@@ -16,6 +16,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import MessageIcon from "@mui/icons-material/Message";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CategoryIcon from "@mui/icons-material/Category";
 
 const drawerWidth = 260;
 
@@ -44,6 +45,11 @@ const menuItems = [
     text: "Messages",
     icon: <MessageIcon />,
     path: "/admin/messages",
+  },
+  {
+    text: "Categories",
+    icon: <CategoryIcon />,
+    path: "/admin/categories",
   },
 ];
 

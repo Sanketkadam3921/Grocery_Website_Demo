@@ -10,15 +10,7 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
-const categories = [
-  "Fresh Fruits",
-  "Fresh Vegetables",
-  "Dairy & Bakery",
-  "Staples & Grains",
-  "Snacks & Beverages",
-  "Household Essentials",
-];
+import { getCategories } from "../../../../admin/services/categoryService";
 
 const priceRanges = [
   { label: "Under ₹100", min: 0, max: 100 },
@@ -38,7 +30,27 @@ function FilterPanel({
   onResetFilters,
 }) {
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
+  const [categories, setCategories] = useState([]);
   const isDraggingRef = useRef(false);
+
+  // Load categories from service
+  useEffect(() => {
+    const loadCategories = () => {
+      const cats = getCategories();
+      setCategories(cats);
+    };
+    loadCategories();
+
+    // Listen for category updates
+    const handleCategoryUpdate = () => {
+      loadCategories();
+    };
+    window.addEventListener("categoriesUpdated", handleCategoryUpdate);
+
+    return () => {
+      window.removeEventListener("categoriesUpdated", handleCategoryUpdate);
+    };
+  }, []);
 
   // Find matching price range on mount or when priceRange changes
   useEffect(() => {

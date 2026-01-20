@@ -9,6 +9,7 @@ import AddProduct from "../features/admin/pages/AddProduct/AddProduct";
 import EditProduct from "../features/admin/pages/EditProduct/EditProduct";
 import Orders from "../features/admin/pages/Orders/Orders";
 import Messages from "../features/admin/pages/Messages/Messages";
+import Categories from "../features/admin/pages/Categories/Categories";
 import UserLayout from "../features/user/components/UserLayout";
 import Home from "../features/user/pages/Home/Home";
 import Products from "../features/user/pages/Products/Products";
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
       { path: "products/edit/:id", element: <EditProduct /> },
       { path: "orders", element: <Orders /> },
       { path: "messages", element: <Messages /> },
+      { path: "categories", element: <Categories /> },
     ],
   },
 ]);
