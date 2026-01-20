@@ -91,20 +91,24 @@ function DiscoverDifferenceSection() {
                   </Typography>
                 </Box>
 
-                <Typography
-                  sx={{
-                    fontWeight: 600,
-                    fontSize: { xs: "0.9375rem", md: "1rem" },
-                    color: "#666",
-                  }}
-                >
-                  Multi-stage quality
+                {/* Item 2 */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                   <Box
-                    component="br"
-                    sx={{ display: { xs: "block", md: "none" } }}
+                    component="img"
+                    src="https://cdn-icons-png.flaticon.com/128/8071/8071280.png"
+                    alt="Quality check"
+                    sx={{ width: 40, height: 40 }}
                   />
-                  checks
-                </Typography>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: { xs: "0.9375rem", md: "1rem" },
+                      color: "#666",
+                    }}
+                  >
+                    Multi-stage quality checks
+                  </Typography>
+                </Box>
 
                 {/* Item 3 */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -114,7 +118,6 @@ function DiscoverDifferenceSection() {
                     alt="Fast delivery"
                     sx={{ width: 40, height: 40 }}
                   />
-
                   <Typography
                     sx={{
                       fontWeight: 600,
@@ -122,12 +125,7 @@ function DiscoverDifferenceSection() {
                       color: "#666",
                     }}
                   >
-                    Hyperlocal fulfillment
-                    <Box
-                      component="br"
-                      sx={{ display: { xs: "block", md: "none" } }}
-                    />
-                    hubs
+                    Hyperlocal fulfillment hubs
                   </Typography>
                 </Box>
 
