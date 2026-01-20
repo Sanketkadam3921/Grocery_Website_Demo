@@ -1,10 +1,19 @@
-import { Box, Grid, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 
 function MissionVision() {
   return (
-    <Box sx={{ mb: { xs: 4, md: 6 } }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+    <Box
+      sx={{ mb: { xs: 4, md: 6 }, display: "flex", justifyContent: "center" }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 3,
+          maxWidth: 1080,
+        }}
+      >
+        <Box sx={{ flex: 1 }}>
           <Paper
             elevation={0}
             sx={{
@@ -36,11 +45,14 @@ function MissionVision() {
               }}
             >
               To make fresh groceries accessible, affordable, and convenient for
-              every household.
+              every household by connecting local farmers, trusted suppliers,
+              and modern technology — ensuring quality produce, fair prices, and
+              a seamless shopping experience from farm to doorstep.
             </Typography>
           </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
+        </Box>
+
+        <Box sx={{ flex: 1 }}>
           <Paper
             elevation={0}
             sx={{
@@ -72,14 +84,16 @@ function MissionVision() {
               }}
             >
               To become the most trusted digital grocery partner for Indian
-              homes.
+              homes by building a transparent, reliable, and sustainable
+              ecosystem that empowers communities, supports local producers, and
+              makes healthy living simple, affordable, and accessible for
+              everyone.
             </Typography>
           </Paper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Box>
   );
 }
 
 export default MissionVision;
-

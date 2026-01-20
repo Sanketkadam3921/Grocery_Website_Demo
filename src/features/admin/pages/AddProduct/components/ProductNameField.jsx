@@ -18,3 +18,4 @@ const ProductNameField = ({ value, onChange, error, isMobile }) => {
 
 export default ProductNameField;
 
+

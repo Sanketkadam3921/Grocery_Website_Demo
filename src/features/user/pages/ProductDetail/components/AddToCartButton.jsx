@@ -36,3 +36,4 @@ const AddToCartButton = ({ onAddToCart, isOutOfStock, disabled }) => {
 
 export default AddToCartButton;
 
+

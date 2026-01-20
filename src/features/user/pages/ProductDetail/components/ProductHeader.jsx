@@ -39,3 +39,4 @@ const ProductHeader = ({ name, category }) => {
 
 export default ProductHeader;
 
+

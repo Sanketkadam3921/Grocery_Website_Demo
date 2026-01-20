@@ -136,7 +136,7 @@ function Products() {
         pb: 4,
       }}
     >
-      <Container maxWidth="lg" sx={{ pt: { xs: 2, md: 4 } }}>
+      <Container maxWidth="lg" sx={{ pt: { xs: 10, md: 12 } }}>
         {/* Header */}
         <Box
           sx={{

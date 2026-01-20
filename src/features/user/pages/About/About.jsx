@@ -23,15 +23,13 @@ function About() {
       >
         {/* Who We Are Section */}
         <WhoWeAre />
-
+        {/* Mission & Vision Section */}
+        <MissionVision />
         {/* What We Offer - Categories Section */}
         <WhatWeOffer />
 
         {/* Why Choose ZonixFresh Section */}
         <WhyChooseUs />
-
-        {/* Mission & Vision Section */}
-        {/* <MissionVision /> */}
 
         {/* Call To Action Section */}
         <CallToAction />

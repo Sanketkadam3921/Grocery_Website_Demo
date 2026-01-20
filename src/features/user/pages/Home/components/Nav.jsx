@@ -197,15 +197,15 @@ function Nav() {
   return (
     <>
       <AppBar
-        position="sticky"
+        position="fixed"
         sx={{
           height: 70,
-          backgroundColor: scrolled
-            ? "rgba(255, 248, 237, 0.9)"
-            : "transparent",
+          backgroundColor: "#ffffff",
           backdropFilter: scrolled ? "blur(8px)" : "none",
-          boxShadow: scrolled ? "0 4px 20px rgba(0,0,0,0.06)" : "none",
+          boxShadow: scrolled ? "0 4px 20px rgba(0,0,0,0.06)" : "0 1px 3px rgba(0,0,0,0.1)",
           transition: "all 0.3s ease",
+          top: 0,
+          zIndex: 1100,
         }}
       >
         <Toolbar sx={{ height: "100%", px: 0 }}>

@@ -35,3 +35,4 @@ const StockInfo = ({ stock, isOutOfStock }) => {
 
 export default StockInfo;
 
+
