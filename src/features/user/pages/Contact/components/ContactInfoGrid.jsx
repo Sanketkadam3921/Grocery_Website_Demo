@@ -17,6 +17,7 @@ const ContactInfoGrid = () => {
       ),
       title: "Email",
       content: "support@zonixfresh.com",
+      href: "mailto:support@zonixfresh.com",
     },
     {
       icon: (
@@ -25,7 +26,8 @@ const ContactInfoGrid = () => {
         />
       ),
       title: "Phone",
-      content: "+91 9XXXXXXXXX",
+      content: "+91 9876543210",
+      href: "tel:+919876543210",
     },
     {
       icon: (
@@ -35,6 +37,7 @@ const ContactInfoGrid = () => {
       ),
       title: "Address",
       content: "Pune, Maharashtra, India",
+      href: "https://www.google.com/maps/place/Pune,+Maharashtra",
     },
     {
       icon: (
@@ -44,6 +47,7 @@ const ContactInfoGrid = () => {
       ),
       title: "Hours",
       content: "9:00 AM – 9:00 PM (Mon–Sat)",
+      // No href or onClick - not clickable
     },
   ];
 
@@ -65,6 +69,8 @@ const ContactInfoGrid = () => {
           icon={info.icon}
           title={info.title}
           content={info.content}
+          href={info.href}
+          onClick={info.onClick}
         />
       ))}
     </Box>

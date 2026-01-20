@@ -14,6 +14,7 @@ function Home() {
   return (
     <Box
       sx={{
+        mt: 4,
         display: "flex",
         flexDirection: "column",
         backgroundColor: "#FFF8ED",

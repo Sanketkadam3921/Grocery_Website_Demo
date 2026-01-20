@@ -5,9 +5,7 @@ import {
   Card,
   CardMedia,
   CardContent,
-  useTheme,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 const features = [
   {
@@ -15,6 +13,11 @@ const features = [
     title: "Fresh Produce",
     description:
       "Hand-picked fruits and vegetables delivered at peak freshness directly from local farms.",
+    points: [
+      "Farm-to-home sourcing",
+      "Daily quality checks",
+      "Zero storage delay",
+    ],
     image:
       "https://images.openai.com/thumbnails/url/JkbTjnicu5mVUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw72c3Hy9ffJyo0M8473SS329czNNI1wyQtwdMz29y-pjDT1q4rwTXN3cslJiQyviAjLUCsGAH6NJpk",
   },
@@ -23,6 +26,11 @@ const features = [
     title: "Pantry Essentials",
     description:
       "All your daily essentials from trusted brands, carefully curated for quality and value.",
+    points: [
+      "Trusted national brands",
+      "Best price guarantee",
+      "Wide daily-use range",
+    ],
     image:
       "https://urbanfarmie.com/wp-content/uploads/Featured-Image-Top-2.jpg",
   },
@@ -31,15 +39,17 @@ const features = [
     title: "Gourmet Treats",
     description:
       "Premium selections for special occasions, featuring artisanal and imported delicacies.",
+    points: [
+      "Premium & imported items",
+      "Perfect for gifting",
+      "Curated seasonal picks",
+    ],
     image:
       "https://i.pinimg.com/736x/96/12/f7/9612f7a7d7d00278a0808c1e77988ab4.jpg",
   },
 ];
 
 function FeatureCardsSection() {
-  const theme = useTheme();
-  const navigate = useNavigate();
-
   return (
     <Box
       sx={{
@@ -78,7 +88,7 @@ function FeatureCardsSection() {
           </Typography>
         </Box>
 
-        {/* Cards - Using Flexbox */}
+        {/* Feature Cards */}
         <Box
           sx={{
             display: "flex",
@@ -92,9 +102,9 @@ function FeatureCardsSection() {
               key={feature.id}
               sx={{
                 flex: {
-                  xs: "1 1 100%", // Mobile: 1 card per row
-                  sm: "1 1 calc(30% - 12px)", // Small tablet: 2 cards per row
-                  md: "1 1 calc(30% - 21px)", // Tablet & up: 3 cards per row
+                  xs: "1 1 100%",
+                  sm: "1 1 calc(30% - 12px)",
+                  md: "1 1 calc(30% - 21px)",
                 },
                 maxWidth: "350px",
               }}
@@ -114,7 +124,7 @@ function FeatureCardsSection() {
                   },
                 }}
               >
-                {/* Image Container - Fixed Aspect Ratio */}
+                {/* Image */}
                 <Box sx={{ position: "relative", paddingTop: "75%" }}>
                   <CardMedia
                     component="img"
@@ -142,9 +152,7 @@ function FeatureCardsSection() {
                   }}
                 >
                   <Typography
-                    gutterBottom
                     variant="h5"
-                    component="h3"
                     sx={{
                       fontSize: { xs: "1.25rem", md: "1.5rem" },
                       fontWeight: 600,
@@ -156,46 +164,34 @@ function FeatureCardsSection() {
                   >
                     {feature.title}
                   </Typography>
+
                   <Typography
                     variant="body2"
                     sx={{
                       color: "#666",
                       fontSize: { xs: "0.95rem", md: "1rem" },
                       lineHeight: 1.6,
-                      flexGrow: 1,
+                      mb: 2,
                     }}
                   >
                     {feature.description}
                   </Typography>
 
-                  {/* Learn More Link */}
-                  <Box sx={{ mt: 3, pt: 2, borderTop: "1px solid #f0f0f0" }}>
-                    <Typography
-                      component="button"
-                      onClick={() => {
-                        navigate("/products");
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      sx={{
-                        color: "#2a9d8f",
-                        fontSize: "0.95rem",
-                        fontWeight: 600,
-                        textDecoration: "none",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        padding: 0,
-                        fontFamily: "inherit",
-                        "&:hover": {
-                          color: "#21867a",
-                          textDecoration: "underline",
-                        },
-                      }}
-                    >
-                      Learn more →
-                    </Typography>
+                  {/* Feature Points */}
+                  <Box sx={{ mt: "auto" }}>
+                    {feature.points.map((point, index) => (
+                      <Typography
+                        key={index}
+                        variant="body2"
+                        sx={{
+                          fontSize: "0.9rem",
+                          color: "#444",
+                          mb: 0.8,
+                        }}
+                      >
+                        • {point}
+                      </Typography>
+                    ))}
                   </Box>
                 </CardContent>
               </Card>

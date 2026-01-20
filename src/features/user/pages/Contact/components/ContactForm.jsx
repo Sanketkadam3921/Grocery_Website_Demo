@@ -21,9 +21,61 @@ const validationSchema = yup.object().shape({
     .string()
     .required("Email is required")
     .email("Invalid email format")
-    .matches(
-      /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/,
-      "Email must have a valid domain (e.g., .com, .in, .org)"
+    .test(
+      "valid-tld",
+      "Email must have a valid domain extension (e.g., .com, .in, .org, .gov, .net, .edu)",
+      (value) => {
+        if (!value) return false;
+        // List of valid TLDs
+        const validTLDs = [
+          "com",
+          "in",
+          "org",
+          "gov",
+          "net",
+          "edu",
+          "co",
+          "io",
+          "ai",
+          "uk",
+          "us",
+          "ca",
+          "au",
+          "de",
+          "fr",
+          "jp",
+          "cn",
+          "ru",
+          "br",
+          "mx",
+          "info",
+          "biz",
+          "tech",
+          "online",
+          "site",
+          "xyz",
+          "me",
+          "tv",
+          "cc",
+          "ws",
+          "name",
+          "mobi",
+          "asia",
+          "tel",
+          "pro",
+          "travel",
+          "jobs",
+          "mil",
+          "int",
+        ];
+        // Extract TLD from email (part after the last dot)
+        const emailParts = value.split("@");
+        if (emailParts.length !== 2) return false;
+        const domainParts = emailParts[1].split(".");
+        if (domainParts.length < 2) return false;
+        const tld = domainParts[domainParts.length - 1].toLowerCase();
+        return validTLDs.includes(tld);
+      }
     ),
   phone: yup
     .string()

@@ -1,4 +1,10 @@
-import { Box, Typography, Container, Link as MuiLink, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Container,
+  Link as MuiLink,
+  IconButton,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -176,9 +182,11 @@ function Footer() {
                 <MuiLink
                   component={Link}
                   to="/"
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -193,9 +201,11 @@ function Footer() {
                 <MuiLink
                   component={Link}
                   to="/about"
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -210,9 +220,11 @@ function Footer() {
                 <MuiLink
                   component={Link}
                   to="/products"
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   sx={{
-                    color: "#666",
+                    color: "#1a1a1a",
                     textDecoration: "none",
                     fontSize: "1rem",
                     transition: "color 0.2s ease",
@@ -227,7 +239,9 @@ function Footer() {
                 <MuiLink
                   component={Link}
                   to="/contact"
-                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   sx={{
                     color: "#666",
                     textDecoration: "none",

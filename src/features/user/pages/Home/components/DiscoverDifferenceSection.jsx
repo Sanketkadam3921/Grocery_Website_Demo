@@ -1,8 +1,6 @@
-import { Box, Container, Typography, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, Container, Typography } from "@mui/material";
 
 function DiscoverDifferenceSection() {
-  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -29,7 +27,7 @@ function DiscoverDifferenceSection() {
           >
             <Box
               sx={{
-                maxWidth: { xs: "100%", sm: "100%", lg: "520px" },
+                maxWidth: { xs: "100%", lg: "520px" },
                 textAlign: { xs: "center", sm: "left" },
                 mx: { xs: "auto", sm: 0 },
               }}
@@ -65,82 +63,90 @@ function DiscoverDifferenceSection() {
               {/* Process Highlights */}
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: { xs: "column", sm: "row" },
-                  flexWrap: "wrap",
-                  gap: { xs: 1.5, sm: 2 },
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "1fr",
+                    sm: "1fr 1fr",
+                  },
+                  gap: { xs: 2, md: 2.5 },
                   mb: { xs: 3, md: 4 },
-                  justifyContent: { xs: "center", sm: "flex-start" },
                 }}
               >
-                <Box sx={{ flex: { xs: "1 1 100%", sm: "1 1 auto" } }}>
+                {/* Item 1 */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box
+                    component="img"
+                    src="https://cdn-icons-png.flaticon.com/128/2756/2756716.png"
+                    alt="Direct sourcing"
+                    sx={{ width: 40, height: 40 }}
+                  />
                   <Typography
                     sx={{
                       fontWeight: 600,
                       fontSize: { xs: "0.9375rem", md: "1rem" },
-                      textAlign: { xs: "center", sm: "left" },
+                      color: "#666",
                     }}
                   >
-                    🏪 Direct-from-source procurement
+                    Direct-from-source procurement
                   </Typography>
                 </Box>
 
-                <Box sx={{ flex: { xs: "1 1 100%", sm: "1 1 auto" } }}>
+                {/* Item 2 */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box
+                    component="img"
+                    src="https://cdn-icons-png.flaticon.com/128/8071/8071280.png"
+                    alt="Quality check"
+                    sx={{ width: 40, height: 40 }}
+                  />
                   <Typography
                     sx={{
                       fontWeight: 600,
                       fontSize: { xs: "0.9375rem", md: "1rem" },
-                      textAlign: { xs: "center", sm: "left" },
+                      color: "#666",
                     }}
                   >
-                    🧪 Multi-stage quality checks
+                    Multi-stage quality<br></br> checks
                   </Typography>
                 </Box>
 
-                <Box sx={{ flex: { xs: "1 1 100%", sm: "1 1 auto" } }}>
+                {/* Item 3 */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box
+                    component="img"
+                    src="https://cdn-icons-png.flaticon.com/128/2203/2203206.png"
+                    alt="Fast delivery"
+                    sx={{ width: 40, height: 40 }}
+                  />
                   <Typography
                     sx={{
                       fontWeight: 600,
                       fontSize: { xs: "0.9375rem", md: "1rem" },
-                      textAlign: { xs: "center", sm: "left" },
+                      color: "#666",
                     }}
                   >
-                    ⚡ Hyperlocal fulfillment hubs
+                    Hyperlocal fulfillment <br></br> hubs
                   </Typography>
                 </Box>
-              </Box>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: { xs: "center", sm: "flex-start" },
-                }}
-              >
-                {/* <Button
-                  variant="contained"
-                  onClick={() => {
-                    navigate("/products");
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  sx={{
-                    backgroundColor: "#FFD84D",
-                    color: "#1a1a1a",
-                    borderRadius: "50px",
-                    px: { xs: 3, md: 4 },
-                    py: { xs: 1.25, md: 1.5 },
-                    textTransform: "none",
-                    fontSize: { xs: "1rem", md: "1.125rem" },
-                    fontWeight: 600,
-                    boxShadow: 2,
-                    width: { xs: "100%", sm: "auto" },
-                    "&:hover": {
-                      backgroundColor: "#FFDE42",
-                      boxShadow: 4,
-                    },
-                  }}
-                >
-                  Start Shopping
-                </Button> */}
+                {/* Item 4 (NEW) */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box
+                    component="img"
+                    src="https://cdn-icons-png.flaticon.com/128/2769/2769400.png"
+                    alt="Customer trust"
+                    sx={{ width: 40, height: 40 }}
+                  />
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: { xs: "0.9375rem", md: "1rem" },
+                      color: "#666",
+                    }}
+                  >
+                    Transparent pricing & customer trust
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           </Box>

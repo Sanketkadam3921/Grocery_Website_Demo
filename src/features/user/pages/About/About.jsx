@@ -9,7 +9,7 @@ import CallToAction from "./components/CallToAction";
 
 function About() {
   return (
-    <Box sx={{ backgroundColor: "#fafafa", minHeight: "100vh" }}>
+    <Box sx={{ backgroundColor: "#fafafa", minHeight: "100vh", mt: 4 }}>
       {/* Hero Section */}
       <HeroSection />
 

@@ -1,10 +1,12 @@
 import { Box, Typography, Button } from "@mui/material";
 import { ArrowForward } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 function CallToAction() {
+  const navigate = useNavigate();
+
   const handleNavigate = () => {
-    console.log("Navigate to products");
-    // navigate("/products") - replace with your navigation logic
+    navigate("/products");
   };
 
   return (

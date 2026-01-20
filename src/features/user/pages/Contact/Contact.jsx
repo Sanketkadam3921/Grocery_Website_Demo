@@ -11,6 +11,7 @@ function Contact() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
+        mt: 9,
       }}
     >
       <HeroSection />

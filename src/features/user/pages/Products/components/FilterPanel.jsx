@@ -9,6 +9,10 @@ import {
   Divider,
   IconButton,
   Chip,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -23,8 +27,7 @@ const categories = [
 
 const priceRanges = [
   { label: "Under ₹100", min: 0, max: 100 },
-  { label: "₹100 - ₹300", min: 100, max: 300 },
-  { label: "₹300 - ₹500", min: 300, max: 500 },
+  { label: "₹100 - ₹500", min: 100, max: 500 },
   { label: "₹500 - ₹1000", min: 500, max: 1000 },
   { label: "Above ₹1000", min: 1000, max: 10000 },
 ];
