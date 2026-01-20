@@ -82,7 +82,7 @@ const validationSchema = yup.object().shape({
         if (domainParts.length < 2) return false;
         const tld = domainParts[domainParts.length - 1].toLowerCase();
         return validTLDs.includes(tld);
-      }
+      },
     ),
   password: yup
     .string()
@@ -196,6 +196,7 @@ function Signup() {
   return (
     <Box
       sx={{
+        mt: 4,
         minHeight: "calc(100vh - 200px)",
         display: "flex",
         alignItems: "center",
@@ -314,7 +315,10 @@ function Signup() {
                 value={formData.password}
                 onChange={handleChange}
                 error={!!errors.password}
-                helperText={errors.password || "Must be at least 6 characters, no spaces allowed"}
+                helperText={
+                  errors.password ||
+                  "Must be at least 6 characters, no spaces allowed"
+                }
                 required
                 autoComplete="new-password"
                 variant="outlined"
@@ -364,7 +368,10 @@ function Signup() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 error={!!errors.confirmPassword}
-                helperText={errors.confirmPassword || "Must match password, no spaces allowed"}
+                helperText={
+                  errors.confirmPassword ||
+                  "Must match password, no spaces allowed"
+                }
                 required
                 autoComplete="new-password"
                 variant="outlined"

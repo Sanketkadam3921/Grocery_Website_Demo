@@ -13,10 +13,7 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { login } from "../../../auth/services/authService";
 import { useAuth } from "../../../auth/hooks/useAuth";
 
@@ -80,7 +77,7 @@ const validationSchema = yup.object().shape({
         if (domainParts.length < 2) return false;
         const tld = domainParts[domainParts.length - 1].toLowerCase();
         return validTLDs.includes(tld);
-      }
+      },
     ),
   password: yup
     .string()
@@ -102,13 +99,13 @@ function Login() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Prevent spaces in password field
     let filteredValue = value;
     if (name === "password") {
       filteredValue = value.replace(/\s/g, "");
     }
-    
+
     setFormData((prev) => ({
       ...prev,
       [name]: filteredValue,
@@ -175,6 +172,7 @@ function Login() {
   return (
     <Box
       sx={{
+        mt: 4,
         minHeight: "calc(100vh - 200px)",
         display: "flex",
         alignItems: "center",
@@ -265,7 +263,10 @@ function Login() {
                 value={formData.password}
                 onChange={handleChange}
                 error={!!errors.password}
-                helperText={errors.password || "Must be at least 6 characters, no spaces allowed"}
+                helperText={
+                  errors.password ||
+                  "Must be at least 6 characters, no spaces allowed"
+                }
                 required
                 autoComplete="current-password"
                 variant="outlined"
@@ -358,6 +359,3 @@ function Login() {
 }
 
 export default Login;
-
-
-
